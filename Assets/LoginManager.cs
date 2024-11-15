@@ -4,6 +4,7 @@ using System.Collections;
 using System.Text;
 using System.Net;
 using System;
+using UnityEditor.PackageManager;
 
 public class LoginManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class LoginManager : MonoBehaviour
 
     void Start()
     {
+        //PlayerPrefs.DeleteAll();
         LoginMember();
     }
 
@@ -60,27 +62,24 @@ public class LoginManager : MonoBehaviour
                 ResponseToken responseData = JsonUtility.FromJson<ResponseToken>(response);
                 if (responseData != null)
                 {
-                    Debug.Log("Member ID: " + responseData.memberId);
+                    Debug.Log("myToken: " + responseData.memberId);
                     Debug.Log("Expiration: " + responseData.exp);
                     // 將myToken設定為取回的memberId
                     myToken = responseData.memberId;
                     // 從 PlayerPrefs 獲取 playerToken
                     string playerToken = PlayerPrefs.GetString("playerToken", "");
 
-                    // 判斷 playerToken 是否等於 myToken
-                    if (playerToken == myToken)
+                    if (string.IsNullOrEmpty(playerToken) || playerToken != myToken)
                     {
-                        // playerToken 和 myToken 相同，表示已存在 UserID
-                        Debug.Log("PlayerPrefs 中已存在 UserID，執行 parse_getobjbyid");
-                        StartCoroutine(ParseGetObjById(myToken, "UserInfo", AssignMyUserInfo)); // 回呼函數為 ParseGetMyUserId
+                        // playerToken 為空或與 myToken 不同，執行 ParseRecoverIDByToken
+                        Debug.Log("PlayerPrefs 中的 playerToken 為空 或與 myToken 不同，執行 RecoverByToken");
+                        StartCoroutine(ParseRecoverIDByToken(myToken, "UserInfo", RecoverIdByTokenSuccess));
                     }
                     else
                     {
-                        //儲存取回的myToken
-                        PlayerPrefs.SetString("playerToken", myToken);
-                        // playerToken 和 myToken 不同，執行 RecoverByToken
-                        Debug.Log("PlayerPrefs 中的 playerToken 與 myToken 不同，執行 RecoverByToken");
-                        RecoverByToken(myToken);
+                        // playerToken 和 myToken 相同，表示已存在 UserID
+                        Debug.Log("PlayerPrefs 中已存在 UserID，執行 parse_getobjbyid");
+                        StartCoroutine(ParseGetObjById(myToken, "UserInfo", AssignMyUserInfo)); // 回呼函數為 AssignMyUserInfo
                     }
                 }
                 else
@@ -120,7 +119,8 @@ public class LoginManager : MonoBehaviour
             }
             else
             {
-                //RecoverByToken(myToken);
+                Debug.Log($"取回的UserInfo中的objectId為空，執行 RecoverByToken");
+                StartCoroutine(ParseRecoverIDByToken(myToken, "UserInfo", RecoverIdByTokenSuccess));
             }
         }
         else
@@ -129,24 +129,149 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-    private void RecoverByToken(string token)
+    private void RecoverIdByTokenSuccess(string response)
     {
-        // 模擬 token 恢復操作
-        bool recoverySuccess = true; // 模擬成功與否
-        if (recoverySuccess)
+        // 解析回傳的 JSON，提取 memberId 和 exp
+        ResponseUserInfo responseData = JsonUtility.FromJson<ResponseUserInfo>(response);
+        if (responseData != null)
         {
-            string jsonResponse = "{\"objectId\":\"123\"}"; // 模擬回傳 JSON
-            if (jsonResponse.Contains("objectId"))
+            Debug.Log("name: " + responseData.name);
+            Debug.Log("objectId: " + responseData.objectId);
+            // 檢查 objectId 是否存在
+            bool hasObjectId = !string.IsNullOrEmpty(responseData.objectId);
+            if (hasObjectId)
             {
-                UpdatePlayerPrefsFromJson(jsonResponse);
+                string userid = responseData.objectId;
+                // 將資料覆蓋 PlayerPrefs
+                UpdatePlayerPrefsFromJson(JsonUtility.ToJson(responseData));
                 RecoverParseRequestEnergy();
-                ParseGetObjByUserId("UserID", ParseGetMyRecord);
+                StartCoroutine(ParseGetObjById(userid, "Lb_eatall", ParseGetMyRecord)); //取得自己的leaderboard
+
+                if (PlayerPrefs.GetString("myPlayerName").Length < 2)
+                {
+                    IsNewUser = true;
+                }
             }
             else
             {
-                SignIn();
+                Debug.Log($"Recover取回的UserInfo中的objectId為空，執行 SignIn");
+                UserData testData = new()
+                {
+                    name = "gd_unity_01",
+                    avatar = 1,
+                    token = myToken,
+                    login = 1
+                };
+                SignIn(ParseURL, JsonUtility.ToJson(testData));
             }
         }
+        else
+        {
+            ShowDialog("無法取得有效的 user 資料，請稍後再試。");
+        }
+    }
+
+    // SignIn 函數 (調用原始的 SignIn 代碼)
+    public void SignIn(string url, string data)
+    {
+        RequestDataByDataJSON req = new()
+        {
+            method = "pushobj",
+            typename = "UserInfo",
+            datajson = data,
+        };
+        string jsonData = JsonUtility.ToJson(req);
+
+        StartCoroutine(parsePoster.Request(url, jsonData,
+            onSuccess: (response) =>
+            {
+                ResponseUserInfo responseData = JsonUtility.FromJson<ResponseUserInfo>(response);
+                if (responseData != null)
+                {
+                    Debug.Log("Sign-in successful. Response: " + response);
+                    // 將資料覆蓋 PlayerPrefs
+                    UpdatePlayerPrefsFromJson(JsonUtility.ToJson(responseData));
+                    IsNewUser = true;
+                    RecoverParseRequestEnergy();
+                    DataUpdateRequest();
+                }
+                else
+                {
+                    Debug.LogError("Sign-in successful, but Response is null");
+                    ShowDialog("連線錯誤，請稍後再試。");
+                }
+            },
+            onError: (error) =>
+            {
+                Debug.LogError("Sign-in failed. Error: " + error);
+                // 在這裡處理錯誤邏輯
+                if (IsNetworkConnected())
+                {
+                    ShowDialog("連線錯誤，請稍後再試。");
+                }
+                else
+                {
+                    ShowDialog("請檢查網路連線。");
+                }
+            }));
+    }
+
+    private IEnumerator ParseGetObjById(string objectId, string typename, System.Action<string> callback)
+    {
+        // 設定請求的 URL
+        string url = ParseURL;
+
+        // 使用 RequestToken 包裝 payload，並轉換為 JSON
+        RequestDataByID requestData = new()
+        {
+            method = "getobjbyid",
+            typename = typename,
+            id = objectId,
+        };
+        string jsonData = JsonUtility.ToJson(requestData);
+        Debug.Log($"jsonToSend={jsonData}");
+
+        // 使用通用的 Request 函數發送請求，並提供回調
+        yield return parsePoster.Request(url, jsonData,
+            onSuccess: (response) =>
+            {
+                callback(response);
+            },
+            onError: (error) =>
+            {
+                // 處理請求失敗
+                ShowDialog("連線錯誤，請稍後再試。");
+                Debug.LogError("GetObjByID_Error: " + error);
+            });
+    }
+
+    private IEnumerator ParseRecoverIDByToken(string token, string typename, System.Action<string> callback)
+    {
+        // 設定請求的 URL
+        string url = ParseURL;
+
+        // 使用 RequestToken 包裝 payload，並轉換為 JSON
+        RequestDataByToken requestData = new()
+        {
+            method = "getobjbyid",
+            typename = typename,
+            token = token,
+        };
+        string jsonData = JsonUtility.ToJson(requestData);
+        Debug.Log($"jsonToSend={jsonData}");
+
+        // 使用通用的 Request 函數發送請求，並提供回調
+        yield return parsePoster.Request(url, jsonData,
+            onSuccess: (response) =>
+            {
+                callback(response);
+            },
+            onError: (error) =>
+            {
+                // 處理請求失敗
+                ShowDialog("連線錯誤，請稍後再試。");
+                Debug.LogError("RecoverIDByToken_Error: " + error);
+            });
     }
 
     private void ParseGetMyRecord(string jsonResponse)
@@ -182,31 +307,6 @@ public class LoginManager : MonoBehaviour
         else
         {
             GoToScene("titleScene");
-        }
-    }
-
-    private void SignIn()
-    {
-        // 模擬註冊或登入的行為
-        bool signInSuccess = true; // 假設註冊成功
-        if (signInSuccess)
-        {
-            string jsonResponse = "{\"objectId\":\"123\"}"; // 假設回傳的 JSON
-            UpdatePlayerPrefsFromJson(jsonResponse);
-            IsNewUser = true;
-            RecoverParseRequestEnergy();
-            DataUpdateRequest();
-        }
-        else
-        {
-            if (IsNetworkConnected())
-            {
-                ShowDialog("連線錯誤，請稍後再試。");
-            }
-            else
-            {
-                ShowDialog("請檢查網路連線。");
-            }
         }
     }
 
@@ -254,35 +354,6 @@ public class LoginManager : MonoBehaviour
     private void RecoverParseRequestEnergy()
     {
         Debug.Log("呼叫 RecoverParseRequestEnergy()");
-    }
-
-    private IEnumerator ParseGetObjById(string objectId, string typename, System.Action<string> callback)
-    {
-        // 設定請求的 URL
-        string url = ParseURL;
-
-        // 使用 RequestToken 包裝 payload，並轉換為 JSON
-        RequestDataByID requestData = new()
-        {
-            method = "getobjbyid",
-            typename = typename,
-            id = objectId,
-        };
-        string jsonData = JsonUtility.ToJson(requestData);
-        Debug.Log($"jsonToSend={jsonData}");
-
-        // 使用通用的 Request 函數發送請求，並提供回調
-        yield return parsePoster.Request(url, jsonData,
-            onSuccess: (response) =>
-            {
-                callback(response);
-            },
-            onError: (error) =>
-            {
-                // 處理請求失敗
-                ShowDialog("連線錯誤，請稍後再試。");
-                Debug.LogError("GetObjByID_Error: " + error);
-            });
     }
 
     private void ParseGetObjByUserId(string userId, System.Action<string> callback)

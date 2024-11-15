@@ -32,6 +32,14 @@ public class RequestDataByUserID
 }
 
 [Serializable]
+public class RequestDataByToken
+{
+    public string method;
+    public string typename;
+    public string token;
+}
+
+[Serializable]
 public class RequestDataByDataJSON
 {
     public string method;
@@ -99,31 +107,7 @@ public class ParsePoster : MonoBehaviour
             login = 1
         };
         string dataJson = JsonUtility.ToJson(testData);
-        SignIn(url, dataJson);
-    }
-
-    // SignIn 函數 (調用原始的 SignIn 代碼)
-    public void SignIn(string url, string data)
-    {
-        var req = new RequestDataByDataJSON
-        {
-            method = "pushobj",
-            typename = "UserInfo",
-            datajson = data,
-        };
-        string jsonData = JsonUtility.ToJson(req);
-
-        StartCoroutine(Request(url, jsonData,
-            onSuccess: (response) =>
-            {
-                Debug.Log("Sign-in successful. Response: " + response);
-                // 在這裡處理成功的登入邏輯
-            },
-            onError: (error) =>
-            {
-                Debug.LogError("Sign-in failed. Error: " + error);
-                // 在這裡處理錯誤邏輯
-            }));
+        //SignIn(url, dataJson);
     }
 
     // 修改後的 Request 函數
