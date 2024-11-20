@@ -3,16 +3,16 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Text;
 using System;
-using Newtonsoft.Json;
 
 [Serializable]
-public class ResponseUserInfo
+public class RequestRank
 {
-    public string objectId;
-    public string name;
-    public string token;
-    public int avatar;
-    public int login;
+    public string method;
+    public string typename;
+    public string userID;
+    public string descendingBy;
+    public int lines;
+    public int afterUnix;
 }
 
 [Serializable]
@@ -47,25 +47,17 @@ public class RequestDataByDataJSON
     public string datajson;
 }
 
-[System.Serializable]
-public class UserData
-{
-    public string name;
-    public int avatar;
-    public string token;
-    public int login;
-}
-
 //以代表user的Payload向Jose請求解碼真正的token
 [System.Serializable]
-public class RequestToken
+public class RequestPayload
 {
     public string payload;
-    public RequestToken(string payload)
+    public RequestPayload(string payload) //構造函數：不用在宣告時對整包賦值，而可以傳入參數讓它在函數中賦值完再回傳
     {
         this.payload = payload;
     }
 }
+
 //取回的token包含memberId與exp，以memberId為最後的token值
 [System.Serializable]
 public class ResponseToken
@@ -74,7 +66,14 @@ public class ResponseToken
     public int exp;
 }
 
-public class ParsePoster : MonoBehaviour
+//取回的jwe
+[System.Serializable]
+public class ResponseJWE
+{
+    public string jwe;
+}
+
+public class RoutePoster : MonoBehaviour
 {
     //string ParseURL = "https://play1apps.com:3001/b4a";//用letsencrypt建立的pem/key來host https server
     //string ParseURL = "https://playoneapps.com.tw:8443/b4a";//可以使用cloudflare的origin ca建立nodejs server, 但必須經由cloudflare允許的8443 port才會通
@@ -91,7 +90,7 @@ public class ParsePoster : MonoBehaviour
             userid = "mEgzD2XM3u",
         };
         string jsonData = JsonUtility.ToJson(req);
-        Debug.Log($"json={jsonData}");
+        //Debug.Log($"json={jsonData}");
         //StartCoroutine(Request(url, jsonData));//POST端口為/api
         //StartCoroutine(GetRequest("https://playoneapps.com.tw/parsereq/testGET"));//測試GET
         //TestSignInFunction(url);
@@ -123,11 +122,11 @@ public class ParsePoster : MonoBehaviour
         webRequest.SetRequestHeader("Content-Type", "application/json");
         webRequest.SetRequestHeader("X-Requested-With", "XMLHttpRequest");
 
-        Debug.Log("Sending request...");
+        Debug.Log("---request sending---");
 
         yield return webRequest.SendWebRequest();
 
-        Debug.Log("Request completed");
+        Debug.Log("---request completed---");
 
         if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
         {
