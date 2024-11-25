@@ -4,49 +4,89 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{{{ PRODUCT_NAME }}}</title>
+    <style>
+      /* 頁面和畫布樣式 */
+      html, body, #unity-canvas {
+          display: block;
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+      }
+
+      /* 加載動畫容器 */
+      #loading-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+      }
+
+      /* 簡單的動畫效果 */
+      .loader {
+          border: 5px solid #f3f3f3;
+          border-top: 5px solid #3498db;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body style="text-align: center">
+    <!-- 畫布 -->
     <canvas id="unity-canvas" style="background: {{{ BACKGROUND_FILENAME ? 'url(\'Build/' + BACKGROUND_FILENAME.replace(/'/g, '%27') + '\') center / cover' : BACKGROUND_COLOR }}}"></canvas>
+
+    <!-- 加載動畫容器 -->
+    <div id="loading-container">
+      <div class="loader"></div>
+    </div>
+
     <script src="Build/{{{ LOADER_FILENAME }}}"></script>
     <script>
+      // 手機裝置適配
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
         document.getElementsByTagName('head')[0].appendChild(meta);
       }
 
+      // 初始化 Unity 實例
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/{{{ DATA_FILENAME }}}",
         frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
-#if USE_WASM
+        #if USE_WASM
         codeUrl: "Build/{{{ CODE_FILENAME }}}",
-#endif
-#if MEMORY_FILENAME
+        #endif
+        #if MEMORY_FILENAME
         memoryUrl: "Build/{{{ MEMORY_FILENAME }}}",
-#endif
-#if SYMBOLS_FILENAME
+        #endif
+        #if SYMBOLS_FILENAME
         symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
-#endif
+        #endif
         streamingAssetsUrl: "StreamingAssets",
         companyName: "{{{ COMPANY_NAME }}}",
         productName: "{{{ PRODUCT_NAME }}}",
         productVersion: "{{{ PRODUCT_VERSION }}}",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      }).then((unityInstance) => {
+        // 當 Unity 初始化完成後，隱藏加載動畫
+        document.getElementById("loading-container").style.display = "none";
+      }).catch((message) => {
+        console.error(message);
+        alert("Failed to load Unity WebGL instance.");
       });
     </script>
-    <style>
-        html,
-        body,
-        #unity-canvas {
-            display: block;
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-    </style>
   </body>
 </html>
