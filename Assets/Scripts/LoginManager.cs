@@ -404,7 +404,7 @@ public class LoginManager : MonoBehaviour
 
     private IEnumerator DataUpdate()
     {
-        // 決定要更新哪些data
+        // 決定要更新哪些data，例如排行榜、成就
         Debug.Log($"開始請求排行榜");
         yield return StartCoroutine(DataUpdate_Rank());// 更新排行榜
         // 更新完成
@@ -433,6 +433,7 @@ public class LoginManager : MonoBehaviour
             onSuccess: (response) =>
             {
                 Debug.Log($"取回排行榜={response}");
+                PlayerPrefs.SetString("leaderboard", response);
             },
             onError: (error) =>
             {
@@ -479,7 +480,7 @@ public class LoginManager : MonoBehaviour
     //    }
     //    catch (Exception ex)
     //    {
-    //        Debug.LogError($"Error parsing URL: {ex.Message}");
+    //        Debug.LogError($"Error parsing URL: {ex.Rank}");
     //        return null;
     //    }
     //}
