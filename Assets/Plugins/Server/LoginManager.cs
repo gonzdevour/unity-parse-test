@@ -5,16 +5,17 @@ using System;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine.SocialPlatforms.Impl;
+using Org.BouncyCastle.Tsp;
 // using System.Web;//原本用來解析UserAgent，但這是後端用的lib，換成使用webgl plugin直接從js取值
 
 public class LoginManager : MonoBehaviour
 {
     public bool CleanStorageAtStart;
-    public UserAgentChecker userAgentChecker;
-    public QueryStringParser queryStringParser;
+    public UserAgentChecker userAgentChecker; //偵測是否在某環境
+    public QueryStringParser queryStringParser; //從qstring取得網址裡的變數
     public UserData userDataManager;
     public RoutePoster routePoster;
-    private int loginProgress;
+    public PanelLoadingProgress panelLoadingProgress;
     private string myToken;
     private bool IsNewUser = false;
     private readonly string GameName = "eatall";
@@ -37,6 +38,7 @@ public class LoginManager : MonoBehaviour
 
     private void Awake()
     {
+
         IsOnWeb = !string.IsNullOrEmpty(Application.absoluteURL);
 
         if (CleanStorageAtStart)
@@ -53,22 +55,56 @@ public class LoginManager : MonoBehaviour
         //LoginCheckPayload();
     }
 
-    public void LoginCheckPayload()
+    public void LoginFromPlayerPref()
     {
+        StartDataLoadingTask(2, "登入中", "搜尋登入權杖");
+        //loginFromPlayerPref與LoginFromCheckingPayload會共用myToken執行recover函數
+        //- 若LoginFromCheckingPayload，會decode playload後取得myToken，myToken並不是一開始就存在PlayerPrefs裡
+        //- 若LoginFromPlayerPref則myToken直接等於playerToken
+        myToken = PlayerPrefs.GetString("token", ""); 
+
+        // 判斷PlayerPrefs中token是否存在
+        string playerToken = PlayerPrefs.GetString("token", "");
+        if (string.IsNullOrEmpty(playerToken))
+        {
+            // playerToken為空，即為新玩家，執行SignIn
+            PlayerPrefs.SetString("token", TokenGen());//產生隨機數作為玩家token
+            Debug.Log($"隨機產生玩家token: {PlayerPrefs.GetString("token", "")}");
+            UserData signInData = new()
+            {
+                token = PlayerPrefs.GetString("token", ""), 
+                name = PlayerPrefs.GetString("name", "新玩家隨機測試"),
+                avatar = PlayerPrefs.GetInt("avatar", 1),
+                login = PlayerPrefs.GetInt("login", 1),
+            };
+            SignIn(ParseURL, JsonUtility.ToJson(signInData));
+        }
+        else
+        {
+            // playerToken 和 myToken 相同，表示已存在 userID，userID即為UserInfo中的objectId，所以使用ParseGetObjById而非ParseGetObjByUserId
+            string userID = PlayerPrefs.GetString("userID", "");
+            Debug.Log($"PlayerPrefs中已存在 userID={userID}，執行parse_getobjbyid");
+            StartCoroutine(ParseGetObjById(userID, "UserInfo", ParseGetUserInfoByIdSuccess)); // 回呼函數為 ParseGetUserInfoByIdSuccess
+        }
+    }
+
+    public void LoginFromCheckingPayload()
+    {
+        StartDataLoadingTask(4, "登入中", "搜尋登入權杖");
         string payload = "";
         if (Application.isEditor) // 在 Unity 編輯器中，測試值
         {
             payload = "eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwicDJjIjoxMDAwMCwicDJzIjoiMEp0TVZqV3pQNkwwSTd4eEg1aE9tdyJ9.k-TcDWZMVgOadOwYn6f3YcV2Q4UfohX-Nf6itn60Hg36wKufr6RQ-w.eViwtmHR6YEb5AGquxs_-g.kCCvwnVmgFG8or3641Ml_hJRtG4tjvLKasNdQMwVvxKaJwqADtYVzHXq8OsjGFlEBhYw2TSyxtj-2jTtqbsaQQyCBDj4sy1FjJdFJt3H0cQ.SFTOxqPeIPtsfBy9VpbPbw"; // 預設值
         }
-        else if (IsOnWeb) // 在web實機，從querystring取得user的參數內容
+        else if (IsOnWeb) // 在web實機
         {
-            payload = queryStringParser.Get("user");
+            payload = queryStringParser.Get("user"); //從querystring取得user的參數內容
         }
 
         // 檢查 payload 是否為空
         if (!string.IsNullOrEmpty(payload))
         {
-            UpdateDataLoadingTask(1);//1. 確認payload有值
+            UpdateDataLoadingTask(1,"登入中", "確認payload數據");//1. 確認payload有值
             StartCoroutine(RequestDecodePayloadToToken(payload));
         }
         else
@@ -97,7 +133,7 @@ public class LoginManager : MonoBehaviour
                 {
                     Debug.Log("RequestEncodeTokenToPayload Success");
                     Debug.Log(responseData.jwe);
-                    UpdateDataLoadingTask(1);//1. 確認payload：用token取回了payload
+                    UpdateDataLoadingTask(1,"登入中", "用payload取回token");//1. 確認payload：用payload取回了token
                 }
                 else
                 {
@@ -127,7 +163,7 @@ public class LoginManager : MonoBehaviour
         yield return routePoster.Request(url, jsonData,
             onSuccess: (response) =>
             {
-                UpdateDataLoadingTask(1);//2. 確認token:用payload取回了token
+                UpdateDataLoadingTask(1,"登入中", "用payload取回token");//2. 確認token:用payload取回了token
                 // 解析回傳的 JSON，提取 memberId 和 exp
                 ResponseToken responseData = JsonUtility.FromJson<ResponseToken>(response);
                 if (responseData != null)
@@ -179,8 +215,8 @@ public class LoginManager : MonoBehaviour
             bool hasObjectId = !string.IsNullOrEmpty(responseData.objectId);
             if (hasObjectId)
             {
-                UpdateDataLoadingTask(1);//3. 確認使用者資料: 用userID取回了UserInfo，表示PlayerPref的本地資料存在
-                UpdateDataLoadingTask(1);//4. 確認使用者成績: PlayerPref的本地資料存在，因此score資料也存在
+                UpdateDataLoadingTask(1,"登入中", "取回使用者資料");//3. 確認使用者資料: 用userID取回了UserInfo，表示PlayerPref的本地資料存在
+                UpdateDataLoadingTask(1,"登入中", "取回使用者成績");//4. 確認使用者成績: PlayerPref的本地資料存在，因此score資料也存在
                 // 將資料覆蓋 PlayerPrefs
                 userDataManager.Update(responseData);
                 // 只有signIn或recoverId成功才允許無限制嘗試更新leaderboard，本地userID連續登入則應該要有限制
@@ -196,7 +232,7 @@ public class LoginManager : MonoBehaviour
         }
         else
         {
-            ShowDialog("無法取得有效的 user 資料，請稍後再試。");
+            ShowDialog("無法取得有效的 user 資料，請稍後再試");
         }
     }
 
@@ -212,7 +248,7 @@ public class LoginManager : MonoBehaviour
             bool hasObjectId = !string.IsNullOrEmpty(responseData.objectId);
             if (hasObjectId)
             {
-                UpdateDataLoadingTask(1);//3. 確認使用者資料: 用token取回了UserInfo，將資料覆蓋 PlayerPrefs
+                UpdateDataLoadingTask(1, "登入中", "取回使用者資料");//3. 確認使用者資料: 用token取回了UserInfo，將資料覆蓋 PlayerPrefs
 
                 string userID = responseData.objectId;
                 // 將資料覆蓋 PlayerPrefs
@@ -234,7 +270,10 @@ public class LoginManager : MonoBehaviour
         }
         else
         {
-            ShowDialog("無法取得有效的 user 資料，請稍後再試。");
+            //清除無效帳號以便重新註冊
+            PlayerPrefs.DeleteKey("userID");
+            PlayerPrefs.DeleteKey("token");
+            ShowDialog("您裝置內儲存的token無法取回有效的 user 資料，請聯絡伺服器管理者，或重新註冊。");
         }
     }
 
@@ -375,7 +414,7 @@ public class LoginManager : MonoBehaviour
 
     private void ParseGetMyRecord(string jsonResponse)
     {
-        UpdateDataLoadingTask(1);//4. 確認使用者成績: 用userID取回自己在Lb裡的score資料(取回自己的成績而非排名)
+        UpdateDataLoadingTask(1, "登入中", "取回使用者成績");//4. 確認使用者成績: 用userID取回自己在Lb裡的score資料(取回自己的成績而非排名)
         JObject data = JObject.Parse(jsonResponse);// 解析 JSON 為 JObject
         int score = data["score"]?.ToObject<int>() ?? 0;//data["key"]為JToken，要再轉成指定型別
         Debug.Log($"用userID取回自己的成績:{score}");
@@ -432,7 +471,8 @@ public class LoginManager : MonoBehaviour
         yield return routePoster.Request(url, jsonData,
             onSuccess: (response) =>
             {
-                Debug.Log($"取回排行榜={response}");
+                Debug.Log($"取回排行榜成功");
+                //Debug.Log($"{response}");
                 PlayerPrefs.SetString("leaderboard", response);
             },
             onError: (error) =>
@@ -500,8 +540,34 @@ public class LoginManager : MonoBehaviour
         Debug.Log("呼叫 RecoverParseRequestEnergy()");
     }
 
-    private void UpdateDataLoadingTask(int progressToAdd)
+    private void StartDataLoadingTask(int totalTaskCount, string title = "", string msg = "") 
     {
-        loginProgress += progressToAdd;
+        panelLoadingProgress.StartProgress(totalTaskCount, title, msg);
+    }
+
+    private void UpdateDataLoadingTask(int progressToAdd, string title="", string msg="")
+    {
+        panelLoadingProgress.Add(progressToAdd, title, msg);
+    }
+
+    private string TokenGen()
+    {
+        // 獲取當前時間戳 (Unix Time Stamp)
+        long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        // 產生隨機4位數字
+        System.Random random = new();
+        int randomNumber = random.Next(1000, 10000); // 隨機4位數，範圍 1000-9999
+
+        // 將時間戳和隨機數組合成字串
+        string combinedString = $"{timestamp}{randomNumber}";
+
+        // 將整個數字字串轉為整數
+        long combinedNumber = long.Parse(combinedString);
+
+        // 將整數轉為16進位字串
+        string hexString = combinedNumber.ToString("X");
+
+        return hexString;
     }
 }

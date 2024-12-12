@@ -1,6 +1,9 @@
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 
@@ -30,7 +33,7 @@ public class CSVToLocalization
             string[] columns = lines[i].Split(',');
             string key = columns[0];
 
-            for (int j = 2; j < headers.Length; j++) //±q2¶}©l¡A¦]¬°­n¥ı²¤¹Lkey, id¨âÄæ
+            for (int j = 2; j < headers.Length; j++) //å¾2é–‹å§‹ï¼Œå› ç‚ºè¦å…ˆç•¥ékey, idå…©æ¬„
             {
                 string localeCode = ExtractLocaleFromHeader(headers[j]);
                 string value = columns[j];
@@ -41,72 +44,105 @@ public class CSVToLocalization
                 }
 
                 localization[key][localeCode] = value;
-                Debug.Log($"[{key}][{localeCode}] = {value}");
+                //å°å‡ºæ‰€æœ‰èªç³»çš„éµå€¼
+                //Debug.Log($"[{key}][{localeCode}] = {value}");
             }
         }
 
-        Debug.Log("Localization data loaded successfully!");
+        Debug.Log("æœ¬åœ°åŒ–è³‡æ–™å¤–éƒ¨è®€å–æˆåŠŸ");
         return localization;
     }
 
-    public void Update(string tableName, string csvData)
+    public IEnumerator Update(string tableName, string csvData)
     {
+        // ç¢ºèªé–‹å§‹åŸ·è¡Œå‡½æ•¸
+        //Debug.Log("Update function started.");
+
+        // ç­‰å¾…æœ¬åœ°åŒ–ç³»çµ±åˆå§‹åŒ–å®Œæˆ
+        yield return LocalizationSettings.InitializationOperation;
+        if (LocalizationSettings.InitializationOperation.Status != UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("LocalizationSettings initialization failed.");
+            yield break;
+        }
+        //Debug.Log("LocalizationSettings initialized successfully.");
+
         var localization = Load(csvData);
         if (localization == null)
         {
             Debug.LogError("Failed to load localization data.");
-            return;
+            yield break;
         }
+        //Debug.Log("Localization data loaded successfully.");
 
         foreach (var localePair in localization)
         {
             string key = localePair.Key;
+            //Debug.Log($"Processing key: {key}");
 
             foreach (var translation in localePair.Value)
             {
                 string localeCode = translation.Key;
                 string value = translation.Value;
+                //Debug.Log($"Processing translation - Locale: {localeCode}, Value: {value}");
 
+                // ä½¿ç”¨åŒæ­¥çš„ GetLocale æ–¹æ³•
                 var locale = LocalizationSettings.AvailableLocales.GetLocale(localeCode);
                 if (locale == null)
                 {
                     Debug.LogError($"Locale '{localeCode}' not found.");
                     continue;
                 }
+                //Debug.Log($"Locale '{localeCode}' found.");
 
-                var table = LocalizationSettings.StringDatabase.GetTable(tableName, locale) as StringTable;
+                // å¼‚æ­¥è·å–å­—ç¬¦ä¸²è¡¨
+                var tableOperation = LocalizationSettings.StringDatabase.GetTableAsync(tableName, locale);
+                //Debug.Log($"Fetching StringTable for locale '{localeCode}' in table '{tableName}'...");
+                yield return tableOperation;
+
+                if (tableOperation.Status != UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                {
+                    Debug.LogError($"Failed to fetch StringTable for locale '{localeCode}' in table '{tableName}'.");
+                    continue;
+                }
+
+                var table = tableOperation.Result as StringTable;
                 if (table == null)
                 {
                     Debug.LogError($"StringTable for locale '{localeCode}' not found in table '{tableName}'.");
                     continue;
                 }
+                //Debug.Log($"StringTable for locale '{localeCode}' loaded successfully.");
 
+                // æ›´æ–°æˆ–æ·»åŠ æ¡ç›®
                 var entry = table.GetEntry(key);
                 if (entry != null)
                 {
-                    entry.Value = value; // ±ø¥Ø¤w¦s¦b¡A§ó·s­È
+                    entry.Value = value; // æ¡ç›®å·²å­˜åœ¨ï¼Œæ›´æ–°å€¼
+                    //Debug.Log($"Updated entry for key '{key}' with value '{value}'.");
                 }
                 else
                 {
-                    table.AddEntry(key, value); // ±ø¥Ø¤£¦s¦b¡A²K¥[·s±ø¥Ø
+                    table.AddEntry(key, value); // æ¡ç›®ä¸å­˜åœ¨ï¼Œæ·»åŠ æ–°æ¡ç›®
+                    //Debug.Log($"Added new entry for key '{key}' with value '{value}'.");
                 }
             }
         }
 
-        Debug.Log($"Localization data updated for table '{tableName}' successfully!");
+        Debug.Log($"'{tableName}' æœ¬åœ°åŒ–è¡¨æ ¼æ›´æ–°æˆåŠŸ");
     }
 
 
 
     public string ExtractLocaleFromHeader(string header)
     {
-        int start = header.LastIndexOf('('); // §ä¨ì³Ì«á¤@­Ó¥ª¬A¸¹
-        int end = header.LastIndexOf(')');  // §ä¨ì³Ì«á¤@­Ó¥k¬A¸¹
+        int start = header.LastIndexOf('('); // æ‰¾åˆ°æœ€å¾Œä¸€å€‹å·¦æ‹¬è™Ÿ
+        int end = header.LastIndexOf(')');  // æ‰¾åˆ°æœ€å¾Œä¸€å€‹å³æ‹¬è™Ÿ
         if (start >= 0 && end > start)
         {
-            return header.Substring(start + 1, end - start - 1).Trim(); // ´£¨ú¬A¸¹¤ºªº¤º®e
+            return header.Substring(start + 1, end - start - 1).Trim(); // æå–æ‹¬è™Ÿå…§çš„å…§å®¹
         }
-        return header.Trim(); // ¦pªG¨S¦³¬A¸¹¡Aªğ¦^¾ã­Ó¼ĞÃD
+        return header.Trim(); // å¦‚æœæ²’æœ‰æ‹¬è™Ÿï¼Œè¿”å›æ•´å€‹æ¨™é¡Œ
     }
 
 
@@ -125,7 +161,7 @@ public class CSVToLocalization
             var entry = table.GetEntry(key);
             if (entry != null)
             {
-                return entry.Value; // ªğ¦^±ø¥Øªº­È
+                return entry.Value; // è¿”å›æ¢ç›®çš„å€¼
             }
         }
 

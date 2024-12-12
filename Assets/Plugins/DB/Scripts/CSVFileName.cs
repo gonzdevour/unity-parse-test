@@ -51,7 +51,7 @@ public static class FileNameHelper
 
             if (!string.IsNullOrEmpty(fileName))
             {
-                Debug.Log("Downloaded file name: " + fileName);
+                //Debug.Log("已下載文件檔名: " + fileName);
             }
             else
             {
@@ -85,9 +85,7 @@ public static class FileNameHelper
             string excelName = nameParts[0];
             string pageName = nameParts[1];
 
-            Debug.Log($"Full Name: {fullName}");
-            Debug.Log($"Excel Name: {excelName}");
-            Debug.Log($"Page Name: {pageName}");
+            Debug.Log($"{excelName}CSV下載並解析成功\nFull Name: {fullName}, Excel Name: {excelName}, Page Name: {pageName}");
 
             // 回傳包含完整檔名、excelName 和 pageName 的 FileName 物件
             return new CSVFileName(fullName, excelName, pageName);

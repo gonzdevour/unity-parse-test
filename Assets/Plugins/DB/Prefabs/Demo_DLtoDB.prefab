@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4792686641526538582}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -52,6 +52,8 @@ MonoBehaviour:
   gas: {fileID: 4797864776206320744}
   csvDownloader: {fileID: 6381516290886453800}
   csv2sq: {fileID: 787613644944163462}
+  panelLoadingProgress: {fileID: 0}
+  panelSpinner: {fileID: 0}
 --- !u!114 &6381516290886453800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,8 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d93ba423b3413a4396d2f1a8970867a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvUrls:
-  - https://docs.google.com/spreadsheets/d/e/2PACX-1vR19m0xM9Qr7HeJqcNWUeN0cvryz9DWiWcAnp_2QSYi2F9evqBL5gIL2QeVAQ2iXUkJPY4nh-Xa6vPc/pub?gid=0&single=true&output=csv
 --- !u!114 &787613644944163462
 MonoBehaviour:
   m_ObjectHideFlags: 0

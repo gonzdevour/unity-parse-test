@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 1507721916416
-    m_Localized: "\u723D\u723D"
+    m_Localized: Button
     m_Metadata:
       m_Items: []
   - m_Id: 1941953809395712

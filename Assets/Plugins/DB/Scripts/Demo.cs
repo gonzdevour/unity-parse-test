@@ -22,6 +22,7 @@ public class Demo : MonoBehaviour
     public CSVToSQLite csv2sq;
     public CSVToLocalization csv2Loc = new();
 
+    public PanelLoadingProgress panelLoadingProgress;
     public GameObject panelSpinner;
     private SQLiteManager dbManager;
 
@@ -31,20 +32,69 @@ public class Demo : MonoBehaviour
         StartCoroutine(Test());
     }
 
+    public void TestLog() 
+    {
+        System.Text.StringBuilder randomString = new System.Text.StringBuilder(550); // 預設容量略大於500，預留換行符
+        for (int i = 0; i < 500; i++)
+        {
+            int randomDigit = Random.Range(0, 10); // 產生0到9之間的隨機數字
+            randomString.Append(randomDigit);
+
+            // 每10個數字後添加換行符
+            if ((i + 1) % 10 == 0)
+            {
+                randomString.Append("\n");
+            }
+        }
+        Debug.Log(randomString.ToString());
+    }
+
     public IEnumerator Test()
     {
-        panelSpinner.SetActive(true);
-        //yield return TestLoadTxt();
-        //yield return TestLoadDocx();
-        //yield return TestLoadExcel();
-        //yield return TestGetGoogleDoc();
-        //yield return TestGetGoogleSheetsAsCSV();
-        //yield return TestGetDocsInGoogleDriveFolder();
-        yield return TestDownloadCSV();
-        //yield return TestDownloadAllCSV();
-        //TestDB(); 
-        panelSpinner.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        ////過關
+        //yield return TestProgress();
 
+        //panelSpinner.SetActive(true);
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Txt");
+        //yield return TestLoadTxt();
+
+        //webgl似乎不支援NPOI?
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Docx");
+        //yield return TestLoadDocx();
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Excel");
+        //yield return TestLoadExcel();
+
+        ////過關
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("gas讀取googleDoc");
+        //yield return TestGetGoogleDoc();
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("gas讀取googleSheet依分頁解析為csv");
+        //yield return TestGetGoogleSheetsAsCSV();
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("gas從GoogleDrive資料夾獲取檔案");
+        //yield return TestGetDocsInGoogleDriveFolder();
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取開放連結的csv作為本地化資料");
+        //yield return TestDownloadCSV();
+        //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取開放連結的一群csv匯入sqldb");
+        //yield return TestDownloadAllCSV();
+        //TestDB();
+        //panelSpinner.SetActive(false);
+
+    }
+
+    /// <summary>
+    /// 測試進度條功能。
+    /// </summary>
+    public IEnumerator TestProgress()
+    {
+        int taskCount = 3;
+        panelLoadingProgress.StartProgress(taskCount, "Test Start", "Starting tasks...");
+
+        for (int i = 1; i <= taskCount; i++)
+        {
+            yield return new WaitForSeconds(Random.Range(1f, 1.5f));
+            panelLoadingProgress.Add(1, $"Task {i} Complete", "Processing...");
+        }
+        yield return new WaitForSeconds(1f);
     }
 
     private void TestDB()
@@ -128,11 +178,8 @@ public class Demo : MonoBehaviour
         string url = urlHead + "1vRqq-0kSrH6IUFzb6ovIfL-o0ER7_WYjlmBiEMM2GNRhIs1wPCbdbjbhEKXZinXPa_NlpRxtuvuk5Fk" + urlTail;
 
         yield return csvDownloader.DownloadCSV(url, resultDict => {
-            Debug.Log($"DownloadCSV result:");
-            Debug.Log($"Page Name: {resultDict["PageName"]}");
-            Debug.Log($"CSV Data:\n{resultDict["CSVData"]}");
-
-            csv2Loc.Update("StringLoc", resultDict["CSVData"]);
+            //Debug.Log($"DownloadCSV result:\nPage Name: {resultDict["PageName"]}\nCSV Data:\n{resultDict["CSVData"]}");
+            StartCoroutine(csv2Loc.Update("StringLoc", resultDict["CSVData"]));
         });
     }
 

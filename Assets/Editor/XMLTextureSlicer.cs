@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -90,3 +91,4 @@ public class SplitSpritesFromXML : EditorWindow
         EditorUtility.DisplayDialog("Success", "Sprites have been successfully split!", "OK");
     }
 }
+#endif

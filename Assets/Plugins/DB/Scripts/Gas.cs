@@ -3,9 +3,6 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using System;
-using UnityEngine.WSA;
-using System.Security.Cryptography;
 
 public class Gas : MonoBehaviour
 {
@@ -24,8 +21,8 @@ public class Gas : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log($"GetGoogleSheetsAsCSV success");
-            Debug.Log($"{request.downloadHandler.text}");
+            //Debug.Log($"GetGoogleSheetsAsCSV success");
+            //Debug.Log($"{request.downloadHandler.text}");
             string textData = request.downloadHandler.text;
             var returnValue = new Dictionary<string, string>
             {
@@ -51,8 +48,8 @@ public class Gas : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log($"GetDocsInGoogleDriveFolder success");
-            Debug.Log($"{request.downloadHandler.text}");
+            //Debug.Log($"GetDocsInGoogleDriveFolder success");
+            //Debug.Log($"{request.downloadHandler.text}");
             string textData = request.downloadHandler.text;
             var returnValue = new Dictionary<string, string>
             {
@@ -79,8 +76,8 @@ public class Gas : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log($"GetGoogleDoc success");
-            Debug.Log($"{request.downloadHandler.text}");
+            //Debug.Log($"GetGoogleDoc success");
+            //Debug.Log($"{request.downloadHandler.text}");
             string textData = request.downloadHandler.text;
             var returnValue = new Dictionary<string, string>
             {

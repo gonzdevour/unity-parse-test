@@ -32,7 +32,7 @@ namespace FancyScrollView.Leaderboard
             // 從 Resources 資料夾中加載新的 Sprite
             // 構建完整路徑
             //string imagePath = $"Sprites/round_nodetails_{itemData.ImageUrl}".Trim();
-            string imagePath = $"Sprites/round_nodetails".Trim();
+            string imagePath = $"Sprites/KennyArt/round_nodetails".Trim();
 
             // 加載圖片
             Sprite[] loadedSprite = Resources.LoadAll<Sprite>(imagePath);

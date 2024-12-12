@@ -5,18 +5,21 @@ using UnityEngine.UI;
 
 public class SceneSwitcher : MonoBehaviour
 {
-    public Image Cover;
-    private readonly float Duration = 0.5f;
+    public GameObject Cover;
+    private Image coverImg;
+    private readonly float Duration = 0.2f;
     public string[] sceneNames;
     private string currentScene;
 
-    void Start()
+    private void Awake()
     {
-        // Global Canvas 設置
-        Canvas globalCanvas = FindObjectOfType<Canvas>();
+        coverImg = GetComponent<Image>();
+        Canvas globalCanvas = coverImg.GetComponentInParent<Canvas>();
         globalCanvas.overrideSorting = true;
         globalCanvas.sortingOrder = 100; // 確保排序在其他 Canvas 之上
-
+    }
+    void Start()
+    {
         currentScene = null;
         SwitchScene("Menu");
     }
@@ -31,10 +34,12 @@ public class SceneSwitcher : MonoBehaviour
 
         if (!string.IsNullOrEmpty(currentScene) && SceneManager.GetSceneByName(currentScene).isLoaded)
         {
+            //Debug.Log($"當前場景{currentScene}非空且已經載入，執行FadeOut。");
             FadeOut(targetScene);
         }
         else
         {
+            //Debug.Log($"當前場景{currentScene}為空或尚未載入。直接讀入目標場景{targetScene}");
             LoadTargetScene(targetScene);
         }
     }
@@ -43,13 +48,15 @@ public class SceneSwitcher : MonoBehaviour
     {
         if (SceneManager.GetSceneByName(targetScene).isLoaded)
         {
+            coverImg.DOFade(0, 0).SetEase(Ease.InQuad);
+            currentScene = targetScene;
             Debug.LogWarning($"場景 {targetScene} 已加載，無需重複加載。");
             return;
         }
 
         SceneManager.LoadSceneAsync(targetScene, LoadSceneMode.Additive).completed += (op) =>
         {
-            Debug.Log($"場景 {targetScene} 加載完成。");
+            //Debug.Log($"場景 {targetScene} 加載完成。");
             currentScene = targetScene;
             FadeIn();
         };
@@ -57,29 +64,27 @@ public class SceneSwitcher : MonoBehaviour
 
     public void FadeIn()
     {
-        if (Cover == null)
+        if (coverImg == null)
         {
             Debug.LogError("FadeIn 無法執行，因為 Cover 未正確設置！");
             return;
         }
-
-        Debug.Log($"FadeIn Dur:{Duration}");
-        Cover.DOFade(0, Duration).SetEase(Ease.InQuad);
+        coverImg.DOFade(0, Duration).SetEase(Ease.InQuad);
     }
 
     public void FadeOut(string targetScene)
     {
-        if (Cover == null)
+        if (coverImg == null)
         {
             Debug.LogError("FadeOut 無法執行，因為 Cover 未正確設置！");
             return;
         }
 
-        Cover.DOFade(1, Duration).SetEase(Ease.OutQuad).OnComplete(() =>
+        coverImg.DOFade(1, Duration).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             SceneManager.UnloadSceneAsync(currentScene).completed += (op) =>
             {
-                Debug.Log($"卸載{currentScene}，讀取{targetScene}");
+                Debug.Log($"卸載{currentScene}場景，讀取{targetScene}場景");
                 LoadTargetScene(targetScene);
             };
         });

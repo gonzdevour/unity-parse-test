@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7430674594769562347}
   - component: {fileID: 356558779073481501}
   - component: {fileID: 1675835326237075048}
-  - component: {fileID: 4074582454326101768}
+  - component: {fileID: 2962916330424796488}
   m_Layer: 5
   m_Name: Cover
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4074582454326101768
+--- !u!114 &2962916330424796488
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,8 +85,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1023590095898951052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d656b5f1c568dd14e926ba00ce8ea3a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 6759d23792bf5584998ddd9dc076b603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cover: {fileID: 1675835326237075048}
-  Duration: 0.5
+  Cover: {fileID: 1023590095898951052}
+  sceneNames: []

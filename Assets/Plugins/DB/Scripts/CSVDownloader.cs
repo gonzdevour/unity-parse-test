@@ -7,7 +7,7 @@ public class CSVDownloader : MonoBehaviour
 {
     public IEnumerator DownloadCSV(string csvUrl, System.Action<Dictionary<string, string>> callback)
     {
-        Debug.Log(csvUrl);
+        //Debug.Log(csvUrl);
         UnityWebRequest request = UnityWebRequest.Get(csvUrl);
         yield return request.SendWebRequest();
 

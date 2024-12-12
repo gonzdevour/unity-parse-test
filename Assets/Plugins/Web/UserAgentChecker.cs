@@ -20,26 +20,9 @@ public class UserAgentChecker : MonoBehaviour
     }
 
     // 代刚ㄧ计
-    public void TestUserAgent()
+    public void TestUserAgent(string keyword) //keyword ex: "Chrome"
     {
-        string keyword = "Chrome";
         bool contains = Has(keyword);
         Debug.Log($"UserAgent contains \"{keyword}\": {contains}");
-
-        System.Text.StringBuilder randomString = new System.Text.StringBuilder(550); // 箇砞甧秖菠500箇痙传︽才
-        for (int i = 0; i < 500; i++)
-        {
-            int randomDigit = Random.Range(0, 10); // 玻ネ09ぇ丁繦诀计
-            randomString.Append(randomDigit);
-
-            // –10计睰传︽才
-            if ((i + 1) % 10 == 0)
-            {
-                randomString.Append("\n");
-            }
-        }
-        Debug.Log(randomString.ToString());
-
-
     }
 }
