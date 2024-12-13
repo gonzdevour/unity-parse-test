@@ -5,8 +5,8 @@ using System.Collections;
 public class BtnToUpload : MonoBehaviour
 {
     public Button button;
-    public string fileUrl = "https://playoneapps.com.tw/Test/unity-parse-test/v14/StreamingAssets/test.xlsx";
-    public string fileName = "test.xlsx";
+    //public string fileUrl = "https://playoneapps.com.tw/Test/unity-parse-test/v14/StreamingAssets/test.xlsx";
+    //public string fileName = "test.xlsx";
 
     void Start()
     {
@@ -15,17 +15,26 @@ public class BtnToUpload : MonoBehaviour
 
     void OnButtonClick()
     {
-        StartCoroutine(DownloadAndToggleButton());
+        var uploader = FindObjectOfType<Uploader>();
+        if (uploader != null)
+        {
+            uploader.UploadFile();
+        }
+        else
+        {
+            Debug.Log("uploader does not exist");
+        }
+        //StartCoroutine(DownloadAndToggleButton());
     }
 
-    private IEnumerator DownloadAndToggleButton()
-    {
-        var downloader = FindObjectOfType<Downloader>();
-        if (downloader != null)
-        {
-            button.interactable = false; // 窽ノ秙
-            yield return StartCoroutine(downloader.StartDownload(fileUrl, fileName));// 币笆更祘单ㄤЧΘ
-            button.interactable = true;// 更ЧΘ穝币ノ秙
-        }
-    }
+    //private IEnumerator DownloadAndToggleButton()
+    //{
+    //    var downloader = FindObjectOfType<Downloader>();
+    //    if (downloader != null)
+    //    {
+    //        button.interactable = false; // 窽ノ秙
+    //        yield return StartCoroutine(downloader.StartDownload(fileUrl, fileName));// 币笆更祘单ㄤЧΘ
+    //        button.interactable = true;// 更ЧΘ穝币ノ秙
+    //    }
+    //}
 }
