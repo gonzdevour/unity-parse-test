@@ -1,6 +1,7 @@
 mergeInto(LibraryManager.library, {
-    UploadFileWebGL: function (uploadUrlPtr) {
+    UploadFileWebGL: function (uploadUrlPtr, objectNamePtr) {
         const uploadUrl = UTF8ToString(uploadUrlPtr);
+        const objectName = UTF8ToString(objectNamePtr);
 
         const input = document.createElement('input');
         input.type = 'file';
@@ -21,11 +22,11 @@ mergeInto(LibraryManager.library, {
                 .then(response => response.text())
                 .then(result => {
                     console.log("File uploaded successfully:", result);
-                    UnityInstance.SendMessage("Uploader", "OnUploadComplete", result);
+                    UnityInstance.SendMessage(objectName, "OnUploadComplete", result);
                 })
                 .catch(error => {
                     console.error("File upload failed:", error);
-                    UnityInstance.SendMessage("Uploader", "OnUploadFailed", error.message);
+                    UnityInstance.SendMessage(objectName, "OnUploadFailed", error.message);
                 });
         };
 

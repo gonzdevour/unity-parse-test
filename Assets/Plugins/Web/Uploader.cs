@@ -10,7 +10,7 @@ public class Uploader : MonoBehaviour
 
     // WebGL 的檔案上傳函數
     [DllImport("__Internal")]
-    private static extern void UploadFileWebGL(string uploadUrl);
+    private static extern void UploadFileWebGL(string uploadUrl, string objectName);
 
     // 公共上傳接口，根據運行平台選擇適當方法
     public void UploadFile()
@@ -44,7 +44,7 @@ public class Uploader : MonoBehaviour
     private void UploadFileForWebGL()
     {
         Debug.Log("Starting WebGL file upload...");
-        UploadFileWebGL(serverUrl);
+        UploadFileWebGL(serverUrl, gameObject.name);
     }
 
     // 上傳檔案的協程 (適用於 PC 平台)
