@@ -294,6 +294,7 @@ public class LoginManager : MonoBehaviour
                 UserData responseData = JsonUtility.FromJson<UserData>(response);
                 if (responseData != null)
                 {
+                    UpdateDataLoadingTask(5, "登入中", "新使用者註冊");//sign-in強制完成登入流程
                     Debug.Log("Sign-in successful. Response: " + response);
                     // signIn成功必定是新玩家
                     IsNewUser = true;
