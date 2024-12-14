@@ -2,10 +2,6 @@ using UnityEngine;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using System;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
-using UnityEngine.SocialPlatforms.Impl;
-using Org.BouncyCastle.Tsp;
 // using System.Web;//原本用來解析UserAgent，但這是後端用的lib，換成使用webgl plugin直接從js取值
 
 public class LoginManager : MonoBehaviour
