@@ -59,7 +59,7 @@ public class Demo : MonoBehaviour
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Txt");
         //yield return TestLoadTxt();
 
-        //webgl似乎不支援NPOI?
+        //webgl不支援NPOI，改用nodejs app解析.docx和.xlsx
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Docx");
         //yield return TestLoadDocx();
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Excel");
@@ -123,21 +123,17 @@ public class Demo : MonoBehaviour
 
     private IEnumerator TestLoadDocx()
     {
-        yield return sa.LoadDocx("12n.docx", resultDict => {
+        yield return sa.LoadDocx("12n.docx", resultString => {
             Debug.Log($"LoadDocx result:");
-            Debug.Log($"{resultDict["TextData"]}");
+            Debug.Log($"{resultString}");
         });
     }
 
     private IEnumerator TestLoadExcel()
     {
-        yield return sa.LoadExcel("test.xlsx", resultDict => {
+        yield return sa.LoadExcel("test.xlsx", resultString => {
             Debug.Log($"LoadExcel result:");
-            foreach (var page in resultDict)
-            {
-                Debug.Log($"Page Name: {page["PageName"]}");
-                Debug.Log($"CSV Data:\n{page["CSVData"]}");
-            }
+            Debug.Log($"{resultString}");
         });
     }
 
