@@ -18,7 +18,7 @@ public class BtnToUpload : MonoBehaviour
         var uploader = FindObjectOfType<Uploader>();
         if (uploader != null)
         {
-            uploader.UploadFile(response => Debug.Log(response));
+            uploader.UploadFileFromDialog<string>(response => Debug.Log(response));
         }
         else
         {

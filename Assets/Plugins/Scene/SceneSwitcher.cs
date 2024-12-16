@@ -21,7 +21,23 @@ public class SceneSwitcher : MonoBehaviour
     void Start()
     {
         currentScene = null;
-        SwitchScene("Menu");
+        // 確認目前已加載的場景數量，只有從global啟動時才會自動前往Menu，否則只需要FadeIn coverImg即可
+        if (SceneManager.sceneCount == 1 && SceneManager.GetSceneAt(0).name == "Global")
+        {
+            SwitchScene("Menu");
+        }
+        else
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name != "Global")
+                {
+                    currentScene = scene.name; // 返回第一個不是 Global 的場景名稱
+                    FadeIn();
+                }
+            }
+        }
     }
 
     public void SwitchScene(string targetScene)

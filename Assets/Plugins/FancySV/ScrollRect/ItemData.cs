@@ -14,13 +14,15 @@ namespace FancyScrollView.Leaderboard
         public string UserName { get; }
         public string Score { get; }
         public string ImageUrl { get; }
+        public string Message { get; }
 
-        public ItemData(string rank = "0", string userName = "UNKNOWN", string score = "No-Data", string imageUrl = "" )
+        public ItemData(string rank = "0", string userName = "UNKNOWN", string score = "No-Data", string imageUrl = "", string message = "")
         {
             Rank = rank;
             UserName = userName;
             Score = score;
             ImageUrl = imageUrl;
+            Message = message;
         }
     }
 }

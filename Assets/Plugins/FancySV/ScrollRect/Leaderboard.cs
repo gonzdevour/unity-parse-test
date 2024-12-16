@@ -22,10 +22,14 @@ namespace FancyScrollView.Leaderboard
         {
             scrollView.OnCellClicked(index => SelectCell(index));
             var myRank = -1; //以out取回
-            GenerateCells(CollectData(PlayerPrefs.GetString("leaderboard", ""), out myRank));//UpdateContents(items);
-            SelectCell(myRank > 0 ? myRank : 0);
-            //JumpTo
-            scrollView.JumpTo(0);
+            var leaderboardData = PlayerPrefs.GetString("leaderboard", "");
+            if (!String.IsNullOrEmpty(leaderboardData)) 
+            {
+                GenerateCells(CollectData(leaderboardData, out myRank));//UpdateContents(items);
+                SelectCell(myRank > 0 ? myRank : 0);
+                //JumpTo
+                scrollView.JumpTo(0);
+            }
         }
 
         void TryParseValue(InputField inputField, int min, int max, Action<int> success) //輸入數值限制

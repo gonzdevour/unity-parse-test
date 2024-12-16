@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace FancyScrollView.Leaderboard
 {
-    class Cell : FancyScrollRectCell<ItemData, Context>
+    class Cell_Leaderboard : FancyScrollRectCell<ItemData, Context>
     {
         [SerializeField] Text txRank = default;
         [SerializeField] Text txName = default;

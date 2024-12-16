@@ -58,6 +58,7 @@ public class Demo : MonoBehaviour
         //panelSpinner.SetActive(true);
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Txt");
         //yield return TestLoadTxt();
+        yield return TestLoadImg();
 
         //webgl不支援NPOI，改用nodejs app解析.docx和.xlsx
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Docx");
@@ -113,10 +114,18 @@ public class Demo : MonoBehaviour
         Db_PrintAll("events");
     }
 
+    private IEnumerator TestLoadImg()
+    {
+        yield return sa.LoadImg("Image/duck.png", resultTexture => {
+            Debug.Log($"LoadImg from StreamingAsset complete");
+            sa.UpdateImageTexture("Img_FromSA",resultTexture);
+        });
+    }
+
     private IEnumerator TestLoadTxt()
     {
         yield return sa.LoadTxt("gogo.txt", resultDict => {
-            Debug.Log($"LoadTxt result:");
+            Debug.Log($"LoadTxt from StreamingAsset result:");
             Debug.Log($"{resultDict["TextData"]}");
         });
     }
@@ -124,7 +133,7 @@ public class Demo : MonoBehaviour
     private IEnumerator TestLoadDocx()
     {
         yield return sa.LoadDocx("12n.docx", resultString => {
-            Debug.Log($"LoadDocx result:");
+            Debug.Log($"LoadDocx from StreamingAsset result:");
             Debug.Log($"{resultString}");
         });
     }
@@ -132,7 +141,7 @@ public class Demo : MonoBehaviour
     private IEnumerator TestLoadExcel()
     {
         yield return sa.LoadExcel("test.xlsx", resultString => {
-            Debug.Log($"LoadExcel result:");
+            Debug.Log($"LoadExcel from StreamingAsset result:");
             Debug.Log($"{resultString}");
         });
     }

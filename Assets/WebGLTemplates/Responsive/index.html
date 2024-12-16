@@ -117,7 +117,7 @@
       productVersion: "{{{ PRODUCT_VERSION }}}",
     }).then((unityInstance) => {
       window.UnityInstance = unityInstance;
-      isUnityLoaded = true; // 標記 Unity 已加載完成
+      isUnityLoaded = true; // 標記 Unity 已加載完成 
     }).catch((message) => {
       console.error(message);
       alert("Failed to load Unity WebGL instance.");

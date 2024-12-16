@@ -6,7 +6,6 @@ using System;
 
 public class LoginManager : MonoBehaviour
 {
-    public bool CleanStorageAtStart;
     public UserAgentChecker userAgentChecker; //偵測是否在某環境
     public QueryStringParser queryStringParser; //從qstring取得網址裡的變數
     public UserData userDataManager;
@@ -34,13 +33,7 @@ public class LoginManager : MonoBehaviour
 
     private void Awake()
     {
-
         IsOnWeb = !string.IsNullOrEmpty(Application.absoluteURL);
-
-        if (CleanStorageAtStart)
-        {
-            PlayerPrefs.DeleteAll();
-        }
     }
 
     void Start()

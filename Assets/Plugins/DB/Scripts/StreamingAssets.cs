@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 //using NPOI.SS.UserModel;
 //using NPOI.XSSF.UserModel;
 //using NPOI.XWPF.UserModel;
@@ -47,6 +48,34 @@ public class StreamingAssets : MonoBehaviour
             {
                 onFileLoaded?.Invoke(request.downloadHandler.data);
             }
+        }
+    }
+
+    public IEnumerator LoadImg(string fileName, Action<Texture2D> callback = null)
+    {
+        byte[] fileData = null;
+        yield return LoadFile(fileName, data => fileData = data);
+
+        if (fileData != null)
+        {
+            //Debug.Log($"Image file loaded successfully, size: {fileData.Length} bytes");
+            Texture2D texture = new Texture2D(2, 2); // 記得設置初始大小，Texture2D 會自動調整
+
+            if (texture.LoadImage(fileData)) // 使用 Unity 提供的 LoadImage 方法
+            {
+                //Debug.Log("Image parsed successfully.");
+                callback?.Invoke(texture);
+            }
+            else
+            {
+                Debug.LogError("Failed to parse image file.");
+                callback?.Invoke(null);
+            }
+        }
+        else
+        {
+            Debug.LogError($"Failed to load image file: {fileName}");
+            callback?.Invoke(null);
         }
     }
 
@@ -118,6 +147,47 @@ public class StreamingAssets : MonoBehaviour
             Debug.LogError($"Failed to load txt file: {fileName}");
             callback?.Invoke(null);
         }
+    }
+
+    public static Dictionary<string, string> ParseTxt(byte[] fileData)
+    {
+        // 假设文件编码为 UTF-8，可以根据需求调整编码
+        string textData = Encoding.UTF8.GetString(fileData);
+        Dictionary<string, string> returnValue = new()
+            {
+                { "TextData", textData },
+            };
+
+        return returnValue;
+    }
+
+    public void UpdateImageTexture(string gameObjectName, Texture2D newTexture)
+    {
+        // 尋找 GameObject
+        GameObject imgFromSA = GameObject.Find(gameObjectName);
+        if (imgFromSA == null)
+        {
+            Debug.LogError($"GameObject '{gameObjectName}' not found.");
+            return;
+        }
+
+        // 取得 Image 組件
+        Image imageComponent = imgFromSA.GetComponent<Image>();
+        if (imageComponent == null)
+        {
+            Debug.LogError($"Image component not found on GameObject '{gameObjectName}'.");
+            return;
+        }
+
+        // 將 Texture2D 轉換為 Sprite 並替換 Image 的 sprite
+        Sprite newSprite = Sprite.Create(
+            newTexture,
+            new Rect(0, 0, newTexture.width, newTexture.height),
+            new Vector2(0.5f, 0.5f) // Pivot point at the center
+        );
+        imageComponent.sprite = newSprite;
+
+        Debug.Log($"Image texture updated successfully on '{gameObjectName}'.");
     }
 
     /// <summary>
@@ -210,16 +280,4 @@ public class StreamingAssets : MonoBehaviour
     //        return returnValue;
     //    }
     //}
-
-    public static Dictionary<string, string> ParseTxt(byte[] fileData)
-    {
-        // 假设文件编码为 UTF-8，可以根据需求调整编码
-        string textData = Encoding.UTF8.GetString(fileData);
-        Dictionary<string, string> returnValue = new()
-            {
-                { "TextData", textData },
-            };
-
-        return returnValue;
-    }
 }
