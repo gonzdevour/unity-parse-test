@@ -6,91 +6,71 @@ using System.Collections.Generic;
 public class ScrollView_Chatbox : MonoBehaviour
 {
     public Transform chatBoxContent;       // ScrollView 的 Content 物件
-    public GameObject cellMsgBubblePrefab; // Cell_MsgBubble 預製件
+    public GameObject AlignerCellMsgBubblePrefab; // Cell_MsgBubble 預製件
     public RectTransform hiddenLayoutRoot; // 用於在螢幕外的暫存 Layout 容器(需在Editor中指定)
-    private Queue<GameObject> messagePool = new Queue<GameObject>();
-    private int poolSize = 10; // 池大小
+
+    private ScrollRect scrollRect;
 
     void Start()
     {
-        // 確保 hiddenLayoutRoot 是 active，以便能在其中進行 Layout 計算
         if (hiddenLayoutRoot == null)
         {
             Debug.LogError("hiddenLayoutRoot is not assigned! Please assign a RectTransform in the inspector.");
             return;
         }
 
-        // hiddenLayoutRoot 可以放在畫面外的座標，
-        // 例如 hiddenLayoutRoot.anchoredPosition = new Vector2(-10000, -10000);
-        // 確保看不見但仍然是 active。
+        // hiddenLayoutRoot保持active並放在螢幕外，確保能正常計算Layout
         hiddenLayoutRoot.gameObject.SetActive(true);
 
-        // 初始化對象池
-        for (int i = 0; i < poolSize; i++)
+        // 嘗試取得 ScrollRect，用於稍後捲動至底部
+        scrollRect = GetComponentInParent<ScrollRect>();
+        if (scrollRect == null)
         {
-            GameObject messageObj = Instantiate(cellMsgBubblePrefab, hiddenLayoutRoot);
-            messageObj.SetActive(false);
-            messagePool.Enqueue(messageObj);
+            Debug.LogWarning("No ScrollRect found in parent. Automatic scrolling might not work.");
         }
     }
 
-    public void UpdateChatBox(string message)
+    public void UpdateChatBox(Dictionary<string, object> serverMessage, string currentUserName)
     {
-        StartCoroutine(PrepareMessageBubble(message));
+        Debug.Log("UpdateChatBox");
+        StartCoroutine(PrepareMessageBubble(serverMessage, currentUserName));
     }
 
-    IEnumerator PrepareMessageBubble(string message)
+    IEnumerator PrepareMessageBubble(Dictionary<string, object> serverMessage, string currentUserName)
     {
-        GameObject messageObj;
+        // 建立一個新的 Cell_MsgBubble 在 hiddenLayoutRoot 中
+        GameObject messageObj = Instantiate(AlignerCellMsgBubblePrefab, hiddenLayoutRoot);
 
-        // 從池中取出一個 Cell_MsgBubble
-        if (messagePool.Count > 0)
-        {
-            messageObj = messagePool.Dequeue();
-        }
-        else
-        {
-            messageObj = Instantiate(cellMsgBubblePrefab, hiddenLayoutRoot);
-        }
-
-        // 設置訊息內容
         messageObj.SetActive(true);
-        Text messageText = messageObj.GetComponentInChildren<Text>();
-
-        if (messageText != null)
+        // 設置訊息內容
+        Debug.Log("PrepareMessageBubble");
+        Cell_MsgBubble bubble = messageObj.GetComponentInChildren<Cell_MsgBubble>();
+        if (bubble != null)
         {
-            messageText.text = message;
+            bubble.UpdateData(serverMessage, currentUserName);
         }
         else
         {
-            Debug.LogWarning("Text component not found in Cell_MsgBubble prefab.");
+            Debug.Log("Cell_MsgBubble not exist in messageObj");
         }
+        
 
         // 等待一幀，讓Unity先完成初步的Layout計算
         yield return null;
 
-        // 強制更新Canvas並重建Layout - 多次呼叫以確保多層Layout都計算完成
-        Canvas.ForceUpdateCanvases();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(hiddenLayoutRoot);
-        Canvas.ForceUpdateCanvases();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(hiddenLayoutRoot);
-
-        // 此時 messageObj 在 hiddenLayoutRoot 中應該已完成最終大小計算
         // 將排版完成的物件移動到 ScrollView 的 Content
         messageObj.transform.SetParent(chatBoxContent, false);
         messageObj.transform.SetAsLastSibling();
 
-        // 如需再次強制更新ScrollView本身的排版，可再調用一次（視需求而定）
+        // 強制重新計算 chatBoxContent 的布局與大小
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)chatBoxContent);
+        Canvas.ForceUpdateCanvases();
 
-        // 回收最舊的物件（超過池大小時）
-        if (chatBoxContent.childCount > poolSize)
+        // 將 ScrollRect 捲動到底部 (verticalNormalizedPosition = 0f 為最下方)
+        if (scrollRect != null)
         {
-            Transform oldestMessage = chatBoxContent.GetChild(0);
-            oldestMessage.gameObject.SetActive(false);
-            oldestMessage.SetParent(hiddenLayoutRoot, false); // 移回暫存區
-            messagePool.Enqueue(oldestMessage.gameObject);
+            scrollRect.verticalNormalizedPosition = 0f;
         }
     }
 }

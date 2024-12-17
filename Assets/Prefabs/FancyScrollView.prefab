@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.39215687}
+  m_Color: {r: 0.5169811, g: 0.5169811, b: 0.5169811, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 4171656571640198624}
   - component: {fileID: 6069082060580083749}
   - component: {fileID: 1258442498572841907}
-  - component: {fileID: 7511896542135165000}
+  - component: {fileID: 8532892470114797506}
   m_Layer: 5
   m_Name: FancyScrollView
   m_TagString: Untagged
@@ -437,7 +437,7 @@ MonoBehaviour:
     Easing: 24
   draggable: 1
   scrollbar: {fileID: 1576346375342335324}
---- !u!114 &7511896542135165000
+--- !u!114 &8532892470114797506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -446,16 +446,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8857373292679964728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edf2116e61aae4a38bc9be5652078992, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ca69025c98bed84eb0efc40e5cd519d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellInterval: 1
-  scrollOffset: 1
+  cellInterval: 0.10166071
+  scrollOffset: 0.10166071
   loop: 0
   cellContainer: {fileID: 9103894230517379168}
   reuseCellMarginCount: 0
   paddingHead: 20
   paddingTail: 20
   spacing: 20
-  cellSize: 200
-  cellPrefab: {fileID: 1865951358068953824, guid: efa276bbc93594b8d9fd30eb37d79102, type: 3}
+  cellSize: 73
+  cellPrefab: {fileID: 1909081617919772014, guid: c51e74d2e3f2df84c8b7abf276ebb843, type: 3}

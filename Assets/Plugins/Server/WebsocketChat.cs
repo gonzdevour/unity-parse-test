@@ -24,6 +24,7 @@ public class WebsocketChat : MonoBehaviour
 
     private WebSocket ws;
     private string currentRoom = string.Empty;
+    private string currentUserName = string.Empty;
 
     private void Update()
     {
@@ -40,7 +41,7 @@ public class WebsocketChat : MonoBehaviour
         ws.OnOpen += () =>
         {
             Debug.Log("WebSocket connected.");
-            //GetRoomList();
+            GetRoomList();
         };
         ws.OnError += (e) => Debug.LogError("WebSocket error: " + e);
         ws.OnClose += (e) => Debug.Log("WebSocket closed.");
@@ -82,6 +83,7 @@ public class WebsocketChat : MonoBehaviour
     {
         if (ws.State == WebSocketState.Open && !string.IsNullOrEmpty(message))
         {
+            messageInput.text = ""; //²MªÅ°T®§Äæ
             string payload = JsonConvert.SerializeObject(new { type = "public_message", message });
             await ws.SendText(payload);
             //Debug.Log($"You: {message}");
@@ -98,6 +100,7 @@ public class WebsocketChat : MonoBehaviour
         {
             string payload = JsonConvert.SerializeObject(new { type = "join_room", userName, roomName });
             await ws.SendText(payload);
+            currentUserName = userName;
             currentRoom = roomName;
             Debug.Log($"Joining room: {roomName} as {userName}");
         }
@@ -171,9 +174,8 @@ public class WebsocketChat : MonoBehaviour
                     Debug.Log("Clients Tree: " + JsonConvert.SerializeObject(serverMessage["data"]));
                     break;
                 case "public_message":
-                    string msgString = JsonConvert.SerializeObject(serverMessage["message"]);
-                    chatBoxView.UpdateChatBox(msgString);
                     Debug.Log($"[{serverMessage["userName"]}] {serverMessage["message"]}");
+                    chatBoxView.UpdateChatBox(serverMessage, currentUserName);
                     break;
                 case "user_joined":
                     Debug.Log($"User joined: {serverMessage["message"]}");

@@ -1,61 +1,70 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace FancyScrollView.Leaderboard
+class Cell_MsgBubble : MonoBehaviour
 {
-    class Cell_MsgBubble : FancyScrollRectCell<ItemData, Context>
+    [SerializeField] private Text txName = default;
+    [SerializeField] private Text txMessage = default;
+    [SerializeField] private Image portrait = default;
+    [SerializeField] private Image cellImage = default;
+    [SerializeField] private Button cellButton = default;
+
+    public void UpdateData(Dictionary<string, object> serverMessage, string currentUserName)
     {
-        [SerializeField] Text txName = default;
-        [SerializeField] Text txMessage = default;
-        [SerializeField] Image portrait = default;
-        [SerializeField] Image cellImage = default;
-        [SerializeField] Button cellButton = default;
+        string userName = serverMessage.ContainsKey("userName") ? serverMessage["userName"]?.ToString() : "Unknown";
+        string message = serverMessage.ContainsKey("message") ? serverMessage["message"]?.ToString() : "";
+        bool isMyMessage = currentUserName == userName;
+        SetAlignment(isMyMessage);
 
-        public override void Initialize()
+        if (txName != null)
+            txName.text = userName;
+        else
+            Debug.LogWarning("txName is not assigned in the Inspector.");
+
+        if (txMessage != null)
+            txMessage.text = message;
+        else
+            Debug.LogWarning("txMessage is not assigned in the Inspector.");
+    }
+
+    public void SetPortrait(Sprite newPortrait)
+    {
+        if (portrait != null && newPortrait != null)
+            portrait.sprite = newPortrait;
+    }
+
+    public void SetCellBackground(Sprite background)
+    {
+        if (cellImage != null && background != null)
+            cellImage.sprite = background;
+    }
+
+    /// <summary>
+    /// 設置對齊方式：如果是自己發送的訊息，將 Child Alignment 設為 Upper Right
+    /// </summary>
+    public void SetAlignment(bool isMine)
+    {
+        // 取得父物件Aligner中的 Horizontal Layout Group
+        HorizontalLayoutGroup layoutGroup = GetComponentInParent<HorizontalLayoutGroup>();
+
+        if (layoutGroup != null)
         {
-            cellButton.onClick.AddListener(() => Context.OnCellClicked?.Invoke(Index));
-        }
-
-        public override void UpdateContent(ItemData itemData) //這個函數應該是在UpdateContents(items)時由plugin自動執行
-        {
-            txMessage.text = itemData.Message;
-            txName.text = itemData.UserName;
-
-            // 從 Resources 資料夾中加載新的 Sprite
-            // 構建完整路徑
-            //string imagePath = $"Sprites/round_nodetails_{itemData.ImageUrl}".Trim();
-            string imagePath = $"Sprites/KennyArt/round_nodetails".Trim();
-
-            // 加載圖片
-            Sprite[] loadedSprite = Resources.LoadAll<Sprite>(imagePath);
-
-            // Debug 日誌輸出
-            //Debug.Log($"Attempting to load sprite from path: {imagePath}");
-
-            // 確認 portrait 和 loadedSprite 均有效
-            if (portrait != null && loadedSprite != null)
+            // 根據 isMine 設定 Child Alignment
+            if (isMine)
             {
-                portrait.sprite = loadedSprite[int.Parse(itemData.ImageUrl)]; // 更改圖像
+                layoutGroup.childAlignment = TextAnchor.UpperRight; // 右上對齊
+                cellButton.image.color = Color.blue;
             }
             else
             {
-                Debug.LogWarning($"Failed to load sprite or portrait is null. Path: {imagePath}");
+                layoutGroup.childAlignment = TextAnchor.UpperLeft; // 左上對齊
             }
-
-
-            var selected = Context.SelectedIndex == Index;
-            cellImage.color = selected
-                ? new Color32(0, 255, 255, 100)
-                : new Color32(255, 255, 255, 77);
         }
-
-        protected override void UpdatePosition(float normalizedPosition, float localPosition)
+        else
         {
-            base.UpdatePosition(normalizedPosition, localPosition);
-
-            //設定左右位移量
-            var wave = Mathf.Sin(normalizedPosition * Mathf.PI * 2) * 0;
-            transform.localPosition += Vector3.right * wave;
+            Debug.LogWarning("HorizontalLayoutGroup not found on the parent object.");
         }
     }
 }
