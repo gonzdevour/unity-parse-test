@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8378944353869863998}
   - component: {fileID: 9141282090778218916}
   m_Layer: 5
-  m_Name: Portrait
+  m_Name: Portrait_UserList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,9 +114,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -488.68195, y: 249.32349}
+  m_AnchoredPosition: {x: -367.69403, y: 212.99998}
   m_SizeDelta: {x: 241.9758, y: 72.647}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6714870725433229540
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 4931501478654034776}
   - component: {fileID: 3612717811142520448}
   m_Layer: 5
-  m_Name: TxName
+  m_Name: TxName_UserList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,6 +4,7 @@ public class ReceiverWSChat : MonoBehaviour, IReceiver
 {
     public void Take(string message)
     {
-        Debug.Log("[WS]" + message);
+        WebsocketChat websocketChat = gameObject.GetComponent<WebsocketChat>();
+        websocketChat.SendPublicMessage(message);
     }
 }

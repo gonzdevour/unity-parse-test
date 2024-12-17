@@ -10,6 +10,7 @@ namespace FancyScrollView.Leaderboard
 {
     class ItemData
     {
+        // Leaderboard
         public string Rank { get; }
         public string UserName { get; }
         public string Score { get; }
