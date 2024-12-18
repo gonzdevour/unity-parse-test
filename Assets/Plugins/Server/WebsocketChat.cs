@@ -174,7 +174,7 @@ public class WebsocketChat : MonoBehaviour
                     Debug.Log("Clients Tree: " + JsonConvert.SerializeObject(serverMessage["data"]));
                     break;
                 case "public_message":
-                    Debug.Log($"[{serverMessage["userName"]}] {serverMessage["message"]}");
+                    //Debug.Log($"[{serverMessage["userName"]}] {serverMessage["message"]}");
                     chatBoxView.UpdateChatBox(serverMessage, currentUserName);
                     break;
                 case "user_joined":

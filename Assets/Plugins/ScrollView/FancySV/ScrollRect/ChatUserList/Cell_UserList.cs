@@ -31,7 +31,7 @@ namespace FancyScrollView.Leaderboard
             }
             else
             {
-                Debug.LogWarning($"Failed to load sprite or portrait is null. Path: {imagePath}");
+                //Debug.LogWarning($"Failed to load sprite or portrait is null. Path: {imagePath}");
             }
 
             var selected = Context.SelectedIndex == Index;
