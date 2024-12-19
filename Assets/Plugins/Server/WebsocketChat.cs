@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System;
 using FancyScrollView.Leaderboard;
+using LSR;
 
 public class WebsocketChat : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class WebsocketChat : MonoBehaviour
     public InputField userNameInput;
     public Dropdown RoomList;
     [SerializeField] private ScrollView_ChatUserList roommateListView;
-    [SerializeField] private ScrollView_Chatbox chatBoxView;
+    [SerializeField] private LoopScrollView chatBoxView;
 
 
     private WebSocket ws;
