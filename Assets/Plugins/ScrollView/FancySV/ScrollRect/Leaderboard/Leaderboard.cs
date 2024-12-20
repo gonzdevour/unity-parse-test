@@ -16,7 +16,7 @@ namespace FancyScrollView.Leaderboard
 {
     class Leaderboard : MonoBehaviour
     {
-        [SerializeField] ScrollView scrollView = default;
+        [SerializeField] ScrollView_Leaderboard scrollView = default;
 
         void Start()
         {

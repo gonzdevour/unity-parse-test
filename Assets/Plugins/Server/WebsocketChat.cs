@@ -4,12 +4,17 @@ using NativeWebSocket;
 using Newtonsoft.Json;
 using System.Text;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System;
 using FancyScrollView.Leaderboard;
 using LSR;
 
 public class WebsocketChat : MonoBehaviour
 {
+    public string serverUrl = "wss://playoneapps.com.tw/ws/";
+
+    public GameObject reconnectPanel;
+    public Button reconnectBtn;
     public Button sendBtn;
     public Button joinRoomBtn;
     public Button leaveRoomBtn;
@@ -26,6 +31,7 @@ public class WebsocketChat : MonoBehaviour
     private WebSocket ws;
     private string currentRoom = string.Empty;
     private string currentUserName = string.Empty;
+    private string currentMoreInfo = string.Empty;
 
     private void Update()
     {
@@ -36,23 +42,9 @@ public class WebsocketChat : MonoBehaviour
 
     void Start()
     {
-        // 初始化 WebSocket
-        ws = new WebSocket("wss://playoneapps.com.tw/ws/");
+        reconnectPanel.SetActive(false);
 
-        ws.OnOpen += () =>
-        {
-            Debug.Log("WebSocket connected.");
-            GetRoomList();
-        };
-        ws.OnError += (e) => Debug.LogError("WebSocket error: " + e);
-        ws.OnClose += (e) => Debug.Log("WebSocket closed.");
-        ws.OnMessage += (bytes) =>
-        {
-            //Debug.Log("got msg");
-            var message = Encoding.UTF8.GetString(bytes);
-            HandleServerMessage(message);
-        };
-
+        InitWebsocket();
         // 嘗試連接 WebSocket
         ConnectWebSocket();
 
@@ -60,11 +52,65 @@ public class WebsocketChat : MonoBehaviour
         RoomList.onValueChanged.AddListener(OnRoomSelected);
 
         // 綁定按鈕事件
-        sendBtn.onClick.AddListener(() => SendPublicMessage(messageInput.text.Trim()));
-        joinRoomBtn.onClick.AddListener(() => JoinRoom(userNameInput.text.Trim(), roomNameInput.text.Trim()));
+        sendBtn.onClick.AddListener(() =>
+        {
+            var message = messageInput.text.Trim();
+            SendPublicMessage(message);
+        });
+        joinRoomBtn.onClick.AddListener(() =>
+        {
+            var userName = userNameInput.text.Trim();
+            var roomName = roomNameInput.text.Trim();
+            var moreInfo = JsonConvert.SerializeObject(new
+            {
+                imgUrl = PlayerPrefs.GetString("Portrait", ""),
+            });
+            JoinRoom(userName, roomName, moreInfo);
+        });
+        reconnectBtn.onClick.AddListener(() =>
+        {
+            reconnectPanel.SetActive(false);
+            ConnectWebSocket();
+        });
         leaveRoomBtn.onClick.AddListener(LeaveRoom);
         getRoomsBtn.onClick.AddListener(GetRoomList);
         //getClientsTreeBtn.onClick.AddListener(GetClientsTree);
+    }
+
+    private void InitWebsocket()
+    {
+        // 初始化 WebSocket
+        ws = new WebSocket(serverUrl);
+
+        ws.OnOpen += () =>
+        {
+            Debug.Log("WebSocket connected.");
+            GetRoomList();
+            if (currentUserName != null && currentRoom != null)
+            {
+                JoinRoom(currentUserName, currentRoom, currentMoreInfo);
+            }
+            else
+            {
+                Debug.Log($"reconnection is not activated, username({currentUserName}) & roomname({currentRoom}) not found");
+            };
+        };
+        ws.OnError += (e) =>
+        {
+            reconnectPanel.SetActive(true);
+            Debug.LogError("WebSocket error: " + e);
+        };
+        ws.OnClose += (e) =>
+        {
+            reconnectPanel.SetActive(true);
+            Debug.Log("WebSocket closed.");
+        };
+        ws.OnMessage += (bytes) =>
+        {
+            var message = Encoding.UTF8.GetString(bytes);
+            Debug.Log(message);
+            HandleServerMessage(message);
+        };
     }
 
     private async void OnApplicationQuit()
@@ -95,14 +141,23 @@ public class WebsocketChat : MonoBehaviour
         }
     }
 
-    public async void JoinRoom(string userName, string roomName)
+    public async void JoinRoom(string userName, string roomName, string moreInfo = null)
     {
         if (ws.State == WebSocketState.Open && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(roomName))
         {
-            string payload = JsonConvert.SerializeObject(new { type = "join_room", userName, roomName });
+            var moreInfoObj = JsonConvert.DeserializeObject(moreInfo);
+            string payload = JsonConvert.SerializeObject(new
+            {
+                type = "join_room",
+                userName,
+                roomName,
+                moreInfo = moreInfoObj,
+            });
+            Debug.Log($"join room payload: {payload}");
             await ws.SendText(payload);
             currentUserName = userName;
             currentRoom = roomName;
+            currentMoreInfo = moreInfo;
             Debug.Log($"Joining room: {roomName} as {userName}");
         }
         else

@@ -110,7 +110,7 @@ namespace DG.Tweening
         /// <param name="pathMode">The path mode: 3D, side-scroller 2D, top-down 2D</param>
         /// <param name="resolution">The resolution of the path (useless in case of Linear paths): higher resolutions make for more detailed curved paths but are more expensive.
         /// Defaults to 10, but a value of 5 is usually enough if you don't have dramatic long curves between waypoints</param>
-        /// <param name="gizmoColor">The color of the path (shown when gizmos are active in the Play panel and the tween is running)</param>
+        /// <param name="gizmoColor">The color of the path (shown when gizmos are active in the Play modalPanel and the tween is running)</param>
         public static TweenerCore<Vector3, Path, PathOptions> DOPath(
             this Rigidbody2D target, Vector2[] path, float duration, PathType pathType = PathType.Linear,
             PathMode pathMode = PathMode.Full3D, int resolution = 10, Color? gizmoColor = null
@@ -138,7 +138,7 @@ namespace DG.Tweening
         /// <param name="pathMode">The path mode: 3D, side-scroller 2D, top-down 2D</param>
         /// <param name="resolution">The resolution of the path: higher resolutions make for more detailed curved paths but are more expensive.
         /// Defaults to 10, but a value of 5 is usually enough if you don't have dramatic long curves between waypoints</param>
-        /// <param name="gizmoColor">The color of the path (shown when gizmos are active in the Play panel and the tween is running)</param>
+        /// <param name="gizmoColor">The color of the path (shown when gizmos are active in the Play modalPanel and the tween is running)</param>
         public static TweenerCore<Vector3, Path, PathOptions> DOLocalPath(
             this Rigidbody2D target, Vector2[] path, float duration, PathType pathType = PathType.Linear,
             PathMode pathMode = PathMode.Full3D, int resolution = 10, Color? gizmoColor = null

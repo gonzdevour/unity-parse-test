@@ -12,6 +12,7 @@ namespace LSR
         public HorizontalLayoutGroup Aligner;
         public VerticalLayoutGroup bubbleVLG;
         public RectTransform portrait;
+        public string portraitSpritePath = "Sprites/KennyArt/square";
         public Image cellBg; // 假設 cell 背景是一個 Image
         public Color MyColor;
         public Color NotMyColor;
@@ -95,6 +96,7 @@ namespace LSR
                 {
                     string userName = bubbleMsg["userName"] as string; // 使用 `as` 進行類型轉換
                     string message = bubbleMsg["message"] as string;
+                    string imgUrl = bubbleMsg["imgUrl"] as string;
                     bool isMyMessage = (bool)bubbleMsg["isMyMessage"]; // 使用顯式轉換
 
                     if (txName != null)
@@ -116,6 +118,20 @@ namespace LSR
                     if (cellBg != null)
                     {
                         cellBg.color = isMyMessage ? MyColor : NotMyColor;
+                    }
+
+                    if (portrait != null)
+                    {
+                        SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
+                        Image image = portrait.GetComponent<Image>();
+                        string address = !string.IsNullOrEmpty(portraitSpritePath) ? portraitSpritePath + "|" + imgUrl : imgUrl;
+                        spriteCacher.GetSprite(address, (sprite) =>
+                        {
+                            if (image != null) //避免回傳時物件已刪除
+                            {
+                                image.sprite = sprite;
+                            };
+                        });
                     }
                 }
             }

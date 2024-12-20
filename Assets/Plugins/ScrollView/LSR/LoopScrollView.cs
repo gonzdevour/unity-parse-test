@@ -88,6 +88,7 @@ namespace LSR
             // 從 serverMessage 中提取訊息資料
             string userName = serverMessage.ContainsKey("userName") ? serverMessage["userName"]?.ToString() : "Unknown";
             string message = serverMessage.ContainsKey("message") ? serverMessage["message"]?.ToString() : "";
+            string imgUrl = serverMessage.ContainsKey("imgUrl") ? serverMessage["imgUrl"]?.ToString() : "";
             bool isMyMessage = currentUserName == userName;
 
             // 創建一個新的訊息資料字典
@@ -95,6 +96,7 @@ namespace LSR
             {
                 { "userName", userName },
                 { "message", message },
+                { "imgUrl", imgUrl },
                 { "isMyMessage", isMyMessage }
             };
 
