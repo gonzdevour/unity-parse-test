@@ -12,7 +12,6 @@ namespace LSR
         public HorizontalLayoutGroup Aligner;
         public VerticalLayoutGroup bubbleVLG;
         public RectTransform portrait;
-        public string portraitSpritePath = "Sprites/KennyArt/square";
         public Image cellBg; // 假設 cell 背景是一個 Image
         public Color MyColor;
         public Color NotMyColor;
@@ -21,7 +20,7 @@ namespace LSR
         {
             UpdateMessage(idx);
             element.preferredHeight = GetCellHeight();
-            Debug.Log(element.preferredHeight);
+            //Debug.Log(element.preferredHeight);
             gameObject.name = $"Cell{idx}";
         }
 
@@ -124,7 +123,24 @@ namespace LSR
                     {
                         SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
                         Image image = portrait.GetComponent<Image>();
-                        string address = !string.IsNullOrEmpty(portraitSpritePath) ? portraitSpritePath + "|" + imgUrl : imgUrl;
+
+                        string address;
+
+                        //multiple sprite測試
+                        address = "Resources://Sprites/KennyArt/square" + "|" + imgUrl;
+
+                        //single sprite測試
+                        //imgUrl = "green_checkmark";
+                        //address = "Resources://Sprites/KennyArt" + "/" + imgUrl;
+
+                        ////網路圖片測試
+                        //imgUrl = "https://playoneapps.com.tw/File/Stand/Hero/image01.png";
+                        //address = imgUrl;
+
+                        //sa圖片測試
+                        //imgUrl = "StreamingAssets://Image/duck.png";
+                        //address = imgUrl;
+
                         spriteCacher.GetSprite(address, (sprite) =>
                         {
                             if (image != null) //避免回傳時物件已刪除

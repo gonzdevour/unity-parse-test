@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace FancyScrollView.Leaderboard
@@ -17,21 +18,44 @@ namespace FancyScrollView.Leaderboard
 
         public override void UpdateContent(ChatUserData data) //這個函數應該是在UpdateContents(items)時由plugin自動執行
         {
+
             txName.text = data.UserName;
 
-            // 從 Resources 資料夾中加載新的 Sprite           
-            string imagePath = $"Sprites/KennyArt/round_nodetails".Trim(); // 構建完整路徑
-            Sprite[] loadedSprite = Resources.LoadAll<Sprite>(imagePath); // 加載圖片
-            //Debug.Log($"Loaded sprites count: {(loadedSprite != null ? loadedSprite.Length : 0)} from path: {imagePath}");
-
-            // 確認 portrait 和 loadedSprite 均有效
-            if (portrait != null && loadedSprite != null && data.ImageUrl != null)
+            if (portrait != null && data.ImageUrl != null)
             {
-                portrait.sprite = loadedSprite[int.Parse(data.ImageUrl)]; // 更改圖像
+                var imgUrl = data.ImageUrl;
+
+                SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
+                Image image = portrait.GetComponent<Image>();
+
+                string address;
+
+                //multiple sprite測試
+                address = "Resources://Sprites/KennyArt/square" + "|" + imgUrl;
+
+                //single sprite測試
+                //imgUrl = "green_checkmark";
+                //address = "Resources://Sprites/KennyArt" + "/" + imgUrl;
+
+                ////網路圖片測試
+                //imgUrl = "https://playoneapps.com.tw/File/Stand/Hero/image01.png";
+                //address = imgUrl;
+
+                //sa圖片測試
+                //imgUrl = "StreamingAssets://Image/duck.png";
+                //address = imgUrl;
+
+                spriteCacher.GetSprite(address, (sprite) =>
+                {
+                    if (image != null) //避免回傳時物件已刪除
+                    {
+                        image.sprite = sprite;
+                    };
+                });
             }
             else
             {
-                //Debug.LogWarning($"Failed to load sprite or portrait is null. Path: {imagePath}");
+                Debug.LogWarning($"Failed to load sprite or portrait is null. Path: {data.ImageUrl}");
             }
 
             var selected = Context.SelectedIndex == Index;

@@ -31,7 +31,7 @@ namespace LSR
 
         void Refresh()
         {
-            Debug.Log($"total count: {chatBubbleMessages.Count}");
+            //Debug.Log($"total count: {chatBubbleMessages.Count}");
             ls.totalCount = chatBubbleMessages.Count;
             //ls.RefillCells();//ls.RefillCells會讓scroll歸0，其實設定totoalCount時會自動ls.refresh，好像不必每次都手動ls.Refresh或ls.Refill
             bool AtBottom = IsScrolledToBottom();

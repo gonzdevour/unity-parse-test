@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.Networking;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class SpriteCacher : MonoBehaviour
 {
@@ -30,7 +30,7 @@ public class SpriteCacher : MonoBehaviour
 
     public void CacheSprite(string address, System.Action<Sprite> onComplete)
     {
-        if (IsUrl(address))
+        if (IsUrl(address)) // 從網路加載
         {
             if (!LoadingSprites.Contains(address))
             {
@@ -38,45 +38,103 @@ public class SpriteCacher : MonoBehaviour
                 StartCoroutine(DownloadAndCacheSprite(address, onComplete));
             }
         }
-        else
+        else // 從Resources或StreamingAssets加載
         {
-            // 若 address 不是網址，從 Resources 加載
-            // 使用 '|' 字元分割字串
-            string[] parts = address.Split('|');
-            string path;
-            string spriteName;
-            if (parts.Length == 2)
+            string addressFromResources = TrimAddress(address, "Resources://");
+            string addressFromStreamingAssets = TrimAddress(address, "StreamingAssets://");
+
+            // 從Resources加載
+            if (!string.IsNullOrEmpty(addressFromResources))
             {
-                path = parts[0];
-                spriteName = parts[1];
-                // 指定sprite所在的素材路徑
-                Sprite[] sprites = Resources.LoadAll<Sprite>(path);
-                // 在載入的陣列中尋找名為 adress 的Sprite
-                Sprite sprite = null;
-                foreach (var s in sprites)
+                if (IsMultipleSprite(addressFromResources)) //如果是分切圖片
                 {
-                    if (s.name == spriteName)
+                    // 使用 '|' 字元分割字串
+                    string[] parts = addressFromResources.Split('|');
+                    string path;
+                    string spriteName;
+                    if (parts.Length == 2)
                     {
-                        sprite = s;
-                        break;
+                        path = parts[0];
+                        spriteName = parts[1];
+                        // 指定sprite所在的素材路徑
+                        Sprite[] sprites = Resources.LoadAll<Sprite>(path);
+                        // 在載入的陣列中尋找名為 adress 的Sprite
+                        Sprite sprite = null;
+                        foreach (var s in sprites)
+                        {
+                            if (s.name == spriteName)
+                            {
+                                sprite = s;
+                                break;
+                            }
+                        }
+                        if (sprite != null)
+                        {
+                            SpriteCache[address] = sprite;
+                            Debug.Log($"Sprite cached from Resources: {address}");
+                            onComplete?.Invoke(sprite);
+                        }
+                        else
+                        {
+                            //Debug.LogWarning($"Sprite not found in Resources: {address}");
+                            onComplete?.Invoke(null);
+                        }
+                    }
+                    else
+                    {
+                        Sprite sprite = Resources.Load<Sprite>(addressFromResources);
+                        if (sprite != null)
+                        {
+                            SpriteCache[address] = sprite;
+                            Debug.Log($"Sprite cached from Resources: {address}");
+                            onComplete?.Invoke(sprite);
+                        }
+                        else
+                        {
+                            //Debug.LogWarning($"Sprite not found in Resources: {address}");
+                            onComplete?.Invoke(null);
+                        }
+                    }
+                } else
+                {
+                    //如果不是分切圖片
+                    Sprite sprite = Resources.Load<Sprite>(addressFromResources);
+                    if (sprite != null)
+                    {
+                        SpriteCache[address] = sprite;
+                        Debug.Log($"Sprite cached from Resources: {address}");
+                        onComplete?.Invoke(sprite);
+                    }
+                    else
+                    {
+                        //Debug.LogWarning($"Sprite not found in Resources: {address}");
+                        onComplete?.Invoke(null);
                     }
                 }
-                if (sprite != null)
-                {
-                    SpriteCache[address] = sprite;
-                    Debug.Log($"Sprite cached from Resources: {address}");
-                    onComplete?.Invoke(sprite);
-                }
-                else
-                {
-                    Debug.LogWarning($"Sprite not found in Resources: {address}");
-                    onComplete?.Invoke(null);
-                }
             }
-            else
+            // 從StreamingAssets加載
+            else if (!string.IsNullOrEmpty(addressFromStreamingAssets))
             {
-                // 若沒有'|'，或分割結果不是兩段，根據需求決定要做什麼處理
-                Debug.LogWarning("Address format is not as expected.");
+                if (!LoadingSprites.Contains(address))
+                {
+                    LoadingSprites.Add(address);
+
+                    string filePath = Path.Combine(Application.streamingAssetsPath, addressFromStreamingAssets);
+                    if (File.Exists(filePath))
+                    {
+                        StartCoroutine(LoadSpriteFromStreamingAssets(filePath, address, sprite =>
+                        {
+                            LoadingSprites.Remove(address);
+                            onComplete?.Invoke(sprite);
+                        }));
+                    }
+                    else
+                    {
+                        //Debug.LogWarning($"File not found in StreamingAssets: {filePath}");
+                        LoadingSprites.Remove(address);
+                        onComplete?.Invoke(null);
+                    }
+                }
             }
         }
     }
@@ -84,6 +142,20 @@ public class SpriteCacher : MonoBehaviour
     private bool IsUrl(string address)
     {
         return address.StartsWith("http://") || address.StartsWith("https://");
+    }
+
+    private string TrimAddress(string address, string prefix)
+    {
+        if (address.StartsWith(prefix))
+        {
+            return address.Substring(prefix.Length); // 移除前綴
+        }
+        return ""; // 不符合條件則返回空字串
+    }
+
+    private bool IsMultipleSprite(string address)
+    {
+        return address.Contains("|");
     }
 
     private IEnumerator DownloadAndCacheSprite(string url, System.Action<Sprite> onComplete)
@@ -111,5 +183,28 @@ public class SpriteCacher : MonoBehaviour
             }
         }
         LoadingSprites.Remove(url); // 加載完成後移除跟蹤
+    }
+
+    // filePath是取檔路徑，address是原始自訂路徑例如"StreamingAssets://filePath"，address是SpriteCache的key
+    private IEnumerator LoadSpriteFromStreamingAssets(string filePath, string address, System.Action<Sprite> onComplete)
+    {
+        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(filePath))
+        {
+            yield return uwr.SendWebRequest();
+
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
+                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                SpriteCache[address] = sprite;
+                Debug.Log($"Sprite cached from StreamingAssets: {address}");
+                onComplete?.Invoke(sprite);
+            }
+            else
+            {
+                Debug.LogWarning($"Failed to load sprite from StreamingAssets: {uwr.error}");
+                onComplete?.Invoke(null);
+            }
+        }
     }
 }

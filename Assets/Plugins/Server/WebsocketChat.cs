@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using FancyScrollView.Leaderboard;
 using LSR;
+using static UnityEditor.Progress;
 
 public class WebsocketChat : MonoBehaviour
 {
@@ -242,7 +243,7 @@ public class WebsocketChat : MonoBehaviour
                 case "roommates_update":
                     // 取得roommates_update資料並呼叫UpdateRoommateList
                     string roommatesJson = JsonConvert.SerializeObject(serverMessage["roomMates"]);
-                    Debug.Log($"Roommates Update: {roommatesJson}");
+                    //Debug.Log($"Roommates Update: {roommatesJson}");
                     UpdateRoommateList(roommatesJson);
                     break;
                 default:
@@ -290,10 +291,9 @@ public class WebsocketChat : MonoBehaviour
     {
         try
         {
+            //Debug.Log($"[UpdateRoommateList]{roommatesJson}");
             var roommates = JsonConvert.DeserializeObject<List<ChatUserData>>(roommatesJson);
-            //Debug.Log($"[UpdateRoommateList] Successfully deserialized into {roommates.Count} roommates.");
             roommateListView.UpdateData(roommates);
-            //Debug.Log("[UpdateRoommateList] roommateListView.UpdateData completed.");
         }
         catch (Exception ex)
         {

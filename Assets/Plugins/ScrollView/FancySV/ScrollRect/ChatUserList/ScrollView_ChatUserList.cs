@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using EasingCore;
+using Newtonsoft.Json;
 
 namespace FancyScrollView.Leaderboard
 {

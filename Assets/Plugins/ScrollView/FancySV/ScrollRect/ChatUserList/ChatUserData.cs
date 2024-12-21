@@ -10,7 +10,7 @@ namespace FancyScrollView.Leaderboard
         [JsonProperty("userName")]
         public string UserName { get; }
 
-        [JsonProperty("imageUrl")]
+        [JsonProperty("imgUrl")]
         public string ImageUrl { get; }
 
         [JsonConstructor]
