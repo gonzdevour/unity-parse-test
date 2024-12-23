@@ -5,15 +5,6 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
-// 定义一个与 events 表结构相匹配的类
-public class Event
-{
-    public int Id { get; set; }
-    public string 日期 { get; set; }
-    public int 日期編號 { get; set; }
-    public string 歷史 { get; set; }
-}
-
 public class Demo : MonoBehaviour
 {
     public StreamingAssets sa;
@@ -24,7 +15,16 @@ public class Demo : MonoBehaviour
 
     public PanelLoadingProgress panelLoadingProgress;
     public GameObject panelSpinner;
-    private SQLiteManager dbManager;
+    public SQLiteManager dbManager;
+
+    // 定义一个与 events 表结构相匹配的类
+    public class HistoryEvent
+    {
+        public int Id { get; set; }
+        public string 日期 { get; set; }
+        public int 日期編號 { get; set; }
+        public string 歷史 { get; set; }
+    }
 
     void Start()
     {
@@ -221,7 +221,7 @@ public class Demo : MonoBehaviour
     public void Db_PrintAll(string pageName) 
     {
         // 基於Event class取得"events"表單中的資料映射到allEvents物件中
-        List<Event> allEvents = dbManager.QueryTable<Event>(pageName);
+        List<HistoryEvent> allEvents = dbManager.QueryTable<HistoryEvent>(pageName);
         // 印出allEvents物件中的各列指定內容
         foreach (var eventItem in allEvents)
         {
@@ -239,7 +239,7 @@ public class Demo : MonoBehaviour
     public void Db_InsertFromObj()
     {
         Debug.Log("---insert obj---");
-        Event myEvent = new()
+        HistoryEvent myEvent = new()
         {
             日期 = "2024-01-01",
             日期編號 = 20240101,
@@ -253,7 +253,7 @@ public class Demo : MonoBehaviour
         Debug.Log("---query---");
         // 查詢數據
         // 基於Event class取得"events"表單中的資料映射到allEvents物件中
-        List<Event> allEvents = dbManager.QueryTable<Event>("events", "日期編號 < 20240101", "日期編號 ASC");//DESC
+        List<HistoryEvent> allEvents = dbManager.QueryTable<HistoryEvent>("events", "日期編號 < 20240101", "日期編號 ASC");//DESC
         // 印出allEvents物件中的各列指定內容
         foreach (var eventItem in allEvents)
         {

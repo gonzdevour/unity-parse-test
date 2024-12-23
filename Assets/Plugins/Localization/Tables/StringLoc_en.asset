@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: Loading
     m_Metadata:
       m_Items: []
+  - m_Id: 6664114042220544
+    m_Localized: Re-connect
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

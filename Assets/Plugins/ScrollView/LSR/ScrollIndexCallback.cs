@@ -124,10 +124,10 @@ namespace LSR
                         SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
                         Image image = portrait.GetComponent<Image>();
 
-                        string address;
+                        //string address = imgUrl;
 
                         //multiple sprite測試
-                        address = "Resources://Sprites/KennyArt/square" + "|" + imgUrl;
+                        //address = "Resources://Sprites/KennyArt/square" + "|" + "penguin";
 
                         //single sprite測試
                         //imgUrl = "green_checkmark";
@@ -141,7 +141,7 @@ namespace LSR
                         //imgUrl = "StreamingAssets://Image/duck.png";
                         //address = imgUrl;
 
-                        spriteCacher.GetSprite(address, (sprite) =>
+                        spriteCacher.GetSprite(imgUrl, (sprite) =>
                         {
                             if (image != null) //避免回傳時物件已刪除
                             {

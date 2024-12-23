@@ -109,7 +109,7 @@ public class WebsocketChat : MonoBehaviour
         ws.OnMessage += (bytes) =>
         {
             var message = Encoding.UTF8.GetString(bytes);
-            Debug.Log(message);
+            //Debug.Log(message);
             HandleServerMessage(message);
         };
     }
@@ -149,7 +149,8 @@ public class WebsocketChat : MonoBehaviour
             var moreInfoObj = JsonConvert.DeserializeObject(moreInfo);
             string payload = JsonConvert.SerializeObject(new
             {
-                type = "join_room",
+                //type = "join_room",
+                type = "leave_then_join_room",
                 userName,
                 roomName,
                 moreInfo = moreInfoObj,
@@ -259,14 +260,14 @@ public class WebsocketChat : MonoBehaviour
 
     public void UpdateRoomList(string roomsJson)
     {
-        Debug.Log($"roomJson: {roomsJson}");
+        //Debug.Log($"roomJson: {roomsJson}");
 
         var rooms = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(roomsJson);
         Debug.Log($"rooms: {rooms}");
 
         // 保留第一個選項
         var firstOption = RoomList.options[0];
-        Debug.Log($"firstOption: {firstOption.text}");
+        //Debug.Log($"firstOption: {firstOption.text}");
 
         // 清除原有選項，但先保留第一個
         RoomList.options.Clear();

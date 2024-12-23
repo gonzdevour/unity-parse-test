@@ -28,10 +28,10 @@ namespace FancyScrollView.Leaderboard
                 SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
                 Image image = portrait.GetComponent<Image>();
 
-                string address;
+                //string address;
 
                 //multiple sprite測試
-                address = "Resources://Sprites/KennyArt/square" + "|" + imgUrl;
+                //address = "Resources://Sprites/KennyArt/square" + "|" + imgUrl;
 
                 //single sprite測試
                 //imgUrl = "green_checkmark";
@@ -45,7 +45,7 @@ namespace FancyScrollView.Leaderboard
                 //imgUrl = "StreamingAssets://Image/duck.png";
                 //address = imgUrl;
 
-                spriteCacher.GetSprite(address, (sprite) =>
+                spriteCacher.GetSprite(imgUrl, (sprite) =>
                 {
                     if (image != null) //避免回傳時物件已刪除
                     {
