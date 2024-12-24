@@ -7,10 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class ItemsGenFromDB : MonoBehaviour
 {
-    CSVDownloader csvDownloader;
-    CSVToSQLite csv2sq;
     SQLiteManager dbManager;
-    SpriteCacher spriteCacher;
 
     public PortraitSelector itemSelector;
     public GameObject itemList;
@@ -31,20 +28,26 @@ public class ItemsGenFromDB : MonoBehaviour
 
     public IEnumerator MakeItemTable()
     {
+        // 清空 itemList 的所有子物件
+        foreach (Transform child in itemList.transform)
+        {
+            Destroy(child.gameObject);
+        }
         // 每秒檢查Global scene是否已加載
         yield return WaitForScene("Global", 1f);
         Debug.Log("Global scene is loaded");
 
-        // 取得Global scene上的必要單例物件
-        csvDownloader = FindObjectOfType<CSVDownloader>();
-        csv2sq = FindObjectOfType<CSVToSQLite>();
+        // 讀取資料庫
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
-
-        Debug.Log("Start DownloadCSV");
-        yield return DownloadCSV(
-            "1vT6trpTZO0gdjTGiRosRmHsd1fjzbRfBH1xLLbAHer5xWmZjglEZfYNAPUbKjp0Pj3o4et4AsS0bm-z", //sheetId
-            "1874800715" //gid
-            );
+        List<HistoryEvent> allEvents = dbManager.QueryTable<HistoryEvent>("查找器");
+        if (allEvents.Count == 0)
+        {
+            Debug.Log("Start DownloadCSV");
+            yield return DownloadCSV(
+                "1vT6trpTZO0gdjTGiRosRmHsd1fjzbRfBH1xLLbAHer5xWmZjglEZfYNAPUbKjp0Pj3o4et4AsS0bm-z", //sheetId
+                "1874800715" //gid
+                );
+        }
         Db_MapToItems("查找器");
         itemSelector.UpdateToggleIsOn();
     }
@@ -64,7 +67,7 @@ public class ItemsGenFromDB : MonoBehaviour
         string urlHead = "https://docs.google.com/spreadsheets/d/e/2PACX-";
         string urlTail = $"/pub?gid={gid}&single=true&output=csv";
         string url = $"{urlHead}{sheetId}{urlTail}";
-        yield return csvDownloader.DownloadCSV(url, resultDict => {
+        yield return CSVDownloader.Inst.DownloadCSV(url, resultDict => {
             Db_CreateByCSV(resultDict);
         });
     }
@@ -83,13 +86,11 @@ public class ItemsGenFromDB : MonoBehaviour
 
         // 在 CSV 下載完成後啟動資料庫導入
         //SaveCSVToFile(resultDict["CSVData"]);
-        csv2sq.ImportCSVToDatabase(resultDict["PageName"], resultDict["CSVData"], dbPath);
+        CSVToSQLite.Inst.ImportCSVToDatabase(resultDict["PageName"], resultDict["CSVData"], dbPath);
     }
 
     public void Db_MapToItems(string pageName)
     {
-        spriteCacher = FindObjectOfType<SpriteCacher>();
-
         // 清空 itemList 的所有子物件
         foreach (Transform child in itemList.transform)
         {
@@ -127,7 +128,7 @@ public class ItemsGenFromDB : MonoBehaviour
         Image backgroundImage = newToggle.transform.Find("Background").GetComponent<Image>();
 
         string imgUrl = $"https://playoneapps.com.tw/images/roc/portrait/{eventItem.name}.png";
-        spriteCacher.GetSprite(imgUrl, (sprite) =>
+        SpriteCacher.Inst.GetSprite(imgUrl, (sprite) =>
         {
             if (backgroundImage != null)
             {

@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Leaderboard.unity
     guid: c8527202e25ca2644ab1d89774142429
+  - enabled: 1
+    path: Assets/Scenes/Chatroom.unity
+    guid: a8e317d0be7610445b636b4d70eb7738
+  - enabled: 1
+    path: Assets/Scenes/ItemGrid.unity
+    guid: c592747e2a1502945a7443de38da9bfa
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: c6fcbe067b4735e45a717af419ca8b19, type: 2}
     com.unity.localization.settings: {fileID: 11400000, guid: fa54467f924dfe448b6bf917446937b9, type: 2}

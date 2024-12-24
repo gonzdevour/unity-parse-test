@@ -8,6 +8,13 @@ public class Gas : MonoBehaviour
 {
     public List<string> GoogleFileIDs;
 
+    public static Gas Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public IEnumerator GetGoogleSheetsAsCSV(List<string> sheetIdArr, System.Action<Dictionary<string, string>> callback = null)
     {
         string GasUrl = "https://script.google.com/macros/s/AKfycbxB2GPvA1XKl7z-sMeuHsrfhdqgnJrB3Mo6xV04_51lKmj_IeB5RnHNvyM1dZg0hj-LBg/exec";

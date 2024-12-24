@@ -14,7 +14,7 @@ public class BtnToScene : MonoBehaviour
     void OnButtonClick()
     {
         button.interactable = false; // ¸T¥Î«ö¶s
-        var sceneSwitcher = FindObjectOfType<SceneSwitcher>();
+        var sceneSwitcher = SceneSwitcher.Inst;
         if (sceneSwitcher != null)
         {
             sceneSwitcher.SwitchScene(targetScene);

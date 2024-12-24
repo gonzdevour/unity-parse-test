@@ -9,6 +9,13 @@ using Newtonsoft.Json;
 
 public class Uploader : MonoBehaviour
 {
+    public static Uploader Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public string serverUrl = "https://playoneapps.com.tw/fileparser/upload"; // 伺服器上傳路由
 
     // WebGL 的檔案上傳函數

@@ -10,14 +10,20 @@ public class SceneSwitcher : MonoBehaviour
     private readonly float Duration = 0.2f;
     public string[] sceneNames;
     private string currentScene;
+    private string lastScene;
 
+    public static SceneSwitcher Inst { get; private set; }
     private void Awake()
     {
-        coverImg = GetComponent<Image>();
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+
+        coverImg = Cover.GetComponent<Image>();
         Canvas globalCanvas = coverImg.GetComponentInParent<Canvas>();
         globalCanvas.overrideSorting = true;
         globalCanvas.sortingOrder = 100; // 確保排序在其他 Canvas 之上
     }
+
     void Start()
     {
         currentScene = null;
@@ -34,6 +40,7 @@ public class SceneSwitcher : MonoBehaviour
                 if (scene.name != "Global")
                 {
                     currentScene = scene.name; // 返回第一個不是 Global 的場景名稱
+                    lastScene = scene.name; //current和last是同個scene，back button不起作用
                     FadeIn();
                 }
             }
@@ -65,7 +72,11 @@ public class SceneSwitcher : MonoBehaviour
         if (SceneManager.GetSceneByName(targetScene).isLoaded)
         {
             coverImg.DOFade(0, 0).SetEase(Ease.InQuad);
+
+            //上一個scene=目前的scene，目前的scene=目標的scene
+            lastScene = currentScene;
             currentScene = targetScene;
+
             Debug.LogWarning($"場景 {targetScene} 已加載，無需重複加載。");
             return;
         }
@@ -73,6 +84,8 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadSceneAsync(targetScene, LoadSceneMode.Additive).completed += (op) =>
         {
             //Debug.Log($"場景 {targetScene} 加載完成。");
+            //上一個scene=目前的scene，目前的scene=目標的scene
+            lastScene = currentScene;
             currentScene = targetScene;
             FadeIn();
         };

@@ -4,10 +4,11 @@ using UnityEngine.UI;
 public class ToggleSelector : MonoBehaviour
 {
     public string SelectorName = "Selector";
-    public Toggle[] toggles; // 拖入所有 Toggles
+    public Toggle[] toggles;
 
-    void Start()
+    public virtual void Start()
     {
+        toggles = GetComponentsInChildren<Toggle>();
         foreach (Toggle toggle in toggles)
         {
             // 為每個 Toggle 添加 OnValueChanged 監聽事件
@@ -27,7 +28,7 @@ public class ToggleSelector : MonoBehaviour
         }
     }
 
-    private void OnToggleValueChanged(Toggle toggle, bool isOn)
+    public virtual void OnToggleValueChanged(Toggle toggle, bool isOn)
     {
         Text toggleTx = toggle.GetComponentInChildren<Text>();
         Debug.Log($"{(isOn ? "選擇" : "取消選擇")}{toggleTx.text}");

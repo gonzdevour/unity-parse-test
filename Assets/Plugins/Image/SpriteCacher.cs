@@ -11,14 +11,21 @@ public class SpriteCacher : MonoBehaviour
     private Dictionary<string, Sprite> SpriteCache = new Dictionary<string, Sprite>(); // 暫存 Sprite
     private HashSet<string> LoadingSprites = new HashSet<string>(); // 跟蹤當前正在加載的地址
 
+    public static SpriteCacher Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void GetSprite(string address, System.Action<Sprite> onComplete)
     {
         // 如果地址已經在加載中，直接返回
-        if (LoadingSprites.Contains(address))
-        {
-            Debug.Log($"Sprite is still loading: {address}");
-            return;
-        }
+        //if (LoadingSprites.Contains(address))
+        //{
+        //    Debug.Log($"Sprite is still loading: {address}");
+        //    return;
+        //}
 
         // 如果已經存在於緩存中，直接回調返回
         if (SpriteCache.TryGetValue(address, out Sprite cachedSprite))

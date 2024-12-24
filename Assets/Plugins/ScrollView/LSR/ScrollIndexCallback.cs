@@ -121,7 +121,6 @@ namespace LSR
 
                     if (portrait != null)
                     {
-                        SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
                         Image image = portrait.GetComponent<Image>();
 
                         //string address = imgUrl;
@@ -141,7 +140,7 @@ namespace LSR
                         //imgUrl = "StreamingAssets://Image/duck.png";
                         //address = imgUrl;
 
-                        spriteCacher.GetSprite(imgUrl, (sprite) =>
+                        SpriteCacher.Inst.GetSprite(imgUrl, (sprite) =>
                         {
                             if (image != null) //避免回傳時物件已刪除
                             {

@@ -64,7 +64,7 @@ public class WebsocketChat : MonoBehaviour
             var roomName = roomNameInput.text.Trim();
             var moreInfo = JsonConvert.SerializeObject(new
             {
-                imgUrl = PlayerPrefs.GetString("Portrait", ""),
+                imgUrl = PlayerPrefs.GetString("PortraitUrl", ""),
             });
             JoinRoom(userName, roomName, moreInfo);
         });
@@ -98,13 +98,19 @@ public class WebsocketChat : MonoBehaviour
         };
         ws.OnError += (e) =>
         {
-            reconnectPanel.SetActive(true);
-            Debug.LogError("WebSocket error: " + e);
+            if (reconnectPanel != null)
+            {
+                reconnectPanel.SetActive(true);
+                Debug.LogError("WebSocket error: " + e);
+            }
         };
         ws.OnClose += (e) =>
         {
-            reconnectPanel.SetActive(true);
-            Debug.Log("WebSocket closed.");
+            if (reconnectPanel != null)
+            {
+                reconnectPanel.SetActive(true);
+                Debug.Log("WebSocket closed.");
+            }
         };
         ws.OnMessage += (bytes) =>
         {

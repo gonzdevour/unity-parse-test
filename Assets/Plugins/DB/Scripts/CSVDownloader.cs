@@ -5,6 +5,13 @@ using System.Collections.Generic;
 
 public class CSVDownloader : MonoBehaviour
 {
+    public static CSVDownloader Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public IEnumerator DownloadCSV(string csvUrl, System.Action<Dictionary<string, string>> callback)
     {
         //Debug.Log(csvUrl);

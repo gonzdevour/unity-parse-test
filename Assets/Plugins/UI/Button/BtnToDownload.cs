@@ -20,7 +20,7 @@ public class BtnToDownload : MonoBehaviour
 
     private IEnumerator DownloadAndToggleButton()
     {
-        var downloader = FindObjectOfType<Downloader>();
+        var downloader = Downloader.Inst;
         if (downloader != null)
         {
             button.interactable = false; // ¸T¥Î«ö¶s

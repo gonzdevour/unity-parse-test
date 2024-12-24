@@ -7,10 +7,6 @@ using UnityEngine.Localization.Settings;
 
 public class Demo : MonoBehaviour
 {
-    public StreamingAssets sa;
-    public Gas gas;
-    public CSVDownloader csvDownloader;
-    public CSVToSQLite csv2sq;
     public CSVToLocalization csv2Loc = new();
 
     public PanelLoadingProgress panelLoadingProgress;
@@ -116,15 +112,15 @@ public class Demo : MonoBehaviour
 
     private IEnumerator TestLoadImg()
     {
-        yield return sa.LoadImg("Image/duck.png", resultTexture => {
+        yield return StreamingAssets.Inst.LoadImg("Image/duck.png", resultTexture => {
             Debug.Log($"LoadImg from StreamingAsset complete");
-            sa.UpdateImageTexture("Img_FromSA",resultTexture);
+            StreamingAssets.Inst.UpdateImageTexture("Img_FromSA",resultTexture);
         });
     }
 
     private IEnumerator TestLoadTxt()
     {
-        yield return sa.LoadTxt("gogo.txt", resultDict => {
+        yield return StreamingAssets.Inst.LoadTxt("gogo.txt", resultDict => {
             Debug.Log($"LoadTxt from StreamingAsset result:");
             Debug.Log($"{resultDict["TextData"]}");
         });
@@ -132,7 +128,7 @@ public class Demo : MonoBehaviour
 
     private IEnumerator TestLoadDocx()
     {
-        yield return sa.LoadDocx("12n.docx", resultString => {
+        yield return StreamingAssets.Inst.LoadDocx("12n.docx", resultString => {
             Debug.Log($"LoadDocx from StreamingAsset result:");
             Debug.Log($"{resultString}");
         });
@@ -140,7 +136,7 @@ public class Demo : MonoBehaviour
 
     private IEnumerator TestLoadExcel()
     {
-        yield return sa.LoadExcel("test.xlsx", resultString => {
+        yield return StreamingAssets.Inst.LoadExcel("test.xlsx", resultString => {
             Debug.Log($"LoadExcel from StreamingAsset result:");
             Debug.Log($"{resultString}");
         });
@@ -149,7 +145,7 @@ public class Demo : MonoBehaviour
     private IEnumerator TestGetGoogleDoc()
     {
         string docId = "1-yQjykZ4lPBzaO8qpXPmy8ITUS8WRD_kgGDnug94pzQ";
-        yield return gas.GetGoogleDoc(docId, resultDict => {
+        yield return Gas.Inst.GetGoogleDoc(docId, resultDict => {
             Debug.Log($"GetGoogleDoc result:");
             Debug.Log($"{resultDict["TextData"]}");
         });
@@ -161,7 +157,7 @@ public class Demo : MonoBehaviour
         {
             "1rzPMs8Hbh12_HThp1IMJjsslG4f3Ehhyni8Vq9NSXyE",
         };
-        yield return gas.GetGoogleSheetsAsCSV(sheetIdArr, resultDict => {
+        yield return Gas.Inst.GetGoogleSheetsAsCSV(sheetIdArr, resultDict => {
             Debug.Log($"GetGoogleSheetsAsCSV result:");
             Debug.Log($"{resultDict["TextData"]}");
         });
@@ -170,7 +166,7 @@ public class Demo : MonoBehaviour
     private IEnumerator TestGetDocsInGoogleDriveFolder()
     {
         string folderId = "1vmjdReoeZM5vqTjgkIEWPbfm7_OLEu9U";
-        yield return gas.GetDocsInGoogleDriveFolder(folderId, resultDict => {
+        yield return Gas.Inst.GetDocsInGoogleDriveFolder(folderId, resultDict => {
             Debug.Log($"GetDocsInGoogleDriveFolder result:");
             Debug.Log($"{resultDict["TextData"]}");
         });
@@ -182,7 +178,7 @@ public class Demo : MonoBehaviour
         string urlTail = "/pub?gid=0&single=true&output=csv";
         string url = urlHead + "1vRqq-0kSrH6IUFzb6ovIfL-o0ER7_WYjlmBiEMM2GNRhIs1wPCbdbjbhEKXZinXPa_NlpRxtuvuk5Fk" + urlTail;
 
-        yield return csvDownloader.DownloadCSV(url, resultDict => {
+        yield return CSVDownloader.Inst.DownloadCSV(url, resultDict => {
             //Debug.Log($"DownloadCSV result:\nPage Name: {resultDict["PageName"]}\nCSV Data:\n{resultDict["CSVData"]}");
             StartCoroutine(csv2Loc.Update("StringLoc", resultDict["CSVData"]));
         });
@@ -197,7 +193,7 @@ public class Demo : MonoBehaviour
             urlHead + "1vR19m0xM9Qr7HeJqcNWUeN0cvryz9DWiWcAnp_2QSYi2F9evqBL5gIL2QeVAQ2iXUkJPY4nh-Xa6vPc" + urlTail,
         };
 
-        yield return csvDownloader.DownloadAllCSV(csvUrls, resultDict => {
+        yield return CSVDownloader.Inst.DownloadAllCSV(csvUrls, resultDict => {
             Db_CreateByCSV(resultDict);
         });
     }
@@ -216,7 +212,7 @@ public class Demo : MonoBehaviour
 
         // 在 CSV 下載完成後啟動資料庫導入
         //SaveCSVToFile(resultDict["CSVData"]);
-        csv2sq.ImportCSVToDatabase(resultDict["PageName"], resultDict["CSVData"], dbPath);
+        CSVToSQLite.Inst.ImportCSVToDatabase(resultDict["PageName"], resultDict["CSVData"], dbPath);
     }
     public void Db_PrintAll(string pageName) 
     {

@@ -24,8 +24,6 @@ namespace FancyScrollView.Leaderboard
             if (portrait != null && data.ImageUrl != null)
             {
                 var imgUrl = data.ImageUrl;
-
-                SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
                 Image image = portrait.GetComponent<Image>();
 
                 //string address;
@@ -45,7 +43,7 @@ namespace FancyScrollView.Leaderboard
                 //imgUrl = "StreamingAssets://Image/duck.png";
                 //address = imgUrl;
 
-                spriteCacher.GetSprite(imgUrl, (sprite) =>
+                SpriteCacher.Inst.GetSprite(imgUrl, (sprite) =>
                 {
                     if (image != null) //避免回傳時物件已刪除
                     {

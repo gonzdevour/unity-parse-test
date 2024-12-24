@@ -6,6 +6,13 @@ using System;
 
 public class LoginManager : MonoBehaviour
 {
+    public static LoginManager Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public UserAgentChecker userAgentChecker; //偵測是否在某環境
     public QueryStringParser queryStringParser; //從qstring取得網址裡的變數
     public UserData userDataManager;
@@ -31,13 +38,9 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        IsOnWeb = !string.IsNullOrEmpty(Application.absoluteURL);
-    }
-
     void Start()
     {
+        IsOnWeb = !string.IsNullOrEmpty(Application.absoluteURL);
         //StartCoroutine(RequestEncodeTokenToPayload("test-encode-ab1234"));//測試jose encode
         //Debug.Log(GetPayloadFromQueryString("user"));//測試System.Web解析querystring
         //Debug.Log("Login Start");

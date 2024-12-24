@@ -37,7 +37,7 @@ public class PortraitSelector : MonoBehaviour
         SelectorInit();
 
         // 從csv資料建立toggle表
-        //StartCoroutine(itemsGenFromDB.MakeItemTable());
+        StartCoroutine(itemsGenFromDB.MakeItemTable());
     }
 
     private void SelectorInit()
@@ -150,11 +150,19 @@ public class PortraitSelector : MonoBehaviour
     private IEnumerator UpdatePortraitSelectorImageFromUrl(string url)
     {
         yield return new WaitForSeconds(0f); //等待SpriteCacher在Global被初始化
-        SpriteCacher spriteCacher = FindObjectOfType<SpriteCacher>();
-        spriteCacher.GetSprite(url, (sprite) =>
+        SpriteCacher.Inst.GetSprite(url, (sprite) =>
         {
             UpdatePortraitSelectorImage(sprite);
         });
+    }
+
+    private void UpdatePortraitSelectorImage(Sprite newSprite)
+    {
+        Image selectorImage = portraitSelector.GetComponent<Image>();
+        if (selectorImage != null)
+        {
+            selectorImage.sprite = newSprite;
+        }
     }
 
     public void RegisterToggleEvent(Toggle toggle, string imgUrl = "")
@@ -194,15 +202,6 @@ public class PortraitSelector : MonoBehaviour
 
             // 隱藏 Panel
             panel.SetActive(false);
-        }
-    }
-
-    private void UpdatePortraitSelectorImage(Sprite newSprite)
-    {
-        Image selectorImage = portraitSelector.GetComponent<Image>();
-        if (selectorImage != null)
-        {
-            selectorImage.sprite = newSprite;
         }
     }
 

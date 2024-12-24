@@ -7,6 +7,13 @@ using UnityEngine.Networking;
 
 public class Downloader : MonoBehaviour
 {
+    public static Downloader Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public IEnumerator StartDownload(string url, string fileName)
     {
         Debug.Log($"StartDownload called with URL: {url}, FileName: {fileName}");

@@ -13,7 +13,7 @@ public class BtnToLogin : MonoBehaviour
     void OnButtonClick()
     {
         button.interactable = false; // ¸T¥Î«ö¶s
-        var loginManager = FindObjectOfType<LoginManager>();
+        var loginManager = LoginManager.Inst;
         if (loginManager != null)
         {
             loginManager.LoginFromPlayerPref();

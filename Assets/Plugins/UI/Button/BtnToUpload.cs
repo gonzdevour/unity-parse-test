@@ -15,7 +15,7 @@ public class BtnToUpload : MonoBehaviour
 
     void OnButtonClick()
     {
-        var uploader = FindObjectOfType<Uploader>();
+        var uploader = Uploader.Inst;
         if (uploader != null)
         {
             uploader.UploadFileFromDialog<string>(response => Debug.Log(response));
@@ -29,7 +29,7 @@ public class BtnToUpload : MonoBehaviour
 
     //private IEnumerator DownloadAndToggleButton()
     //{
-    //    var downloader = FindObjectOfType<Downloader>();
+    //    var downloader = Downloader.Inst;
     //    if (downloader != null)
     //    {
     //        button.interactable = false; // ¸T¥Î«ö¶s

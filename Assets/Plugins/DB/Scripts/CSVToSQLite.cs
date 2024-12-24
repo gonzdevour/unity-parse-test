@@ -7,6 +7,13 @@ using yutokun;
 
 public class CSVToSQLite : MonoBehaviour
 {
+    public static CSVToSQLite Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void ImportCSVToDatabase(string pageName, string csvContent, string dbPath)
     {
         if (!string.IsNullOrEmpty(csvContent))

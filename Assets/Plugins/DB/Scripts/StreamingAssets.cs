@@ -13,6 +13,13 @@ using System.Text;
 
 public class StreamingAssets : MonoBehaviour
 {
+    public static StreamingAssets Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
     public string GetFilePath(string fileName)
     {
         string filePath;
@@ -88,7 +95,7 @@ public class StreamingAssets : MonoBehaviour
         {
             Debug.Log($"File loaded successfully, size: {fileData.Length} bytes");
             //List<Dictionary<string, string>> returnValue = ParseExcelToCsv(fileData); //使用 NPOI 解析 Excel
-            var uploader = FindObjectOfType<Uploader>(); //使用nodejs app解析Excel
+            var uploader = Uploader.Inst; //使用nodejs app解析Excel
             if (uploader != null)
             {
                 yield return uploader.UploadRequest(fileName, fileData, callback);
@@ -114,7 +121,7 @@ public class StreamingAssets : MonoBehaviour
         {
             Debug.Log($"File loaded successfully, size: {fileData.Length} bytes");
             //Dictionary<string, string> returnValue = ParseDocx(fileData); //使用 NPOI 解析 Excel
-            var uploader = FindObjectOfType<Uploader>(); //使用nodejs app解析Excel
+            var uploader = Uploader.Inst; //使用nodejs app解析Excel
             if (uploader != null)
             {
                 yield return uploader.UploadRequest(fileName, fileData, callback);
