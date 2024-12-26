@@ -25,6 +25,7 @@
       align-items: center;
       z-index: 9999;
       flex-direction: column;
+      transition: opacity 0.5s ease;
     }
 
     #progress-bar {
@@ -69,36 +70,58 @@
       document.getElementsByTagName('head')[0].appendChild(meta);
     }
 
-    // 進度條控制
     let isUnityLoaded = false;
     let progress = 0; // 初始進度
     const progressBarFill = document.getElementById("progress-bar-fill");
     const progressText = document.getElementById("progress-text");
     const loadingContainer = document.getElementById("loading-container");
 
+    // 更新進度條
+    const updateProgressBar = () => {
+      progressBarFill.style.width = progress + "%";
+      progressText.textContent = `Loading... ${progress}%`;
+    };
+
     // 模擬進度條
     const simulateProgress = () => {
       const interval = setInterval(() => {
         if (progress < 99 && !isUnityLoaded) {
-          progress += 1; // 每次增加 1%
-          progressBarFill.style.width = progress + "%";
-          progressText.textContent = "Loading... " + progress + "%";
+          progress++;
+          updateProgressBar();
+        } else if (isUnityLoaded) {
+          progress = 100;
+          updateProgressBar();
+          clearInterval(interval);
+          setTimeout(hideLoadingScreen, 500); // 隱藏加載畫面
         } else {
-          clearInterval(interval); // 停止模擬
-          if (isUnityLoaded) {
-            progress = 100;
-            progressBarFill.style.width = "100%";
-            progressText.textContent = "Loading... 100%";
-            setTimeout(() => {
-              loadingContainer.style.display = "none"; // 延遲 0.5 秒隱藏加載畫面
-            }, 500);
-          }
+          clearInterval(interval);
         }
       }, 100); // 每 100 毫秒更新一次
     };
 
+    // 隱藏加載畫面
+    const hideLoadingScreen = () => {
+      loadingContainer.style.opacity = "0"; // 添加淡出效果
+      setTimeout(() => {
+        loadingContainer.style.display = "none"; // 在動畫結束後隱藏
+      }, 500);
+    };
+
+    // 清除緩存以確保首次加載正常
+    if ('caches' in window) {
+      caches.keys().then((keyList) => {
+        return Promise.all(
+          keyList.map((key) => {
+            return caches.delete(key); // 刪除所有緩存
+          })
+        );
+      });
+    }
+
+    // 啟動模擬進度
     simulateProgress();
 
+    // 加載 Unity 實例
     createUnityInstance(document.querySelector("#unity-canvas"), {
       dataUrl: "Build/{{{ DATA_FILENAME }}}",
       frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
@@ -116,11 +139,15 @@
       productName: "{{{ PRODUCT_NAME }}}",
       productVersion: "{{{ PRODUCT_VERSION }}}",
     }).then((unityInstance) => {
+      console.log("Unity instance created successfully.");
       window.UnityInstance = unityInstance;
-      isUnityLoaded = true; // 標記 Unity 已加載完成 
+      isUnityLoaded = true; // 標記 Unity 已加載完成
+      progress = 100; // 確保進度條顯示為 100%
+      updateProgressBar();
+      setTimeout(hideLoadingScreen, 500); // 隱藏加載畫面
     }).catch((message) => {
-      console.error(message);
-      alert("Failed to load Unity WebGL instance.");
+      console.error("Error creating Unity instance:", message);
+      alert("An error occurred. Please refresh the page and try again.");
     });
   </script>
 </body>

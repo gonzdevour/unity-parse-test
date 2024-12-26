@@ -162,6 +162,8 @@ public class PortraitSelector : MonoBehaviour
         if (selectorImage != null)
         {
             selectorImage.sprite = newSprite;
+            // 強制進行一次幀更新
+            Canvas.ForceUpdateCanvases();
         }
     }
 

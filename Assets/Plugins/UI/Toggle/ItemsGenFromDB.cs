@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class ItemsGenFromDB : MonoBehaviour
 {
@@ -35,12 +36,22 @@ public class ItemsGenFromDB : MonoBehaviour
         }
         // 每秒檢查Global scene是否已加載
         yield return WaitForScene("Global", 1f);
-        Debug.Log("Global scene is loaded");
+        //Debug.Log("[Wait] Global scene is ready");
 
         // 讀取資料庫
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
-        List<HistoryEvent> allEvents = dbManager.QueryTable<HistoryEvent>("查找器");
-        if (allEvents.Count == 0)
+        // 檢查是否能查詢表單數據
+        List<HistoryEvent> allEvents = null;
+        try
+        {
+            allEvents = dbManager.QueryTable<HistoryEvent>("查找器");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to query table: {e.Message}");
+        }
+        // 如果數據表為空，下載 CSV 並導入數據
+        if (allEvents == null || allEvents.Count == 0)
         {
             Debug.Log("Start DownloadCSV");
             yield return DownloadCSV(
@@ -130,8 +141,10 @@ public class ItemsGenFromDB : MonoBehaviour
         string imgUrl = $"https://playoneapps.com.tw/images/roc/portrait/{eventItem.name}.png";
         SpriteCacher.Inst.GetSprite(imgUrl, (sprite) =>
         {
+            Debug.Log($"SpriteCacher開始取代sprite:{imgUrl}");
             if (backgroundImage != null)
             {
+                Debug.Log($"SpriteCacher開始取代sprite，已取代目標:{imgUrl}");
                 //Debug.Log($"spriteName: {backgroundImage.sprite.name}");
                 backgroundImage.sprite = sprite;
             }

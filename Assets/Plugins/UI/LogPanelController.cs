@@ -8,14 +8,18 @@ public class LogPanelController : MonoBehaviour
     [SerializeField] private ScrollRect scrollRect; // ScrollView  ScrollRect
     [SerializeField] private Text logText;          // 陪ボ癟 Text
     [SerializeField] private Slider pageSlider;     // ノ北计绢 Slider
-    [SerializeField] private int maxCharactersPerPage = 1000; // –程计
+    [SerializeField] private int maxCharactersPerPage = 2000; // –程计
 
     private System.Text.StringBuilder logBuilder;   // 纗┮Τら粁 StringBuilder
     private List<string> logPages;                  // だ纗ら粁
     private int currentPage = 0;                    // 讽玡絏
 
+    public static LogPanelController Inst { get; private set; }
     private void Awake()
     {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+
         logBuilder = new System.Text.StringBuilder();
         logPages = new List<string>();
         Application.logMessageReceived += HandleLog; // 爹ら粁㊣
@@ -102,5 +106,6 @@ public class LogPanelController : MonoBehaviour
         yield return null; // 单碫
         Canvas.ForceUpdateCanvases();
         scrollRect.verticalNormalizedPosition = 0; // 簎笆程┏场
+
     }
 }

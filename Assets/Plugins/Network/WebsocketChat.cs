@@ -4,11 +4,9 @@ using NativeWebSocket;
 using Newtonsoft.Json;
 using System.Text;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System;
 using FancyScrollView.Leaderboard;
 using LSR;
-using static UnityEditor.Progress;
 
 public class WebsocketChat : MonoBehaviour
 {

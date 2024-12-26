@@ -78,10 +78,22 @@ namespace LSR
             // 使用字體生成器計算文字的所需空間
             var generator = new TextGenerator();
             var generationSettings = text.GetGenerationSettings(new Vector2(width, 0f));
+            //Debug.Log($"文字固定寬度為{width}");
             float textHeight = generator.GetPreferredHeight(text.text, generationSettings);
+            //Debug.Log($"文字預計高度為{textHeight}");
+
+            // 處理scale縮放造成的文字空間計算誤差
+            //Debug.Log($"screenHeight:{Screen.height}");
+            CanvasScaler scaler = GetComponentInParent<CanvasScaler>();
+            Vector2 referenceResolution = scaler.referenceResolution;
+            //Debug.Log($"CanvasExpectHeight:{referenceResolution.y}");
+            float adjustRatio = referenceResolution.y / Screen.height;
+            //Debug.Log($"文字調整比例為{referenceResolution.y} / {Screen.height} = {adjustRatio}");
+            float adjustedTextHeight = textHeight* adjustRatio + (10f * adjustRatio);
+            //Debug.Log($"文字調整高度為{adjustedTextHeight}");
 
             // 調整文字高度計算結果
-            return textHeight;
+            return adjustedTextHeight;
         }
 
         void UpdateMessage(int idx)

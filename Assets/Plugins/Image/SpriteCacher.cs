@@ -8,159 +8,151 @@ using UnityEngine.Networking;
 
 public class SpriteCacher : MonoBehaviour
 {
-    private Dictionary<string, Sprite> SpriteCache = new Dictionary<string, Sprite>(); // 暫存 Sprite
-    private HashSet<string> LoadingSprites = new HashSet<string>(); // 跟蹤當前正在加載的地址
+    // Sprite 緩存字典，每個地址對應一個已加載的 Sprite
+    private Dictionary<string, Sprite> SpriteCache = new Dictionary<string, Sprite>();
 
+    // 當前正在加載的地址集合，防止重複加載
+    private HashSet<string> LoadingSprites = new HashSet<string>();
+
+    // 地址對應的回調列表，用於支持多個回調請求
+    private Dictionary<string, List<Action<Sprite>>> CallbackMap = new Dictionary<string, List<Action<Sprite>>>();
+
+    private readonly string corsanywhereUrl = "https://playoneapps.com.tw/corsanywhere/";
+
+    // 單例模式
     public static SpriteCacher Inst { get; private set; }
+
     private void Awake()
     {
+        // 確保單例唯一性
         if (Inst == null) Inst = this; else Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject); // 場景切換時保持不銷毀
     }
 
-    public void GetSprite(string address, System.Action<Sprite> onComplete)
+    /// <summary>
+    /// 獲取指定地址的 Sprite，如果尚未加載則啟動加載流程
+    /// </summary>
+    /// <param name="address">資源地址</param>
+    /// <param name="onComplete">加載完成時的回調</param>
+    public void GetSprite(string address, Action<Sprite> onComplete)
     {
-        // 如果地址已經在加載中，直接返回
-        //if (LoadingSprites.Contains(address))
-        //{
-        //    Debug.Log($"Sprite is still loading: {address}");
-        //    return;
-        //}
+        Debug.Log($"呼叫GetSprite取得{address}");
+        // 如果地址正在加載，將回調加入隊列
+        if (LoadingSprites.Contains(address))
+        {
+            Debug.Log($"{address}在隊列中");
+            if (CallbackMap.TryGetValue(address, out var callbacks))
+            {
+                callbacks.Add(onComplete);
+            }
+            else
+            {
+                Debug.Log($"新增{address}到隊列");
+                CallbackMap[address] = new List<Action<Sprite>> { onComplete };
+            }
+            Debug.Log($"Sprite is still loading: {address}");
+            return;
+        }
 
-        // 如果已經存在於緩存中，直接回調返回
+        // 如果資源已經在緩存中，直接執行回調
         if (SpriteCache.TryGetValue(address, out Sprite cachedSprite))
         {
+            Debug.Log($"{address}已經在緩存中");
             onComplete?.Invoke(cachedSprite);
             return;
         }
 
-        // 標記地址為加載中
+        // 開始新的加載過程
         LoadingSprites.Add(address);
-
-        // 根據地址類型進行不同的加載操作
+        CallbackMap[address] = new List<Action<Sprite>> { onComplete };
+        Debug.Log($"{address}在路上了");
+        // 根據地址類型進行加載
         if (IsUrl(address))
         {
-            // 如果是網絡地址，使用協程進行下載並緩存
-            StartCoroutine(DownloadAndCacheSprite(address, onComplete));
+            StartCoroutine(DownloadAndCacheSprite(address));
         }
         else if (address.StartsWith("Resources://"))
         {
-            // 如果是 Resources 資源，調用對應加載方法
-            CacheFromResources(TrimAddress(address, "Resources://"), address, onComplete);
+            CacheFromResources(TrimAddress(address, "Resources://"), address);
         }
         else if (address.StartsWith("StreamingAssets://"))
         {
-            // 如果是 StreamingAssets 資源，調用對應加載方法
-            CacheFromStreamingAssets(TrimAddress(address, "StreamingAssets://"), address, onComplete);
+            StartCoroutine(CacheFromStreamingAssets(TrimAddress(address, "StreamingAssets://"), address));
         }
         else
         {
-            // 如果地址無效，打印警告並返回
             Debug.LogWarning($"Invalid address: {address}");
             LoadingSprites.Remove(address);
+            CallbackMap.Remove(address);
             onComplete?.Invoke(null);
         }
     }
 
     // 從 Resources 資源加載 Sprite
-    private void CacheFromResources(string resourceAddress, string originalAddress, System.Action<Sprite> onComplete)
+    private void CacheFromResources(string resourceAddress, string originalAddress)
     {
-        // 嘗試從資源中加載所有 Sprite
         Sprite[] sprites = Resources.LoadAll<Sprite>(resourceAddress.Split('|')[0]);
-        // 根據名稱匹配指定的 Sprite
         Sprite sprite = sprites.FirstOrDefault(s => s.name == resourceAddress.Split('|').Last());
 
-        if (sprite == null)
-        {
-            // 如果未找到，打印警告並回調返回 null
-            Debug.LogWarning($"Sprite not found in Resources: {originalAddress}");
-            LoadingSprites.Remove(originalAddress);
-            onComplete?.Invoke(null);
-            return;
-        }
-
-        // 將加載的 Sprite 添加到緩存中
-        SpriteCache[originalAddress] = sprite;
-        LoadingSprites.Remove(originalAddress);
-        Debug.Log($"Sprite cached from Resources: {originalAddress}");
-        onComplete?.Invoke(sprite);
+        OnSpriteLoaded(originalAddress, sprite);
     }
 
     // 從 StreamingAssets 資源加載 Sprite
-    private void CacheFromStreamingAssets(string filePath, string address, System.Action<Sprite> onComplete)
+    private IEnumerator CacheFromStreamingAssets(string filePath, string address)
     {
-        // 拼接完整的文件路徑
-        string fullPath = Path.Combine(Application.streamingAssetsPath, filePath);
-        if (!File.Exists(fullPath))
+        Debug.Log($"開始從sa讀取{filePath}");
+        var sa = StreamingAssets.Inst;
+        yield return sa.LoadImg(filePath, (texture) => 
         {
-            // 如果文件不存在，打印警告並回調返回 null
-            Debug.LogWarning($"File not found in StreamingAssets: {filePath}");
-            LoadingSprites.Remove(address);
-            onComplete?.Invoke(null);
-            return;
-        }
-
-        // 使用協程加載 Sprite
-        StartCoroutine(LoadSpriteFromStreamingAssets(fullPath, address, sprite =>
-        {
-            LoadingSprites.Remove(address);
-            onComplete?.Invoke(sprite);
-        }));
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            OnSpriteLoaded(address, sprite);
+        });
     }
 
     // 從 URL 下載並緩存 Sprite
-    private IEnumerator DownloadAndCacheSprite(string url, System.Action<Sprite> onComplete)
+    private IEnumerator DownloadAndCacheSprite(string url)
     {
-        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
+        Debug.Log($"SpriteCacher開始下載{url}");
+        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(corsanywhereUrl + url))
         {
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                // 如果下載失敗，打印錯誤並回調返回 null
                 Debug.LogError($"Failed to download sprite from URL: {url}, Error: {request.error}");
-                LoadingSprites.Remove(url);
-                onComplete?.Invoke(null);
+                OnSpriteLoaded(url, null);
             }
             else
             {
-                // 下載成功，將圖片轉換為 Texture2D
+                Debug.Log($"SpriteCacher成功下載Texture2D，從:{url}");
                 Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
                 texture.wrapMode = TextureWrapMode.Clamp;
 
-                // 將 Texture2D 轉換為 Sprite 並緩存
                 Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                SpriteCache[url] = sprite;
-                //Debug.Log($"Sprite cached from URL: {url}");
-                LoadingSprites.Remove(url);
-                onComplete?.Invoke(sprite);
+                OnSpriteLoaded(url, sprite);
             }
         }
     }
 
-    // 從 StreamingAssets 加載 Sprite
-    private IEnumerator LoadSpriteFromStreamingAssets(string filePath, string address, System.Action<Sprite> onComplete)
+    // 資源加載完成後執行的通用回調處理
+    private void OnSpriteLoaded(string address, Sprite sprite)
     {
-        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(filePath))
+        if (sprite != null)
         {
-            yield return uwr.SendWebRequest();
-
-            if (uwr.result == UnityWebRequest.Result.Success)
-            {
-                // 加載成功，將 Texture2D 轉換為 Sprite
-                Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
-                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                SpriteCache[address] = sprite;
-                Debug.Log($"Sprite cached from StreamingAssets: {address}");
-                onComplete?.Invoke(sprite);
-            }
-            else
-            {
-                // 加載失敗，打印警告並回調返回 null
-                Debug.LogWarning($"Failed to load sprite from StreamingAssets: {uwr.error}");
-                onComplete?.Invoke(null);
-            }
+            SpriteCache[address] = sprite;
+            Debug.Log($"Sprite cached: {address}");
         }
+
+        if (CallbackMap.TryGetValue(address, out var callbacks))
+        {
+            foreach (var callback in callbacks)
+            {
+                callback?.Invoke(sprite);
+            }
+            CallbackMap.Remove(address);
+        }
+
+        LoadingSprites.Remove(address);
     }
 
     // 判斷是否為 URL 地址
@@ -174,8 +166,8 @@ public class SpriteCacher : MonoBehaviour
     {
         if (address.StartsWith(prefix))
         {
-            return address.Substring(prefix.Length); // 移除前綴
+            return address.Substring(prefix.Length);
         }
-        return ""; // 不符合條件則返回空字串
+        return "";
     }
 }

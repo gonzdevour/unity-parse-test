@@ -48,21 +48,19 @@ public class Demo : MonoBehaviour
     public IEnumerator Test()
     {
         yield return new WaitForSeconds(1f);
-        ////過關
+
         //yield return TestProgress();
 
         //panelSpinner.SetActive(true);
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Txt");
         //yield return TestLoadTxt();
-        yield return TestLoadImg();
 
-        //webgl不支援NPOI，改用nodejs app解析.docx和.xlsx
+        ////webgl不支援NPOI，改用nodejs app解析.docx和.xlsx
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Docx");
         //yield return TestLoadDocx();
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("讀取streamingAsset裡的Excel");
         //yield return TestLoadExcel();
 
-        ////過關
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("gas讀取googleDoc");
         //yield return TestGetGoogleDoc();
         //panelSpinner.GetComponent<PanelSpinner>().SetMessage("gas讀取googleSheet依分頁解析為csv");
@@ -108,14 +106,6 @@ public class Demo : MonoBehaviour
         Db_PrintAll("events");
         Db_Update();
         Db_PrintAll("events");
-    }
-
-    private IEnumerator TestLoadImg()
-    {
-        yield return StreamingAssets.Inst.LoadImg("Image/duck.png", resultTexture => {
-            Debug.Log($"LoadImg from StreamingAsset complete");
-            StreamingAssets.Inst.UpdateImageTexture("Img_FromSA",resultTexture);
-        });
     }
 
     private IEnumerator TestLoadTxt()
