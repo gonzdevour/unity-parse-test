@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
-public class Demo : MonoBehaviour
+public class DemoGlobal : MonoBehaviour
 {
     public CSVToLocalization csv2Loc = new();
 

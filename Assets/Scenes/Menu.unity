@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 42798936}
   - component: {fileID: 42798935}
   m_Layer: 0
-  m_Name: Demo_Menu
+  m_Name: DemoMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
