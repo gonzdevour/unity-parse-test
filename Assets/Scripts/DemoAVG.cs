@@ -29,12 +29,15 @@ public class DemoAVG : MonoBehaviour
         public string 前往 { get; set; }
         public string 說話前 { get; set; }
         public string 說話後 { get; set; }
+        public string 顯示名稱 { get; set; }
     }
 
     void Start()
     {
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
         sheetToDB = GetComponent<SheetToDB>();
+
+        TxR.Inst.SetVariable("Name", "陳大志");
 
         // 在 PlayerPrefs 中設置測試數據
         PlayerPrefs.SetString("姓名", "蘇  東坡");
@@ -56,7 +59,7 @@ public class DemoAVG : MonoBehaviour
         yield return null;
         yield return sheetToDB.LoadExcel("Story.xlsx");
         FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
-        yield return AVG.Inst.StoryStart();
+        yield return AVG.Inst.StoryQueueStart<StoryCut>(() => { Debug.Log("Story Fin"); });
 
     }
 
