@@ -99,12 +99,13 @@ public class AVG : MonoBehaviour
         // 等待玩家操作
         isReadyToNext = false;
 
-        Debug.Log($"StoryCutStart: {cutIndex}");
+        //Debug.Log($"StoryCutStart: {cutIndex}");
         var storyCutDict = StoryEventDicts[cutIndex];
         // 執行說話前函數集
         if (HasValidValue(storyCutDict, "說話前"))
         {
-           
+            string[] commands = storyCutDict["說話前"].ToString().Split('\n');
+            Director.Inst.ExecuteActionPackage(commands);
         }
         // 顯示當前cut的內容
         string Name = TxR.Inst.Render(storyCutDict["說話者"].ToString());
@@ -114,7 +115,13 @@ public class AVG : MonoBehaviour
             DisplayName = TxR.Inst.Render(storyCutDict["顯示名稱"].ToString());
         }
         string Content = TxR.Inst.Render(storyCutDict["說話內容"].ToString());
-        Debug.Log($"{DisplayName}：{Content}");
+        Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
+
+        if (HasValidValue(storyCutDict, "說話後"))
+        {
+            string[] commands = storyCutDict["說話後"].ToString().Split('\n');
+            Director.Inst.ExecuteActionPackage(commands);
+        }
 
         //Debug.Log($"=> 前往的值：{storyCutDict["前往"]}");
         if (HasValidValue(storyCutDict, "前往"))
@@ -168,8 +175,8 @@ public class AVG : MonoBehaviour
         {
             // 創建按鈕
             GameObject button = Instantiate(choicePrefab, choicePanel.transform);
-            button.GetComponentInChildren<Text>().text = options[i]; // 設置按鈕文字
-            int resultCutIndex = int.Parse(targets[i]);
+            button.GetComponentInChildren<Text>().text = TxR.Inst.Render(options[i]); // 設置按鈕文字
+            int resultCutIndex = int.Parse(ParseTernary(targets[i]));
 
             // 設置按鈕回調
             Button btn = button.GetComponent<Button>();
@@ -216,5 +223,51 @@ public class AVG : MonoBehaviour
     private bool HasValidValue(Dictionary<string, object> dict, string key)
     {
         return dict.ContainsKey(key) && dict[key] != null && !string.IsNullOrWhiteSpace(dict[key].ToString());
+    }
+
+    /// <summary>
+    /// 解析條件運算子字串並返回結果。
+    /// </summary>
+    /// <param name="expression">條件運算子字串，例如 "金錢>=蛋糕價格?3:8"</param>
+    /// <returns>解析並判斷後的結果</returns>
+    public static string ParseTernary(string expression)
+    {
+        if (string.IsNullOrEmpty(expression))
+        {
+            Debug.LogError("表達式為空或 null");
+            return string.Empty;
+        }
+
+        try
+        {
+            // 找到條件運算子的位置
+            int questionMarkIndex = expression.IndexOf('?');
+            int colonIndex = expression.IndexOf(':');
+
+            // 檢查格式是否正確
+            if (questionMarkIndex == -1 || colonIndex == -1 || questionMarkIndex > colonIndex)
+            {
+                Debug.Log($"非三元式：{expression}，回傳值為{expression}");
+                return expression;
+            }
+
+            // 解析條件、為真結果、為假結果
+            string condition = expression.Substring(0, questionMarkIndex).Trim();
+            string trueResult = expression.Substring(questionMarkIndex + 1, colonIndex - questionMarkIndex - 1).Trim();
+            string falseResult = expression.Substring(colonIndex + 1).Trim();
+
+            // 使用 Judge.EvaluateCondition 判斷條件是否成立
+            bool conditionResult = Judge.EvaluateSingleCondition(condition);
+
+            // 根據條件結果返回相應的值
+            string result = conditionResult ? trueResult : falseResult;
+            Debug.Log($"三元式為：{expression}，回傳值為{result}");
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"解析或判斷表達式時發生錯誤: {ex.Message}");
+            return string.Empty;
+        }
     }
 }

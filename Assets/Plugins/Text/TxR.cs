@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class TxR : MonoBehaviour
 {
-    private Dictionary<string, string> variables = new(); // 儲存模板變數
-
     public static TxR Inst { get; private set; }
+
     private void Awake()
     {
         if (Inst == null) Inst = this; else Destroy(gameObject);
@@ -13,31 +12,24 @@ public class TxR : MonoBehaviour
     }
 
     /// <summary>
-    /// 新增或更新變數
+    /// 新增或更新變數（使用 PPM）
     /// </summary>
     /// <param name="key">占位符名稱</param>
     /// <param name="value">替換值</param>
     public void SetVariable(string key, string value)
     {
-        if (variables.ContainsKey(key))
-        {
-            variables[key] = value; // 更新已有鍵
-        }
-        else
-        {
-            variables.Add(key, value); // 添加新鍵
-        }
+        PPM.Inst.Set(key, value); // 直接使用 PPM 儲存變數
     }
 
     /// <summary>
-    /// 批量新增或更新變數
+    /// 批量新增或更新變數（使用 PPM）
     /// </summary>
     /// <param name="newVariables">包含鍵值對的字典</param>
     public void SetVariables(Dictionary<string, string> newVariables)
     {
         foreach (var kvp in newVariables)
         {
-            SetVariable(kvp.Key, kvp.Value);
+            SetVariable(kvp.Key, kvp.Value); // 使用 SetVariable 來新增或更新變數
         }
     }
 
@@ -49,21 +41,23 @@ public class TxR : MonoBehaviour
     public string Render(string template)
     {
         string result = template;
+        List<string> keys = PPM.Inst.GetAllKeys(); // 獲取 PPM 的鍵表
 
-        foreach (var kvp in variables)
+        foreach (string key in keys)
         {
-            string placeholder = $"{{{{{kvp.Key}}}}}"; // 格式化占位符，例如 {{name}}
-            result = result.Replace(placeholder, kvp.Value ?? string.Empty);
+            string placeholder = $"{{{{{key}}}}}"; // 格式化占位符，例如 {{name}}
+            string value = PPM.Inst.Get(key); // 從 PPM 獲取對應值
+            result = result.Replace(placeholder, value ?? string.Empty);
         }
 
         return result;
     }
 
     /// <summary>
-    /// 清除所有變數
+    /// 清除所有變數（使用 PPM）
     /// </summary>
     public void ClearVariables()
     {
-        variables.Clear();
+        PPM.Inst.Clear(); // 清空所有變數
     }
 }

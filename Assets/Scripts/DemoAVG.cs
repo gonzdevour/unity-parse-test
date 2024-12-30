@@ -40,18 +40,22 @@ public class DemoAVG : MonoBehaviour
         TxR.Inst.SetVariable("Name", "陳大志");
 
         // 在 PlayerPrefs 中設置測試數據
-        PlayerPrefs.SetString("姓名", "蘇  東坡");
-        PlayerPrefs.SetFloat("體重", 40.3f);
-        PlayerPrefs.SetInt("日期", 20240103);
-        PlayerPrefs.SetInt("hp", 1);
-        PlayerPrefs.SetInt("mp", 2);
-        PlayerPrefs.SetInt("目前時間", 1500);
-        PlayerPrefs.SetInt("王小美好感度", 4);
-        PlayerPrefs.SetInt("李大花好感度", 5);
+        DataSet<string>("姓名", "蘇  東坡");
+        DataSet<float>("體重", 40.3f);
+        DataSet<int>("日期", 20240103);
+        DataSet<int>("hp", 1);
+        DataSet<int>("mp", 2);
+        DataSet<int>("目前時間", 1500);
+        DataSet<int>("王小美好感度", 4);
+        DataSet<int>("李大花好感度", 5);
 
         //StartCoroutine(Test());
         //Test2();
         StartCoroutine(StartAVG());
+    }
+    void DataSet<T>(string key, T value)
+    {
+        PlayerPrefs.SetString(key, value.ToString());
     }
 
     IEnumerator StartAVG()
