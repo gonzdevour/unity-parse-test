@@ -6,71 +6,71 @@ public class Judge
     // 主函數：解析並判斷條件
     public static bool EvaluateCondition(string condition)
     {
-        Debug.Log($"開始解析條件: \n{condition}");
+        //Debug.Log($"開始解析條件: \n{condition}");
 
         // 將條件以行拆分，每行代表一組&&條件
         string[] lines = condition.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
         foreach (string line in lines)
         {
-            Debug.Log($"解析行條件: {line}");
+            //Debug.Log($"解析行條件: {line}");
 
             // 將每行條件拆分為 && 條件組
             string[] andConditions = line.Split(new[] { "&&" }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string andCondition in andConditions)
             {
-                Debug.Log($"解析 AND 條件: {andCondition}");
+                //Debug.Log($"解析 AND 條件: {andCondition}");
 
                 // 將 && 條件中的每個子條件進行判斷
                 if (!EvaluateOrConditions(andCondition))
                 {
                     // 如果任一條件不成立，返回 false
-                    Debug.Log($"條件不成立: {andCondition}");
+                    //Debug.Log($"條件不成立: {andCondition}");
                     return false;
                 }
             }
         }
 
         // 如果所有條件都成立，返回 true
-        Debug.Log("所有條件都成立。");
+        Debug.Log("[群組判斷] 所有條件都成立。");
         return true;
     }
 
     // 判斷一行中的 OR 條件
     private static bool EvaluateOrConditions(string andCondition)
     {
-        Debug.Log($"解析 OR 條件: {andCondition}");
+        //Debug.Log($"解析 OR 條件: {andCondition}");
 
         // 將條件按 || 分割
         string[] orConditions = andCondition.Split(new[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
 
         foreach (string orCondition in orConditions)
         {
-            Debug.Log($"解析單一 OR 子條件: {orCondition.Trim()}");
+            //Debug.Log($"解析單一 OR 子條件: {orCondition.Trim()}");
 
             // 若任一 OR 子條件成立，則整個 OR 條件為真
             if (EvaluateSingleCondition(orCondition.Trim()))
             {
-                Debug.Log($"OR 子條件成立: {orCondition.Trim()}");
+                //Debug.Log($"OR 子條件成立: {orCondition.Trim()}");
                 return true;
             }
         }
 
         // 所有 OR 子條件都不成立，返回 false
-        Debug.Log($"所有 OR 子條件都不成立: {andCondition}");
+        //Debug.Log($"所有 OR 子條件都不成立: {andCondition}");
         return false;
     }
 
     // 判斷單一條件
     public static bool EvaluateSingleCondition(string condition)
     {
-        Debug.Log($"解析單一條件: {condition}");
+        //Debug.Log($"解析單一條件: {condition}");
 
         // 將單一 "=" 替換為 "=="，確保不影響其他運算符
         if (condition.Contains("=") && !condition.Contains("==") && !condition.Contains(">=") && !condition.Contains("<="))
         {
-            Debug.Log($"將單一 '=' 替換為 '==': {condition}");
+            //Debug.Log($"將單一 '=' 替換為 '==': {condition}");
             condition = condition.Replace("=", "==");
         }
 
@@ -95,7 +95,7 @@ public class Judge
                         value = PlayerPrefs.GetString(value, value);
                     }
 
-                    Debug.Log($"條件拆分: key={key}, value={value}, op={op}");
+                    //Debug.Log($"條件拆分: key={key}, value={value}, op={op}");
 
                     // 從 PlayerPrefs 讀取 key 的值
                     if (int.TryParse(value, out int intValue))

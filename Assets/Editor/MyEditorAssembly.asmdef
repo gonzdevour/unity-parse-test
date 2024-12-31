@@ -2,8 +2,7 @@
     "name": "MyEditorAssembly",
     "rootNamespace": "",
     "references": [
-        "Unity.2D.Sprite.Editor",
-        "Unity.TextMeshPro"
+        "Unity.2D.Sprite.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,10 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ToggleSelector : MonoBehaviour
 {
     public string SelectorName = "Selector";
     public Toggle[] toggles;
+
+    public string[] SelectedToggleNames
+    {
+        get { return GetSelectedLabelNames(); }
+    }
+
+    public string SelectedToggleNamesString
+    {
+        get { return string.Join(",", SelectedToggleNames); }
+    }
 
     public virtual void Start()
     {
@@ -31,40 +42,29 @@ public class ToggleSelector : MonoBehaviour
     public virtual void OnToggleValueChanged(Toggle toggle, bool isOn)
     {
         Text toggleTx = toggle.GetComponentInChildren<Text>();
-        Debug.Log($"{(isOn ? "選擇" : "取消選擇")}{toggleTx.text}");
-        Check();
-    }
-
-    public void Check()
-    {
-        if (CountSelectedToggles() > 0)
+        //Debug.Log($"{(isOn ? "選擇" : "取消選擇")}{toggleTx.text}");
+        if (isOn)
         {
-            Debug.Log($"{SelectorName}已選擇：");
-            foreach (var toggle in toggles)
-            {
-                if (toggle.isOn)
-                {
-                    Text toggleTx = toggle.GetComponentInChildren<Text>();
-                    Debug.Log($"- {toggleTx.text} ");
-                }
-            }
-        }
-        else
-        {
-            Debug.Log($"{SelectorName}尚未選擇");
+            Debug.Log("選中的 LabelName: " + string.Join(", ", SelectedToggleNames));
         }
     }
 
-    int CountSelectedToggles()
+    private string[] GetSelectedLabelNames()
     {
-        int count = 0;
+        // 回傳目前所有選中 Toggle 的 LabelName
+        var selectedNames = new List<string>();
+
         foreach (Toggle toggle in toggles)
         {
             if (toggle.isOn)
             {
-                count++;
+                ToggleVariables toggleVariables = toggle.GetComponent<ToggleVariables>();
+                if (toggleVariables != null && !string.IsNullOrEmpty(toggleVariables.LabelName))
+                {
+                    selectedNames.Add(toggleVariables.LabelName);
+                }
             }
         }
-        return count;
+        return selectedNames.ToArray();
     }
 }

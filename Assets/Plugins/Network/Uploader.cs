@@ -149,12 +149,12 @@ public class Uploader : MonoBehaviour
 
                     if (typeof(T) == typeof(string))
                     {
-                        Debug.Log("檔案線上解析成功，回傳類型為string");
+                        Debug.Log("檔案由Nodejs線上解析成功，回傳類型為string");
                         response = (T)(object)responseText; // 若 T 是 string
                     }
                     else
                     {
-                        Debug.Log("檔案線上解析成功，回傳類型為Json");
+                        Debug.Log("檔案由Nodejs線上解析成功，回傳類型為Json");
                         response = JsonUtility.FromJson<T>(responseText); // 若 T 不是 string，嘗試 JSON 反序列化
                     }
                     onSuccess?.Invoke(response);

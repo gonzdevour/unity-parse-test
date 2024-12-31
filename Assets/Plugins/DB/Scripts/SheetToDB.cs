@@ -85,14 +85,14 @@ public class SheetToDB : MonoBehaviour
     public void Db_CreateByCSV(Dictionary<string, string> resultDict)
     {
         //印出resultDict
-        foreach (var kvp in resultDict)
-        {
-            Debug.Log($"{kvp.Key}: {kvp.Value}");
-        }
+        //foreach (var kvp in resultDict)
+        //{
+        //    Debug.Log($"{kvp.Key}: {kvp.Value}");
+        //}
 
         //取得db path
         string dbPath = Path.Combine(Application.persistentDataPath, "dynamicDatabase.db");
-        Debug.Log(dbPath);
+        //Debug.Log(dbPath);
 
         // 在 CSV 下載完成後啟動資料庫導入
         //SaveCSVToFile(resultDict["CSVData"]);

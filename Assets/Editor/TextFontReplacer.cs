@@ -3,12 +3,10 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 public class GlobalTextEditorWindow : EditorWindow
 {
     private Font selectedUnityFont = null;
-    private TMP_FontAsset selectedTMPFont = null;
     private float lineSpacing = 1f;
 
     [MenuItem("Tools/Global Text Editor")]
@@ -27,14 +25,6 @@ public class GlobalTextEditorWindow : EditorWindow
             "Unity Font",
             selectedUnityFont,
             typeof(Font),
-            false
-        );
-
-        // TextMeshPro 字型選擇
-        selectedTMPFont = (TMP_FontAsset)EditorGUILayout.ObjectField(
-            "TMP Font Asset",
-            selectedTMPFont,
-            typeof(TMP_FontAsset),
             false
         );
 
@@ -126,19 +116,6 @@ public class GlobalTextEditorWindow : EditorWindow
             }
             textComponent.lineSpacing = lineSpacing;
             EditorUtility.SetDirty(textComponent);
-        }
-
-        // 修改 TextMeshPro 的屬性
-        TMP_Text tmpTextComponent = obj.GetComponent<TMP_Text>();
-        if (tmpTextComponent != null)
-        {
-            Undo.RecordObject(tmpTextComponent, "Adjust TMP Text Properties");
-            if (selectedTMPFont != null)
-            {
-                tmpTextComponent.font = selectedTMPFont;
-            }
-            tmpTextComponent.lineSpacing = lineSpacing;
-            EditorUtility.SetDirty(tmpTextComponent);
         }
 
         // 遞迴處理子物件

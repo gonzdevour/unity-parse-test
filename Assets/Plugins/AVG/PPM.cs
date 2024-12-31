@@ -22,6 +22,7 @@ public class PPM : MonoBehaviour
     {
         // 儲存值
         PlayerPrefs.SetString(key, value.ToString());
+        Debug.Log($"[PPM]已設定{key}為{value.ToString()}");
 
         // 更新鍵表
         var keys = GetKeyList();
@@ -47,7 +48,7 @@ public class PPM : MonoBehaviour
             return PlayerPrefs.GetString(key);
         }
 
-        Debug.LogWarning($"PPM: Key '{key}' does not exist. Returning default value: {defaultValue}");
+        //Debug.LogWarning($"PPM: Key '{key}' does not exist. Returning default value: {defaultValue}");
         return defaultValue;
     }
 

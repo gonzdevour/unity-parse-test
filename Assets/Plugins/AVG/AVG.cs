@@ -105,21 +105,29 @@ public class AVG : MonoBehaviour
         if (HasValidValue(storyCutDict, "說話前"))
         {
             string[] commands = storyCutDict["說話前"].ToString().Split('\n');
+            for (int i = 0; i < commands.Length; i++)
+            {
+                commands[i] = ParseEx(commands[i]);
+            }
             Director.Inst.ExecuteActionPackage(commands);
         }
         // 顯示當前cut的內容
-        string Name = TxR.Inst.Render(storyCutDict["說話者"].ToString());
+        string Name = TxR.Inst.Render(ParseEx(storyCutDict["說話者"].ToString()));
         string DisplayName = Name;
         if (HasValidValue(storyCutDict, "顯示名稱"))
         {
-            DisplayName = TxR.Inst.Render(storyCutDict["顯示名稱"].ToString());
+            DisplayName = TxR.Inst.Render(ParseEx(storyCutDict["顯示名稱"].ToString()));
         }
-        string Content = TxR.Inst.Render(storyCutDict["說話內容"].ToString());
+        string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
         Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
 
         if (HasValidValue(storyCutDict, "說話後"))
         {
             string[] commands = storyCutDict["說話後"].ToString().Split('\n');
+            for (int i = 0; i < commands.Length; i++)
+            {
+                commands[i] = ParseEx(commands[i]);
+            }
             Director.Inst.ExecuteActionPackage(commands);
         }
 
@@ -136,7 +144,7 @@ public class AVG : MonoBehaviour
             }
             else
             {
-                nextCutIndex = int.Parse(targets[0]);
+                nextCutIndex = int.Parse(ParseEx(targets[0]));
                 //Debug.Log($"有前往但是沒有選項，指定前往第一個index{nextCutIndex}");
             }
         }
@@ -175,8 +183,8 @@ public class AVG : MonoBehaviour
         {
             // 創建按鈕
             GameObject button = Instantiate(choicePrefab, choicePanel.transform);
-            button.GetComponentInChildren<Text>().text = TxR.Inst.Render(options[i]); // 設置按鈕文字
-            int resultCutIndex = int.Parse(ParseTernary(targets[i]));
+            button.GetComponentInChildren<Text>().text = TxR.Inst.Render(ParseEx(options[i])); // 設置按鈕文字
+            int resultCutIndex = int.Parse(ParseEx(targets[i]));
 
             // 設置按鈕回調
             Button btn = button.GetComponent<Button>();
@@ -230,7 +238,7 @@ public class AVG : MonoBehaviour
     /// </summary>
     /// <param name="expression">條件運算子字串，例如 "金錢>=蛋糕價格?3:8"</param>
     /// <returns>解析並判斷後的結果</returns>
-    public static string ParseTernary(string expression)
+    public static string ParseEx(string expression)
     {
         if (string.IsNullOrEmpty(expression))
         {
@@ -240,6 +248,7 @@ public class AVG : MonoBehaviour
 
         try
         {
+            expression = expression.Trim();
             // 找到條件運算子的位置
             int questionMarkIndex = expression.IndexOf('?');
             int colonIndex = expression.IndexOf(':');
@@ -247,8 +256,15 @@ public class AVG : MonoBehaviour
             // 檢查格式是否正確
             if (questionMarkIndex == -1 || colonIndex == -1 || questionMarkIndex > colonIndex)
             {
-                Debug.Log($"非三元式：{expression}，回傳值為{expression}");
-                return expression;
+                //Debug.Log($"非三元式：{expression}，回傳值為{expression}");
+                if (!expression.StartsWith("\"") || !expression.EndsWith("\""))
+                {
+                    return PPM.Inst.Get(expression, expression);
+                }
+                else
+                {
+                    return expression;
+                }
             }
 
             // 解析條件、為真結果、為假結果

@@ -65,7 +65,7 @@ public class SpriteCacher : MonoBehaviour
         // 開始新的加載過程
         LoadingSprites.Add(address);
         CallbackMap[address] = new List<Action<Sprite>> { onComplete };
-        Debug.Log($"{address}在路上了");
+        //Debug.Log($"{address}在路上了");
         // 根據地址類型進行加載
         if (IsUrl(address))
         {
