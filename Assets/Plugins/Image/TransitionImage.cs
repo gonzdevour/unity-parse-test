@@ -31,23 +31,23 @@ public class TransitionImage : MonoBehaviour
     /// <summary>
     /// 開始圖片轉換
     /// </summary>
-    /// <param name="imagePath">新圖片的路徑</param>
+    /// <param name="imgUrl">新圖片的路徑</param>
     /// <param name="transitionType">過渡特效類型</param>
     /// <param name="dur">過渡特效時間</param>
     /// <param name="onComplete">過渡完成時的回調</param>
-    public void StartTransition(string imagePath, string transitionType, float dur = 2f, Action onComplete = null)
+    public void StartTransition(string imgUrl, string transitionType, float dur = 2f, Action onComplete = null)
     {
         // 若有正在執行的過渡效果，先完成它
         CompleteCurrentTransition();
 
         // 更換 ReadyImage 圖片
-        Sprite newSprite = LoadSpriteFromPath(imagePath);
-        if (newSprite == null)
+        SpriteCacher.Inst.GetSprite(imgUrl, (sprite) =>
         {
-            Debug.LogError($"圖片路徑無效: {imagePath}");
-            return;
-        }
-        readyImage.sprite = newSprite;
+            if (readyImage != null) //避免回傳時物件已刪除
+            {
+                readyImage.sprite = sprite;
+            };
+        });
         readyImage.gameObject.SetActive(true); // 顯示 ReadyImage
 
         // 檢查並執行特效

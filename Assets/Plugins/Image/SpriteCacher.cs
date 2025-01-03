@@ -91,11 +91,50 @@ public class SpriteCacher : MonoBehaviour
     // 從 Resources 資源加載 Sprite
     private void CacheFromResources(string resourceAddress, string originalAddress)
     {
-        Sprite[] sprites = Resources.LoadAll<Sprite>(resourceAddress.Split('|')[0]);
-        Sprite sprite = sprites.FirstOrDefault(s => s.name == resourceAddress.Split('|').Last());
+        Debug.Log($"開始從Resources讀取 {resourceAddress}");
 
+        Sprite sprite;
+
+        if (resourceAddress.Contains("|"))
+        {
+            // 若包含 "|"，採用 multiple sprite 的讀取方式
+            string[] resourceParts = resourceAddress.Split('|');
+            if (resourceParts.Length < 2)
+            {
+                Debug.LogError("resourceAddress 格式錯誤，應包含 '|' 分隔的路徑和名稱！");
+                OnSpriteLoaded(originalAddress, null);
+                return;
+            }
+
+            string resourcePath = resourceParts[0];
+            string spriteName = resourceParts[1];
+
+            Debug.Log($"從 Resources 加載多張 Sprite，路徑: {resourcePath}，名稱: {spriteName}");
+            Sprite[] sprites = Resources.LoadAll<Sprite>(resourcePath);
+
+            sprite = sprites.FirstOrDefault(s => s.name == spriteName);
+            if (sprite == null)
+            {
+                Debug.LogWarning($"未找到名稱為 {spriteName} 的 Sprite！");
+            }
+        }
+        else
+        {
+            // 若不包含 "|"，採用單一圖片的讀取方式
+            resourceAddress = resourceAddress.Split('.')[0];
+            Debug.Log($"從 Resources 加載單張 Sprite，路徑: {resourceAddress}");
+            sprite = Resources.Load<Sprite>(resourceAddress);
+
+            if (sprite == null)
+            {
+                Debug.LogWarning($"未找到路徑為 {resourceAddress} 的單張 Sprite！");
+            }
+        }
+
+        // 回調處理結果
         OnSpriteLoaded(originalAddress, sprite);
     }
+
 
     // 從 StreamingAssets 資源加載 Sprite
     private IEnumerator CacheFromStreamingAssets(string filePath, string address)

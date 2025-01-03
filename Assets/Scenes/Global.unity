@@ -1723,10 +1723,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6759d23792bf5584998ddd9dc076b603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnmaskTransform: {fileID: 0}
+  UnmaskCtnr: {fileID: 262885029}
   ScreenImg: {fileID: 788406928}
-  DurationOut: 0.2
-  DurationIn: 0.2
+  DurOut: 0.5
+  DurIn: 0.5
   EaseOut: 6
   EaseIn: 5
   sceneNames: []
@@ -3647,7 +3647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1093525368314320966
 MonoBehaviour:
   m_ObjectHideFlags: 0

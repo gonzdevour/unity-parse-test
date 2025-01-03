@@ -17,9 +17,9 @@ public class Demo_Transimg : MonoBehaviour
     void Start()
     {
         // 初始化圖片資源路徑
-        imagePaths["Image1"] = "Assets/Resources/Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
-        imagePaths["Image2"] = "Assets/Resources/Sprites/AVG/BG/Landscape/Daily/ACstreet001_19201080.jpg";
-        imagePaths["Image3"] = "Assets/Resources/Sprites/AVG/BG/Landscape/Daily/rtshoppingstreet01_19201080.jpg";
+        imagePaths["Image1"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
+        imagePaths["Image2"] = "Resources://Sprites/AVG/BG/Landscape/Daily/ACstreet001_19201080.jpg";
+        imagePaths["Image3"] = "Resources://Sprites/AVG/BG/Landscape/Daily/rtshoppingstreet01_19201080.jpg";
 
         pathKeys = new List<string>(imagePaths.Keys);
 
