@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class SceneSwitcher : MonoBehaviour
 {
-    public Transform UnmaskTransform;
+    public GameObject UnmaskCtnr;
     public Image ScreenImg;
-    private readonly float Duration = 0.2f;
+    public float DurOut = 0.5f;
+    public float DurIn = 0.5f;
+    public Ease EaseOut = Ease.OutQuad;
+    public Ease EaseIn = Ease.InQuad;
     public string[] sceneNames;
     private string firstScene = "Menu";
     private string currentScene;
@@ -27,7 +30,7 @@ public class SceneSwitcher : MonoBehaviour
         globalCanvas.sortingOrder = 100; // 確保排序在其他 Canvas 之上
 
         // 預設使用淡入淡出特效
-        transitionEffect = new FadeTransitionEffect(ScreenImg, Duration);
+        transitionEffect = new TransitionEffectCircle(UnmaskCtnr, ScreenImg, DurOut, DurIn, EaseOut, EaseIn);
     }
 
     void Start()
@@ -87,7 +90,7 @@ public class SceneSwitcher : MonoBehaviour
         // 如果目標場景已存在，立即停止Fade，將目標場景設定為目前場景
         if (SceneManager.GetSceneByName(targetScene).isLoaded)
         {
-            ScreenImg.DOFade(0, 0).SetEase(Ease.InQuad);
+            transitionEffect.Stop();//立即完成並停止fade
 
             lastScene = currentScene;
             currentScene = targetScene;
@@ -106,68 +109,5 @@ public class SceneSwitcher : MonoBehaviour
     public void SetTransitionEffect(ITransitionEffect effect)
     {
         transitionEffect = effect;
-    }
-}
-
-public interface ITransitionEffect
-{
-    void FadeIn();
-    void FadeOut(System.Action onComplete);
-}
-
-public class FadeTransitionEffect : ITransitionEffect
-{
-    private Image ScreenImg;
-    private float duration;
-
-    public FadeTransitionEffect(Image ScreenImg, float duration)
-    {
-        this.ScreenImg = ScreenImg;
-        this.duration = duration;
-    }
-
-    public void FadeIn()
-    {
-        if (ScreenImg == null)
-        {
-            Debug.LogError("FadeIn 無法執行，因為 Cover 未正確設置！");
-            return;
-        }
-        ScreenImg.DOFade(0, duration).SetEase(Ease.InQuad);
-    }
-
-    public void FadeOut(System.Action onComplete)
-    {
-        if (ScreenImg == null)
-        {
-            Debug.LogError("FadeOut 無法執行，因為 Cover 未正確設置！");
-            return;
-        }
-
-        ScreenImg.DOFade(1, duration).SetEase(Ease.OutQuad).OnComplete(() => onComplete?.Invoke());
-    }
-}
-
-// 未來可擴展其他特效，如縮放、旋轉等
-public class ScaleTransitionEffect : ITransitionEffect
-{
-    private Transform coverTransform;
-    private float duration;
-
-    public ScaleTransitionEffect(Image coverImage, float duration)
-    {
-        this.coverTransform = coverImage.transform;
-        this.duration = duration;
-    }
-
-    public void FadeIn()
-    {
-        coverTransform.localScale = Vector3.one * 1.5f;
-        coverTransform.DOScale(Vector3.one, duration).SetEase(Ease.OutQuad);
-    }
-
-    public void FadeOut(System.Action onComplete)
-    {
-        coverTransform.DOScale(Vector3.one * 1.5f, duration).SetEase(Ease.InQuad).OnComplete(() => onComplete?.Invoke());
     }
 }

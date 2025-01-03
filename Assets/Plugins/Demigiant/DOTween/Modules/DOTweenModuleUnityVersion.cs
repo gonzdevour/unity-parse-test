@@ -23,7 +23,7 @@ namespace DG.Tweening
         /// <summary>Tweens a Material's color using the given gradient
         /// (NOTE 1: only uses the colors of the gradient, not the alphas - NOTE 2: creates a Sequence, not a Tweener).
         /// Also stores the image as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="gradient">The gradient to use</param><param name="duration">The duration of the tween</param>
+        /// <param name="gradient">The gradient to use</param><param name="duration">The DurOut of the tween</param>
         public static Sequence DOGradientColor(this Material target, Gradient gradient, float duration)
         {
             Sequence s = DOTween.Sequence();
@@ -36,7 +36,7 @@ namespace DG.Tweening
                     continue;
                 }
                 float colorDuration = i == len - 1
-                    ? duration - s.Duration(false) // Verifies that total duration is correct
+                    ? duration - s.Duration(false) // Verifies that total DurOut is correct
                     : duration * (i == 0 ? c.time : c.time - colors[i - 1].time);
                 s.Append(target.DOColor(c.color, colorDuration).SetEase(Ease.Linear));
             }
@@ -48,7 +48,7 @@ namespace DG.Tweening
         /// Also stores the image as the tween's target so it can be used for filtered operations</summary>
         /// <param name="gradient">The gradient to use</param>
         /// <param name="property">The name of the material property to tween (like _Tint or _SpecColor)</param>
-        /// <param name="duration">The duration of the tween</param>
+        /// <param name="duration">The DurOut of the tween</param>
         public static Sequence DOGradientColor(this Material target, Gradient gradient, string property, float duration)
         {
             Sequence s = DOTween.Sequence();
@@ -61,7 +61,7 @@ namespace DG.Tweening
                     continue;
                 }
                 float colorDuration = i == len - 1
-                    ? duration - s.Duration(false) // Verifies that total duration is correct
+                    ? duration - s.Duration(false) // Verifies that total DurOut is correct
                     : duration * (i == 0 ? c.time : c.time - colors[i - 1].time);
                 s.Append(target.DOColor(c.color, property, colorDuration).SetEase(Ease.Linear));
             }
@@ -172,7 +172,7 @@ namespace DG.Tweening
         /// Also stores the material as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The end value to reach</param>
         /// <param name="propertyID">The ID of the material property to tween (also called nameID in Unity's manual)</param>
-        /// <param name="duration">The duration of the tween</param>
+        /// <param name="duration">The DurOut of the tween</param>
         public static TweenerCore<Vector2, Vector2, VectorOptions> DOOffset(this Material target, Vector2 endValue, int propertyID, float duration)
         {
             if (!target.HasProperty(propertyID)) {
@@ -188,7 +188,7 @@ namespace DG.Tweening
         /// Also stores the material as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The end value to reach</param>
         /// <param name="propertyID">The ID of the material property to tween (also called nameID in Unity's manual)</param>
-        /// <param name="duration">The duration of the tween</param>
+        /// <param name="duration">The DurOut of the tween</param>
         public static TweenerCore<Vector2, Vector2, VectorOptions> DOTiling(this Material target, Vector2 endValue, int propertyID, float duration)
         {
             if (!target.HasProperty(propertyID)) {

@@ -19,7 +19,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens an AudioSource's volume to the given value.
         /// Also stores the AudioSource as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach (0 to 1)</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach (0 to 1)</param><param name="duration">The DurOut of the tween</param>
         public static TweenerCore<float, float, FloatOptions> DOFade(this AudioSource target, float endValue, float duration)
         {
             if (endValue < 0) endValue = 0;
@@ -31,7 +31,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens an AudioSource's pitch to the given value.
         /// Also stores the AudioSource as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         public static TweenerCore<float, float, FloatOptions> DOPitch(this AudioSource target, float endValue, float duration)
         {
             TweenerCore<float, float, FloatOptions> t = DOTween.To(() => target.pitch, x => target.pitch = x, endValue, duration);
@@ -47,7 +47,7 @@ namespace DG.Tweening
         /// Also stores the AudioMixer as the tween's target so it can be used for filtered operations.
         /// Note that you need to manually expose a float in an AudioMixerGroup in order to be able to tween it from an AudioMixer.</summary>
         /// <param name="floatName">Name given to the exposed float to set</param>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         public static TweenerCore<float, float, FloatOptions> DOSetFloat(this AudioMixer target, string floatName, float endValue, float duration)
         {
             TweenerCore<float, float, FloatOptions> t = DOTween.To(()=> {
@@ -101,7 +101,7 @@ namespace DG.Tweening
         /// and returns the total number of tweens involved.
         /// </summary>
         /// <param name="to">Time position to reach
-        /// (if higher than the whole tween duration the tween will simply reach its end)</param>
+        /// (if higher than the whole tween DurOut the tween will simply reach its end)</param>
         /// <param name="andPlay">If TRUE will play the tween after reaching the given position, otherwise it will pause it</param>
         public static int DOGoto(this AudioMixer target, float to, bool andPlay = false)
         {

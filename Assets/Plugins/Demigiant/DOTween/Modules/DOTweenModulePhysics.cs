@@ -21,7 +21,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens a Rigidbody's position to the given value.
         /// Also stores the rigidbody as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static TweenerCore<Vector3, Vector3, VectorOptions> DOMove(this Rigidbody target, Vector3 endValue, float duration, bool snapping = false)
         {
@@ -32,7 +32,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens a Rigidbody's X position to the given value.
         /// Also stores the rigidbody as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static TweenerCore<Vector3, Vector3, VectorOptions> DOMoveX(this Rigidbody target, float endValue, float duration, bool snapping = false)
         {
@@ -43,7 +43,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens a Rigidbody's Y position to the given value.
         /// Also stores the rigidbody as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static TweenerCore<Vector3, Vector3, VectorOptions> DOMoveY(this Rigidbody target, float endValue, float duration, bool snapping = false)
         {
@@ -54,7 +54,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens a Rigidbody's Z position to the given value.
         /// Also stores the rigidbody as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static TweenerCore<Vector3, Vector3, VectorOptions> DOMoveZ(this Rigidbody target, float endValue, float duration, bool snapping = false)
         {
@@ -65,7 +65,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens a Rigidbody's rotation to the given value.
         /// Also stores the rigidbody as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
+        /// <param name="endValue">The end value to reach</param><param name="duration">The DurOut of the tween</param>
         /// <param name="mode">Rotation mode</param>
         public static TweenerCore<Quaternion, Vector3, QuaternionOptions> DORotate(this Rigidbody target, Vector3 endValue, float duration, RotateMode mode = RotateMode.Fast)
         {
@@ -77,7 +77,7 @@ namespace DG.Tweening
 
         /// <summary>Tweens a Rigidbody's rotation so that it will look towards the given position.
         /// Also stores the rigidbody as the tween's target so it can be used for filtered operations</summary>
-        /// <param name="towards">The position to look at</param><param name="duration">The duration of the tween</param>
+        /// <param name="towards">The position to look at</param><param name="duration">The DurOut of the tween</param>
         /// <param name="axisConstraint">Eventual axis constraint for the rotation</param>
         /// <param name="up">The vector that defines in which direction up is (default: Vector3.up)</param>
         public static TweenerCore<Quaternion, Vector3, QuaternionOptions> DOLookAt(this Rigidbody target, Vector3 towards, float duration, AxisConstraint axisConstraint = AxisConstraint.None, Vector3? up = null)
@@ -97,7 +97,7 @@ namespace DG.Tweening
         /// <param name="endValue">The end value to reach</param>
         /// <param name="jumpPower">Power of the jump (the max height of the jump is represented by this plus the final Y offset)</param>
         /// <param name="numJumps">Total number of jumps</param>
-        /// <param name="duration">The duration of the tween</param>
+        /// <param name="duration">The DurOut of the tween</param>
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static Sequence DOJump(this Rigidbody target, Vector3 endValue, float jumpPower, int numJumps, float duration, bool snapping = false)
         {
@@ -134,7 +134,7 @@ namespace DG.Tweening
         /// <para>BEWARE: doesn't work on Windows Phone store (waiting for Unity to fix their own bug).
         /// If you plan to publish there you should use a regular transform.DOPath.</para></summary>
         /// <param name="path">The waypoints to go through</param>
-        /// <param name="duration">The duration of the tween</param>
+        /// <param name="duration">The DurOut of the tween</param>
         /// <param name="pathType">The type of path: Linear (straight path), CatmullRom (curved CatmullRom path) or CubicBezier (curved with control points)</param>
         /// <param name="pathMode">The path mode: 3D, side-scroller 2D, top-down 2D</param>
         /// <param name="resolution">The resolution of the path (useless in case of Linear paths): higher resolutions make for more detailed curved paths but are more expensive.
@@ -159,7 +159,7 @@ namespace DG.Tweening
         /// <para>BEWARE: doesn't work on Windows Phone store (waiting for Unity to fix their own bug).
         /// If you plan to publish there you should use a regular transform.DOLocalPath.</para></summary>
         /// <param name="path">The waypoint to go through</param>
-        /// <param name="duration">The duration of the tween</param>
+        /// <param name="duration">The DurOut of the tween</param>
         /// <param name="pathType">The type of path: Linear (straight path), CatmullRom (curved CatmullRom path) or CubicBezier (curved with control points)</param>
         /// <param name="pathMode">The path mode: 3D, side-scroller 2D, top-down 2D</param>
         /// <param name="resolution">The resolution of the path: higher resolutions make for more detailed curved paths but are more expensive.
