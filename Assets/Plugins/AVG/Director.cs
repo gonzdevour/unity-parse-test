@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Net.NetworkInformation;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Director : MonoBehaviour
@@ -15,18 +13,23 @@ public class Director : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private ITransitionEffect TEffect;
+    private string currentTEffectName = "Circle";
+
     // 定義函數字典
     private Dictionary<string, Action<object[]>> actions;
-
     private void Start()
     {
+        TEffect = GetComponent<TEffectsManager>().Init(currentTEffectName);
         // 初始化字典並綁定函數
         actions = new Dictionary<string, Action<object[]>>
         {
             { "表情", args => ChangeExpression(args) },
             { "移動", args => MoveCharacter(args) },
             { "隨機值", args => SetRandomValue(args) },
-            { "金錢", args => SetMoney(args) }
+            { "金錢", args => SetMoney(args) },
+            { "淡入", args => FadeIn(args) },
+            { "淡出", args => FadeOut(args) },
         };
 
         // 測試
@@ -46,10 +49,29 @@ public class Director : MonoBehaviour
         //ExecuteAction("HP=MaxHP*50");
         //ExecuteAction("表情,張沐霖,怒");
     }
+    public void FadeIn()
+    {
+        TEffect.FadeIn();
+    }
+
+    public void FadeOut()
+    {
+        TEffect.FadeOut();
+    }
 
     // 字典中的函數
 
-    private void SetMoney(object[] args)
+    private void FadeIn(object[] args = null)
+    {
+        TEffect.FadeIn();
+    }
+
+    private void FadeOut(object[] args = null)
+    {
+        TEffect.FadeOut();
+    }
+
+    private void SetMoney(object[] args = null)
     {
         string input = args[0].ToString();
         PPM.Inst.Set("金錢", input);

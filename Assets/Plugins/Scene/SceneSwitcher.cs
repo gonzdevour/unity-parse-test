@@ -7,6 +7,7 @@ public class SceneSwitcher : MonoBehaviour
 {
     public GameObject UnmaskCtnr;
     public Image ScreenImg;
+    public Transform TEffectsPack;
     public float DurOut = 0.5f;
     public float DurIn = 0.5f;
     public Ease EaseOut = Ease.OutQuad;
@@ -16,7 +17,8 @@ public class SceneSwitcher : MonoBehaviour
     private string currentScene;
     private string lastScene;
 
-    private ITransitionEffect transitionEffect;
+    private ITransitionEffect TEffect;
+    public string currentTEffectName = "Circle";
 
     public static SceneSwitcher Inst { get; private set; }
 
@@ -29,8 +31,18 @@ public class SceneSwitcher : MonoBehaviour
         globalCanvas.overrideSorting = true;
         globalCanvas.sortingOrder = 100; // 確保排序在其他 Canvas 之上
 
-        // 預設使用淡入淡出特效
-        transitionEffect = new TransitionEffectCircle(UnmaskCtnr, ScreenImg, DurOut, DurIn, EaseOut, EaseIn);
+        // 特效
+        TEffect = TEffectsPack.GetComponent($"TransitionEffect{currentTEffectName}") as ITransitionEffect;
+        TransitionEffectConfig config = new()
+        {
+            UnmaskCtnr = UnmaskCtnr,
+            ScreenImg = ScreenImg,
+            DurOut = DurOut,
+            DurIn = DurIn,
+            EaseOut = EaseOut,
+            EaseIn = EaseIn
+        };
+        TEffect.Init(config);
     }
 
     void Start()
@@ -51,7 +63,8 @@ public class SceneSwitcher : MonoBehaviour
                 {
                     currentScene = scene.name;
                     lastScene = scene.name;
-                    transitionEffect.FadeIn();
+                    //Debug.Log("teffect try to fade in");
+                    TEffect.FadeIn();
                 }
             }
         }
@@ -69,7 +82,8 @@ public class SceneSwitcher : MonoBehaviour
         if (!string.IsNullOrEmpty(currentScene) && SceneManager.GetSceneByName(currentScene).isLoaded)
         {
             // 當前場景字串非空且當前場景存在，執行FadeOut後卸載當前場景並加載目標場景
-            transitionEffect.FadeOut(() =>
+            //Debug.Log("teffect try to fade out");
+            TEffect.FadeOut(() =>
             {
                 SceneManager.UnloadSceneAsync(currentScene).completed += (op) =>
                 {
@@ -90,7 +104,8 @@ public class SceneSwitcher : MonoBehaviour
         // 如果目標場景已存在，立即停止Fade，將目標場景設定為目前場景
         if (SceneManager.GetSceneByName(targetScene).isLoaded)
         {
-            transitionEffect.Stop();//立即完成並停止fade
+            //Debug.Log("teffect try to stop");
+            TEffect.Stop();//立即完成並停止fade
 
             lastScene = currentScene;
             currentScene = targetScene;
@@ -102,12 +117,8 @@ public class SceneSwitcher : MonoBehaviour
         {
             lastScene = currentScene;
             currentScene = targetScene;
-            transitionEffect.FadeIn();
+            //Debug.Log("teffect try to fade in");
+            TEffect.FadeIn();
         };
-    }
-
-    public void SetTransitionEffect(ITransitionEffect effect)
-    {
-        transitionEffect = effect;
     }
 }

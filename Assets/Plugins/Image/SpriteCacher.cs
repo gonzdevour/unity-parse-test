@@ -152,6 +152,7 @@ public class SpriteCacher : MonoBehaviour
     private IEnumerator DownloadAndCacheSprite(string url)
     {
         Debug.Log($"SpriteCacher¶}©l¤U¸ü{url}");
+        //Debug.Log($"corsanywhereUrl:{corsanywhereUrl + url}");
         using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(corsanywhereUrl + url))
         {
             yield return request.SendWebRequest();

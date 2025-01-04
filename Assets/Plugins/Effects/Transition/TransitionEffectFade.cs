@@ -2,24 +2,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class TransitionEffectFade : ITransitionEffect
+public class TransitionEffectFade : MonoBehaviour, ITransitionEffect
 {
     private GameObject UnmaskCtnr;
     private Image ScreenImg;
-    private float DurationOut;
-    private float DurationIn;
+    private float DurOut;
+    private float DurIn;
     private Ease EaseOut;
     private Ease EaseIn;
     private Tween activeTween;
 
-    public TransitionEffectFade(GameObject UnmaskCtnr, Image ScreenImg, float DurOut, float DurIn, Ease EaseOut, Ease EaseIn)
+    public void Init(TransitionEffectConfig config)
     {
-        this.UnmaskCtnr = UnmaskCtnr;
-        this.ScreenImg = ScreenImg;
-        this.DurationOut = DurOut;
-        this.DurationIn = DurIn;
-        this.EaseOut = EaseOut;
-        this.EaseIn = EaseIn;
+        UnmaskCtnr = config.UnmaskCtnr;
+        ScreenImg = config.ScreenImg;
+        DurOut = config.DurOut;
+        DurIn = config.DurIn;
+        EaseOut = config.EaseOut;
+        EaseIn = config.EaseIn;
+
         activeTween = null;
     }
 
@@ -34,7 +35,7 @@ public class TransitionEffectFade : ITransitionEffect
         Stop(true); // 停止任何進行中的 Tween，保證乾淨狀態
 
         // 開始淡入動畫
-        activeTween = ScreenImg.DOFade(0, DurationIn)
+        activeTween = ScreenImg.DOFade(0, DurIn)
             .SetEase(EaseIn)
             .OnComplete(() =>
             {
@@ -54,7 +55,7 @@ public class TransitionEffectFade : ITransitionEffect
         Stop(true); // 停止任何進行中的 Tween，保證乾淨狀態
 
         // 開始淡出動畫
-        activeTween = ScreenImg.DOFade(1, DurationOut)
+        activeTween = ScreenImg.DOFade(1, DurOut)
             .SetEase(EaseOut)
             .OnComplete(() =>
             {
@@ -82,12 +83,12 @@ public class TransitionEffectFade : ITransitionEffect
             // 根據 Tween 狀態設定完成值
             if (activeTween != null && activeTween.IsPlaying())
             {
-                if (activeTween.Duration(false) == DurationIn)
+                if (activeTween.Duration(false) == DurIn)
                 {
                     // 如果是 FadeIn，設定最終透明度為 0
                     ScreenImg.color = new Color(ScreenImg.color.r, ScreenImg.color.g, ScreenImg.color.b, 0);
                 }
-                else if (activeTween.Duration(false) == DurationOut)
+                else if (activeTween.Duration(false) == DurOut)
                 {
                     // 如果是 FadeOut，設定最終透明度為 1
                     ScreenImg.color = new Color(ScreenImg.color.r, ScreenImg.color.g, ScreenImg.color.b, 1);

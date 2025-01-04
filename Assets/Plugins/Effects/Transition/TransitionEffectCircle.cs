@@ -6,21 +6,22 @@ public class TransitionEffectCircle : MonoBehaviour, ITransitionEffect
 {
     private GameObject UnmaskCtnr;
     private Image ScreenImg;
-    private float DurationOut;
-    private float DurationIn;
+    private float DurOut;
+    private float DurIn;
     private Ease EaseOut;
     private Ease EaseIn;
     private Ease EaseCurrent;
     private Tween activeTween;
 
-    public TransitionEffectCircle(GameObject UnmaskCtnr, Image ScreenImg, float DurOut, float DurIn, Ease EaseOut, Ease EaseIn)
+    public void Init(TransitionEffectConfig config)
     {
-        this.UnmaskCtnr = UnmaskCtnr;
-        this.ScreenImg = ScreenImg;
-        this.DurationOut = DurOut;
-        this.DurationIn = DurIn;
-        this.EaseOut = EaseOut;
-        this.EaseIn = EaseIn;
+        UnmaskCtnr = config.UnmaskCtnr;
+        ScreenImg = config.ScreenImg;
+        DurOut = config.DurOut;
+        DurIn = config.DurIn;
+        EaseOut = config.EaseOut;
+        EaseIn = config.EaseIn;
+
         activeTween = null;
     }
 
@@ -28,6 +29,7 @@ public class TransitionEffectCircle : MonoBehaviour, ITransitionEffect
 
     public void FadeIn(System.Action onComplete)
     {
+        //Debug.Log("circle fade in");
         // 停止任何進行中的 Tween，初始化
         Stop(true);
         ScreenImg.gameObject.SetActive(true);
@@ -43,12 +45,12 @@ public class TransitionEffectCircle : MonoBehaviour, ITransitionEffect
         // 設置 circle 的初始寬高為 0
         circleRectTransform.sizeDelta = Vector2.zero;
 
-        // 取得屏幕長邊
-        float screenMaxDimension = Mathf.Max(Screen.width, Screen.height);
+        // 取得Screen長邊
+        float screenMaxDimension = Mathf.Max(ScreenImg.rectTransform.rect.width, ScreenImg.rectTransform.rect.height);
 
         // Tween 到 (長邊, 長邊)
         EaseCurrent = EaseIn;
-        activeTween = circleRectTransform.DOSizeDelta(new Vector2(screenMaxDimension, screenMaxDimension), DurationIn)
+        activeTween = circleRectTransform.DOSizeDelta(new Vector2(screenMaxDimension, screenMaxDimension), DurIn)
             .SetEase(EaseCurrent)
             .OnComplete(() =>
             {
@@ -64,6 +66,7 @@ public class TransitionEffectCircle : MonoBehaviour, ITransitionEffect
 
     public void FadeOut(System.Action onComplete)
     {
+        //Debug.Log("circle fade out");
         // 停止任何進行中的 Tween，初始化
         Stop(true);
         ScreenImg.gameObject.SetActive(true);
@@ -76,13 +79,14 @@ public class TransitionEffectCircle : MonoBehaviour, ITransitionEffect
         // 將 circle 的 Local Position 歸 0
         circleRectTransform.localPosition = Vector3.zero;
 
-        // 設置 circle 的初始大小為屏幕長邊
-        float screenMaxDimension = Mathf.Max(Screen.width, Screen.height);
+        // 取Screen長邊
+        float screenMaxDimension = Mathf.Max(ScreenImg.rectTransform.rect.width, ScreenImg.rectTransform.rect.height);
+        // 將unmask以長邊設為正方形
         circleRectTransform.sizeDelta = new Vector2(screenMaxDimension, screenMaxDimension);
 
         // Tween 到 (0, 0)
         EaseCurrent = EaseOut;
-        activeTween = circleRectTransform.DOSizeDelta(Vector2.zero, DurationOut)
+        activeTween = circleRectTransform.DOSizeDelta(Vector2.zero, DurOut)
             .SetEase(EaseCurrent)
             .OnComplete(() =>
             {
