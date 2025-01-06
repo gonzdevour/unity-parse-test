@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,12 +15,17 @@ public class Director : MonoBehaviour
     }
 
     private ITransitionEffect TEffect;
-    private string currentTEffectName = "Circle";
+    private string currentTEffectName = "Anim2";
+
+    public TransitionImage Background; //背景
+    public float BgTransitionDur = 2f;
+    private Dictionary<string, string> imagePaths = new Dictionary<string, string>(); // 儲存圖片資源路徑
 
     // 定義函數字典
     private Dictionary<string, Action<object[]>> actions;
     private void Start()
     {
+        // 取得TEffect組件
         TEffect = GetComponent<TEffectsManager>().Init(currentTEffectName);
         // 初始化字典並綁定函數
         actions = new Dictionary<string, Action<object[]>>
@@ -30,16 +36,15 @@ public class Director : MonoBehaviour
             { "金錢", args => SetMoney(args) },
             { "淡入", args => FadeIn(args) },
             { "淡出", args => FadeOut(args) },
+            { "結束", args => Cut(args) },
+            { "背景", args => SetBackground(args) },
         };
 
+        // 初始化圖片資源路徑
+        imagePaths["街道"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
+        imagePaths["店裡"] = "Resources://Sprites/AVG/BG/Landscape/Daily/130machi_19201080.jpg";
+
         // 測試
-        PPM.Inst.Set("金錢", "100");
-        PPM.Inst.Set("蛋糕價格", "100");
-        PPM.Inst.Set("麵包價格", "60");
-        PPM.Inst.Set("卡布奇諾價格", "120");
-        PPM.Inst.Set("栗子蒙布朗價格", "150");
-        PPM.Inst.Set("MaxHP", "199");
-        PPM.Inst.Set("獲勝陣營", "國民革命軍");
         //ExecuteAction("移動,角色1,10,20");
         //ExecuteAction("金錢,100");
         //ExecuteAction("金錢+100-20");
@@ -51,15 +56,79 @@ public class Director : MonoBehaviour
     }
     public void FadeIn()
     {
-        TEffect.FadeIn();
+        StartCoroutine(FadeInWithDelay());
     }
 
     public void FadeOut()
     {
+        StartCoroutine(FadeOutWithDelay());
+    }
+
+    public IEnumerator FadeInWithDelay(float Delay = 0f)
+    {
+        yield return new WaitForSeconds(Delay);
+        TEffect.FadeIn();
+    }
+
+    public IEnumerator FadeOutWithDelay(float Delay = 0f)
+    {
+        yield return new WaitForSeconds(Delay);
         TEffect.FadeOut();
     }
 
     // 字典中的函數
+
+    private void SetBackground(object[] args = null)
+    {
+        // 檢查 args 是否為 null 或空數組
+        if (args == null || args.Length == 0)
+        {
+            Debug.LogError("args is null or empty.");
+            return;
+        }
+
+        // 提取 imagePath
+        string imagePath = null;
+        if (args.Length > 0 && args[0] != null)
+        {
+            var key = args[0].ToString();
+            if (!imagePaths.ContainsKey(key))
+            {
+                Debug.LogError($"Key '{key}' does not exist in imagePaths.");
+                return;
+            }
+            imagePath = imagePaths[key];
+        }
+        else
+        {
+            Debug.LogError("args[0] is null or missing.");
+            return;
+        }
+
+        // 提取 effectType
+        string effectType = null;
+        if (args.Length > 1)
+        {
+            effectType = args[1]?.ToString(); // 如果 args[1] 為 null，effectType 也為 null
+            //Debug.Log($"effectType有值：{effectType}");
+        }
+
+        // 提取 duration，默認為 0
+        float duration = BgTransitionDur;
+        if (args.Length > 2)
+        {
+            if (!float.TryParse(args[2]?.ToString(), out duration))
+            {
+                Debug.LogWarning($"Invalid duration value: {args[2]}. Using default duration: {duration}.");
+            }
+        }
+        Background.StartTransition(imagePath, effectType, duration);
+    }
+
+    private void Cut(object[] args = null)
+    {
+        AVG.Inst.nextCutIndex = 99999; //使下一卡索引超出範圍，強制結束
+    }
 
     private void FadeIn(object[] args = null)
     {
@@ -348,7 +417,7 @@ public class Director : MonoBehaviour
                 // 從 PlayerPrefs 嘗試取值，默認為 token 本身
                 if (!PlayerPrefs.HasKey(token))
                 {
-                    Debug.LogError($"[EvaluateExpression]{token}無值");
+                    Debug.LogWarning($"[EvaluateExpression]{token}無值");
                 }
                 string value = PPM.Inst.Get(token, "0");
 

@@ -6,10 +6,21 @@ using UnityEngine.UI;
 
 public class Demo_Menu : MonoBehaviour
 {
+    private Dictionary<string, string> ImgPathsToPreload = new Dictionary<string, string>(); // 儲存圖片資源路徑
+
     void Start()
     {
         Debug.Log("開始讀取圖片");
         StartCoroutine(TestLoadImg("Img_FromSA", "StreamingAssets://Image/duck.png"));
+        StartCoroutine(Preload());
+    }
+
+    IEnumerator Preload()
+    {
+        yield return null; //等待global scene
+        ImgPathsToPreload["街道"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
+        ImgPathsToPreload["店裡"] = "Resources://Sprites/AVG/BG/Landscape/Daily/130machi_19201080.jpg";
+        SpriteCacher.Inst.PreloadBatch(ImgPathsToPreload);
     }
 
     private IEnumerator TestLoadImg(string gameObjectName, string url)

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.UI;
+using System.Collections;
 
 public class SceneSwitcher : MonoBehaviour
 {
@@ -82,43 +83,53 @@ public class SceneSwitcher : MonoBehaviour
         if (!string.IsNullOrEmpty(currentScene) && SceneManager.GetSceneByName(currentScene).isLoaded)
         {
             // 當前場景字串非空且當前場景存在，執行FadeOut後卸載當前場景並加載目標場景
-            //Debug.Log("teffect try to fade out");
+            Debug.Log("teffect try to fade out");
             TEffect.FadeOut(() =>
             {
                 SceneManager.UnloadSceneAsync(currentScene).completed += (op) =>
                 {
                     Debug.Log($"卸載場景 {currentScene} 完成。");
-                    LoadTargetScene(targetScene);
+                    StartCoroutine(LoadTargetScene(targetScene));
                 };
             });
         }
         else
         {
             // 當前場景字串為空或當前場景不存在，不執行FadeOut，直接讀取目標場景
-            LoadTargetScene(targetScene);
+            StartCoroutine(LoadTargetScene(targetScene));
         }
     }
 
-    private void LoadTargetScene(string targetScene)
+    private IEnumerator LoadTargetScene(string targetScene)
     {
-        // 如果目標場景已存在，立即停止Fade，將目標場景設定為目前場景
+        // 如果目標場景已存在，立即停止Fade，並設定為目前場景
         if (SceneManager.GetSceneByName(targetScene).isLoaded)
         {
-            //Debug.Log("teffect try to stop");
-            TEffect.Stop();//立即完成並停止fade
+            Debug.Log("teffect try to stop");
+            TEffect.Stop(); // 立即完成並停止fade
 
             lastScene = currentScene;
             currentScene = targetScene;
             Debug.LogWarning($"場景 {targetScene} 已加載，無需重複加載。");
-            return;
+            yield break; // 結束 Coroutine
         }
-        // 如果目標場景不存在，以Additive模式加載場景，完成後執行FadeIn
-        SceneManager.LoadSceneAsync(targetScene, LoadSceneMode.Additive).completed += (op) =>
+
+        // 加載場景
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(targetScene, LoadSceneMode.Additive);
+
+        // 等待場景加載完成
+        while (!loadOperation.isDone)
         {
-            lastScene = currentScene;
-            currentScene = targetScene;
-            //Debug.Log("teffect try to fade in");
-            TEffect.FadeIn();
-        };
+            yield return null; // 等待一幀
+        }
+
+        // 更新當前場景狀態
+        lastScene = currentScene;
+        currentScene = targetScene;
+        yield return new WaitForSeconds(0f); //不要立即執行FadeIn以防止scene切換時造成unmask animation的閃爍
+        // 執行 FadeIn
+        Debug.Log("teffect try to fade in");
+        TEffect.FadeIn();
     }
+
 }

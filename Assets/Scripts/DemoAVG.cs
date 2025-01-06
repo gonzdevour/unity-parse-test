@@ -3,12 +3,20 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Unity.Burst.Intrinsics.X86;
+using UnityEngine.UI;
 
 public class DemoAVG : MonoBehaviour
 {
+    public Button Btn_StoryStart;
+
     SQLiteManager dbManager;
     SheetToDB sheetToDB;
+
+    public class Preset
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+    }
 
     // 定義表格資料結構
     public class StoryList
@@ -34,37 +42,40 @@ public class DemoAVG : MonoBehaviour
 
     void Start()
     {
+        Btn_StoryStart.onClick.AddListener(() => StartCoroutine(StartAVG()));
+
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
         sheetToDB = GetComponent<SheetToDB>();
 
-        TxR.Inst.SetVariable("Name", "陳大志");
-
-        // 在 PlayerPrefs 中設置測試數據
-        DataSet<string>("姓名", "蘇  東坡");
-        DataSet<float>("體重", 40.3f);
-        DataSet<int>("日期", 20240103);
-        DataSet<int>("hp", 1);
-        DataSet<int>("mp", 2);
-        DataSet<int>("目前時間", 1500);
-        DataSet<int>("王小美好感度", 4);
-        DataSet<int>("李大花好感度", 5);
-
         //StartCoroutine(Test());
         //Test2();
-        StartCoroutine(StartAVG());
-    }
-    void DataSet<T>(string key, T value)
-    {
-        PlayerPrefs.SetString(key, value.ToString());
+        //StartCoroutine(StartAVG());
     }
 
     IEnumerator StartAVG()
     {
-        yield return null;
-        yield return sheetToDB.LoadExcel("Story.xlsx");
-        FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
-        yield return AVG.Inst.StoryQueueStart<StoryCut>(() => { Debug.Log("Story Fin"); });
+        yield return null; //等待Global scene初始化
 
+        AVG.Inst.On();
+
+        yield return sheetToDB.LoadExcel("Story.xlsx");
+
+        UpdatePPM("Preset");//更新預設值
+        FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
+        StartCoroutine(Director.Inst.FadeInWithDelay(2f));//等待背景讀入後再FadeIn
+
+        yield return AVG.Inst.StoryQueueStart<StoryCut>(() => 
+        {
+            StartCoroutine(EndAVG());
+        });
+    }
+
+    IEnumerator EndAVG()
+    {
+        Director.Inst.FadeOut();
+        yield return new WaitForSeconds(2f);
+        AVG.Inst.Off();
+        Debug.Log("Story Fin");
     }
 
     IEnumerator Test()
@@ -108,6 +119,22 @@ public class DemoAVG : MonoBehaviour
         //// 查看結果
         //Debug.Log($"條件結果: {result}");
 
+    }
+
+    void DataSet<T>(string key, T value)
+    {
+        PPM.Inst.Set(key, value);
+    }
+
+    public void UpdatePPM(string pageName)
+    {
+        // 在 PPM 中設置測試字串數據，同時支援TxR
+        List<Preset> allItems = dbManager.QueryTable<Preset>(pageName);
+        foreach (var item in allItems)
+        {
+            //Debug.Log($"{item.Key}={item.Value}");
+            PPM.Inst.Set(item.Key, item.Value);
+        }
     }
 
     public void FilterStories(string pageName)

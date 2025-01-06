@@ -16,6 +16,7 @@ public class AVG : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public GameObject AVGPanel; //主舞台面板
     public GameObject choicePanel; // 選擇面板
     public GameObject choicePrefab; // 選項按鈕Prefab
     public Button Btn_Next; //下一步面板(按鈕)
@@ -41,6 +42,17 @@ public class AVG : MonoBehaviour
     private bool isChoiceSelected = true;
     private bool isStoryEnd = false;
     private int gotoIndex = -1; // 選項選擇後將前往的cutIndex
+    public int nextCutIndex; //下一卡的索引值，可以讓外部控制
+
+    public void On()
+    {
+        AVGPanel.SetActive(true);
+    }
+
+    public void Off()
+    {
+        AVGPanel.SetActive(false);
+    }
 
     private void OnProcessButtonClicked()
     {
@@ -94,7 +106,7 @@ public class AVG : MonoBehaviour
 
     public IEnumerator StoryCutStart(int cutIndex)
     {
-        int nextCutIndex = cutIndex;//先隨意賦值
+        nextCutIndex = cutIndex;//先隨意賦值
 
         // 等待玩家操作
         isReadyToNext = false;
@@ -121,16 +133,6 @@ public class AVG : MonoBehaviour
         string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
         Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
 
-        if (HasValidValue(storyCutDict, "說話後"))
-        {
-            string[] commands = storyCutDict["說話後"].ToString().Split('\n');
-            for (int i = 0; i < commands.Length; i++)
-            {
-                commands[i] = ParseEx(commands[i]);
-            }
-            Director.Inst.ExecuteActionPackage(commands);
-        }
-
         //Debug.Log($"=> 前往的值：{storyCutDict["前往"]}");
         if (HasValidValue(storyCutDict, "前往"))
         {
@@ -152,6 +154,17 @@ public class AVG : MonoBehaviour
         {
             nextCutIndex = cutIndex + 1;
             //Debug.Log($"前往無值，直接+1: 前往{nextCutIndex}");
+        }
+
+        //說話後的函數可以改變前往的nextCutIndex
+        if (HasValidValue(storyCutDict, "說話後"))
+        {
+            string[] commands = storyCutDict["說話後"].ToString().Split('\n');
+            for (int i = 0; i < commands.Length; i++)
+            {
+                commands[i] = ParseEx(commands[i]);
+            }
+            Director.Inst.ExecuteActionPackage(commands);
         }
 
         yield return new WaitUntil(() => isReadyToNext);

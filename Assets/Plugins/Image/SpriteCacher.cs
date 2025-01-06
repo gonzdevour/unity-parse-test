@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -29,12 +30,20 @@ public class SpriteCacher : MonoBehaviour
         DontDestroyOnLoad(gameObject); // 場景切換時保持不銷毀
     }
 
+    public void PreloadBatch(Dictionary<string, string> UrlsDict) 
+    {
+        foreach (var item in UrlsDict)
+        {
+            GetSprite(item.Value);
+        }
+    }
+
     /// <summary>
     /// 獲取指定地址的 Sprite，如果尚未加載則啟動加載流程
     /// </summary>
     /// <param name="address">資源地址</param>
-    /// <param name="onComplete">加載完成時的回調</param>
-    public void GetSprite(string address, Action<Sprite> onComplete)
+    /// <param name="onComplete">加載完成時的回調，如不傳入回調則只進行Cache</param>
+    public void GetSprite(string address, Action<Sprite> onComplete = null)
     {
         Debug.Log($"呼叫GetSprite取得{address}");
         // 如果地址正在加載，將回調加入隊列

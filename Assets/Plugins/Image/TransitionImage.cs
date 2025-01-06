@@ -35,7 +35,7 @@ public class TransitionImage : MonoBehaviour
     /// <param name="transitionType">過渡特效類型</param>
     /// <param name="dur">過渡特效時間</param>
     /// <param name="onComplete">過渡完成時的回調</param>
-    public void StartTransition(string imgUrl, string transitionType, float dur = 2f, Action onComplete = null)
+    public void StartTransition(string imgUrl, string transitionType = "fade", float dur = 2f, Action onComplete = null)
     {
         // 若有正在執行的過渡效果，先完成它
         CompleteCurrentTransition();
@@ -51,14 +51,34 @@ public class TransitionImage : MonoBehaviour
         readyImage.gameObject.SetActive(true); // 顯示 ReadyImage
 
         // 檢查並執行特效
+        if (string.IsNullOrEmpty(transitionType))
+        {
+            transitionType = "fade";
+        }
+
+        if (transitionEffects == null)
+        {
+            Debug.LogError("Transition effects dictionary is null.");
+            return;
+        }
+
         if (transitionEffects.ContainsKey(transitionType.ToLower()))
         {
-            transitionEffects[transitionType.ToLower()](dur);
+            var effect = transitionEffects[transitionType.ToLower()];
+            if (effect != null)
+            {
+                effect(dur); // 執行特效
+            }
+            else
+            {
+                Debug.LogError($"特效 '{transitionType}' 未定義行為。");
+            }
         }
         else
         {
             Debug.LogError($"無效的過渡特效類型: {transitionType}");
         }
+
 
         // 設置完成時的回調
         if (onComplete != null)

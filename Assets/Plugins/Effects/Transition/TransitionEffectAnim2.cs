@@ -1,0 +1,183 @@
+using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+
+public class TransitionEffectAnim2 : MonoBehaviour, ITransitionEffect
+{
+    private GameObject UnmaskCtnr;
+    private Image ScreenImg;
+    private float DurOut;
+    private float DurIn;
+    private Ease EaseOut;
+    private Ease EaseIn;
+    private Ease EaseCurrent;
+    private Tween activeTween;
+    private bool IsForward;
+    private string animationName = "TEffect_Water01";
+
+    public void Init(TransitionEffectConfig config)
+    {
+        UnmaskCtnr = config.UnmaskCtnr;
+        ScreenImg = config.ScreenImg;
+        DurOut = config.DurOut;
+        DurIn = config.DurIn;
+        EaseOut = config.EaseOut;
+        EaseIn = config.EaseIn;
+
+        activeTween = null;
+    }
+
+    private string prefabName = "Unmask_Water01";
+
+    public void FadeIn(System.Action onComplete)
+    {
+        Stop(true); // 停止當前的補間
+
+        ScreenImg.gameObject.SetActive(true);
+
+        // 產生 Unmask
+        GameObject prefab = Resources.Load<GameObject>($"prefabs/{prefabName}");
+        var inst = Instantiate(prefab, Vector3.zero, Quaternion.identity, UnmaskCtnr.transform);
+        var RTrans = inst.GetComponent<RectTransform>();
+
+        RTrans.localPosition = Vector3.zero;
+        RTrans.sizeDelta = new Vector2(ScreenImg.rectTransform.rect.width, ScreenImg.rectTransform.rect.height);
+
+        EaseCurrent = EaseIn;
+        IsForward = false;
+
+        float startTime = 0.99f; // FadeIn 逆向播放，從終點開始(用1的話會有一幀回到起點而閃爍，所以要用小於1的值)
+        float endTime = 0f;   // 播放到起點
+
+        var animator = inst.GetComponent<Animator>();
+        animator.Play(animationName, 0, startTime);
+        animator.Update(0f); // 強制刷新狀態
+
+        activeTween = DOTween.To(
+            () => animator.GetCurrentAnimatorStateInfo(0).normalizedTime,
+            x => animator.Play(animationName, 0, x),
+            endTime,
+            DurIn
+        ).SetEase(EaseCurrent)
+         .OnComplete(() =>
+         {
+             activeTween = null;
+             ScreenImg.gameObject.SetActive(false);
+             foreach (Transform child in UnmaskCtnr.transform)
+             {
+                 Destroy(child.gameObject);
+             }
+             onComplete?.Invoke();
+         });
+    }
+
+
+    public void FadeOut(System.Action onComplete)
+    {
+        //Debug.Log("circle fade out");
+        // 停止任何進行中的 Tween，初始化
+        Stop(true);
+        ScreenImg.gameObject.SetActive(true);
+
+        // 產生Unmask
+        GameObject prefab = Resources.Load<GameObject>($"prefabs/{prefabName}");
+        var inst = Instantiate(prefab, Vector3.zero, Quaternion.identity, UnmaskCtnr.transform);
+        var RTrans = inst.GetComponent<RectTransform>();
+
+        // 將 circle 的 Local Position 歸 0
+        RTrans.localPosition = Vector3.zero;
+
+        // 將unmask設為與Screen相同大小
+        RTrans.sizeDelta = new Vector2(ScreenImg.rectTransform.rect.width, ScreenImg.rectTransform.rect.height);
+
+        // 決定Ease與播放方向
+        EaseCurrent = EaseOut;
+        IsForward = true;
+
+        // 設置動畫起始進度
+        float startTime = IsForward ? 0f : 1f;
+        float endTime = IsForward ? 1f : 0f;
+
+        // 取得animator
+        var animator = inst.GetComponent<Animator>();
+
+        // 播放動畫
+        animator.Play(animationName, 0, startTime);
+
+        // 使用 DOTween 補間 normalizedTime
+        activeTween = DOTween.To(
+            () => animator.GetCurrentAnimatorStateInfo(0).normalizedTime,
+            x => animator.Play(animationName, 0, x),
+            endTime,
+            DurOut
+        ).SetEase(EaseCurrent)
+         .OnComplete(() =>
+         {
+             activeTween = null; // 清理 Tween
+             ScreenImg.gameObject.SetActive(true);
+             foreach (Transform child in UnmaskCtnr.transform)
+             {
+                 Destroy(child.gameObject); // 刪除所有Unmask
+             }
+             onComplete?.Invoke(); // 執行回調
+         });
+    }
+
+    public void Stop(bool instant)
+    {
+        // 停止任何正在進行的 Tween
+        if (activeTween != null && activeTween.IsActive())
+        {
+            activeTween.Kill(true);
+        }
+
+        if (instant)
+        {
+            if (activeTween != null && activeTween.IsPlaying())
+            {
+                // 根據 Tween 是 FadeIn 或 FadeOut 判斷
+                if (EaseCurrent == EaseIn)
+                {
+                    // FadeIn 的最終狀態
+                    ScreenImg.gameObject.SetActive(false);
+                    foreach (Transform child in UnmaskCtnr.transform)
+                    {
+                        Destroy(child.gameObject); // 刪除所有Unmask
+                    }
+                }
+                else if (EaseCurrent == EaseOut)
+                {
+                    // FadeOut 的最終狀態
+                    ScreenImg.gameObject.SetActive(true);
+                    foreach (Transform child in UnmaskCtnr.transform)
+                    {
+                        Destroy(child.gameObject); // 刪除所有Unmask
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (activeTween != null && activeTween.IsPlaying())
+            {
+                // 根據 Tween 是 FadeIn 或 FadeOut 判斷
+                if (EaseCurrent == EaseIn)
+                {
+                    // FadeIn 的最終狀態
+                    ScreenImg.gameObject.SetActive(true);
+                }
+                else if (EaseCurrent == EaseOut)
+                {
+                    // FadeOut 的最終狀態
+                    ScreenImg.gameObject.SetActive(false);
+                }
+                foreach (Transform child in UnmaskCtnr.transform)
+                {
+                    Destroy(child.gameObject); // 刪除所有Unmask
+                }
+            }
+        }
+
+        activeTween = null; // 清理 Active Tween
+    }
+}
