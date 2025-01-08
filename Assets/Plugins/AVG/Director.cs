@@ -54,6 +54,12 @@ public class Director : MonoBehaviour
         //ExecuteAction("HP=MaxHP*50");
         //ExecuteAction("ªí±¡,±i¨NÀM,«ã");
     }
+    public void Off()
+    {
+        TEffect.Stop();
+        Background.Clear();
+    }
+
     public void FadeIn()
     {
         StartCoroutine(FadeInWithDelay());

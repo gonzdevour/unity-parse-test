@@ -49,20 +49,30 @@ public class DemoAVG : MonoBehaviour
 
         //StartCoroutine(Test());
         //Test2();
-        //StartCoroutine(StartAVG());
+        StartCoroutine(StartAVG());
+    }
+
+    void OnDestroy()
+    {
+        AVG.Inst.Off();
     }
 
     IEnumerator StartAVG()
     {
         yield return null; //等待Global scene初始化
+        var panelSpinner = CanvasUI.Inst.panelSpinner;
+        panelSpinner.gameObject.SetActive(true);
+        panelSpinner.SetMessage("「與怪物戰鬥之人，應當小心自己不要成為怪物。」");
 
         AVG.Inst.On();
 
         yield return sheetToDB.LoadExcel("Story.xlsx");
+        panelSpinner.gameObject.SetActive(false);
 
         UpdatePPM("Preset");//更新預設值
         FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
-        StartCoroutine(Director.Inst.FadeInWithDelay(2f));//等待背景讀入後再FadeIn
+
+        StartCoroutine(Director.Inst.FadeInWithDelay(1f));//等待背景讀入後再FadeIn
 
         yield return AVG.Inst.StoryQueueStart<StoryCut>(() => 
         {
@@ -73,7 +83,7 @@ public class DemoAVG : MonoBehaviour
     IEnumerator EndAVG()
     {
         Director.Inst.FadeOut();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         AVG.Inst.Off();
         Debug.Log("Story Fin");
     }

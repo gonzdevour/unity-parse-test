@@ -18,6 +18,7 @@ public class AVG : MonoBehaviour
 
     public GameObject AVGPanel; //主舞台面板
     public GameObject choicePanel; // 選擇面板
+    public GameObject TEffectPanel; // 淡入淡出特效面板
     public GameObject choicePrefab; // 選項按鈕Prefab
     public Button Btn_Next; //下一步面板(按鈕)
     public List<string> PendingStoryTitles;
@@ -27,9 +28,12 @@ public class AVG : MonoBehaviour
     private void Start()
     {
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
-        // 隱藏choicePanel
+        
+        // 初始隱藏Panel
         choicePanel.SetActive(false);
-        // 確保按鈕可用並添加監聽
+        AVGPanel.SetActive(false);
+
+        // 確保全畫面下一步按鈕可用並添加監聽
         if (Btn_Next != null)
         {
             Btn_Next.onClick.AddListener(OnProcessButtonClicked);
@@ -47,11 +51,22 @@ public class AVG : MonoBehaviour
     public void On()
     {
         AVGPanel.SetActive(true);
+        TEffectPanel.SetActive(true);
     }
 
     public void Off()
     {
-        AVGPanel.SetActive(false);
+        Director.Inst.Off(); //清空Director管制的物件群，如Background與TEffect
+        SetInactive(choicePanel);
+        SetInactive(AVGPanel);
+    }
+
+    private void SetInactive(GameObject gameObject) 
+    {
+        if (gameObject != null)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnProcessButtonClicked()

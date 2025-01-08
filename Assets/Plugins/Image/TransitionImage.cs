@@ -28,6 +28,20 @@ public class TransitionImage : MonoBehaviour
         };
     }
 
+    public void Clear()
+    {
+        ClearImage(activeImage);
+        ClearImage(readyImage);
+    }
+
+    private void ClearImage(Image image)
+    {
+        if (image != null)
+        {
+            image.sprite = null;
+        }
+    }
+
     /// <summary>
     /// 開始圖片轉換
     /// </summary>

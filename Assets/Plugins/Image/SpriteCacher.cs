@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -199,6 +197,7 @@ public class SpriteCacher : MonoBehaviour
                 callback?.Invoke(sprite);
             }
             CallbackMap.Remove(address);
+            Debug.Log($"Removed callback from CallbackMap: {address}");
         }
 
         LoadingSprites.Remove(address);
