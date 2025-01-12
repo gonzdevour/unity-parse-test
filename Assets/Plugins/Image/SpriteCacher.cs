@@ -28,11 +28,42 @@ public class SpriteCacher : MonoBehaviour
         DontDestroyOnLoad(gameObject); // 場景切換時保持不銷毀
     }
 
-    public void PreloadBatch(Dictionary<string, string> UrlsDict) 
+    public void GetAllSpritesInSA(Action onAllDone, string folderName = null)
     {
-        foreach (var item in UrlsDict)
+        var PngPathsInSA = StreamingAssets.GetAllAssetPaths(folderName: folderName, fileExt: ".png"); //一定要加.
+
+        // 防呆：如果沒有任何地址，就直接呼叫 onAllDone
+        if (PngPathsInSA == null || PngPathsInSA.Count == 0)
         {
-            GetSprite(item.Value);
+            onAllDone?.Invoke();
+            return;
+        }
+
+        int totalRequests = PngPathsInSA.Count;
+        int completedCount = 0;
+
+        // 並行地一次送出所有請求
+        foreach (string path in PngPathsInSA)
+        {
+            GetSprite(path, (sprite) =>
+            {
+                // 單個 request 完成的時候，把計數器加 1
+                completedCount++;
+
+                // 若全部都完成了，就呼叫 onAllDone
+                if (completedCount == totalRequests)
+                {
+                    onAllDone?.Invoke();
+                }
+            });
+        }
+    }
+
+    public void PreloadBatch(Dictionary<string, string> UrlDict)
+    {
+        foreach (var url in UrlDict)
+        {
+            GetSprite(url.Value);
         }
     }
 
@@ -72,7 +103,7 @@ public class SpriteCacher : MonoBehaviour
         // 開始新的加載過程
         LoadingSprites.Add(address);
         CallbackMap[address] = new List<Action<Sprite>> { onComplete };
-        //Debug.Log($"{address}在路上了");
+        //Debug.Log($"{path}在路上了");
         // 根據地址類型進行加載
         if (IsUrl(address))
         {

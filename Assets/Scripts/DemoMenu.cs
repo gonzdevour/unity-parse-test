@@ -18,9 +18,9 @@ public class Demo_Menu : MonoBehaviour
     IEnumerator Preload()
     {
         yield return null; //等待global scene
-        ImgPathsToPreload["街道"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
-        ImgPathsToPreload["店裡"] = "Resources://Sprites/AVG/BG/Landscape/Daily/130machi_19201080.jpg";
-        SpriteCacher.Inst.PreloadBatch(ImgPathsToPreload);
+        //ImgPathsToPreload["街道"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
+        //ImgPathsToPreload["店裡"] = "Resources://Sprites/AVG/BG/Landscape/Daily/130machi_19201080.jpg";
+        //SpriteCacher.Inst.PreloadBatch(ImgPathsToPreload);
     }
 
     private IEnumerator TestLoadImg(string gameObjectName, string url)

@@ -46,7 +46,10 @@ public class DemoGlobal : MonoBehaviour
     public IEnumerator Test()
     {
         yield return new WaitForSeconds(1f);
-
+        SpriteCacher.Inst.GetAllSpritesInSA(() => 
+        {
+            Debug.Log("GetAllSpritesInSA Done");
+        });
         //yield return TestProgress();
 
         //panelSpinner.SetActive(true);

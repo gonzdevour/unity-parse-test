@@ -2,25 +2,24 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections; // 確保已經安裝 DOTween 並使用此命名空間
 
-public class ImageTweenPosition : MonoBehaviour
+public class ImageTweenAngle : MonoBehaviour
 {
     private RectTransform rectTransform;
-    private Vector3 initialPosition;
-    private Tween moveTween;
+    private Vector3 initialRotation;
+    private Tween angleTween;
 
     [Header("Tween Settings")]
     public int loopTimes = -1;
     public bool StartOnEnable = false;
     public bool ResetAfterTween = false;
     public bool DestroyAfterTween = false;
-    public float targetX = 0f; // 目標位移量 X
-    public float targetY = -20f; // 目標位移量 Y
-    public float durForward = 0.5f; // 目標位移量 X
-    public float durBackward = 0.5f; // 目標位移量 Y
-    public Ease easeForward = Ease.Linear; // 前往目標的緩動效果
-    public Ease easeBackward = Ease.Linear; // 返回初始位置的緩動效果
-    public float delay = 0f;
-    public Vector2 initial = Vector2.zero;
+    public float relativeAngle = 30f; // 相對旋轉角度（度數）
+    public float durIncrease = 0.5f; // 增加旋轉持續時間
+    public float durDecrease = 0.5f; // 減少旋轉持續時間
+    public Ease easeIncrease = Ease.Linear; // 增加旋轉的緩動效果
+    public Ease easeDecrease = Ease.Linear; // 減少旋轉的緩動效果
+    public float delay = 0f; // 動畫延遲
+    public float initial = -1f;
 
     /// <summary>
     /// 初始化並更新變數。
@@ -30,26 +29,24 @@ public class ImageTweenPosition : MonoBehaviour
         bool? startOnEnable = null,
         bool? resetAfterTween = null,
         bool? destroyAfterTween = null,
-        float? targetX = null,
-        float? targetY = null,
-        float? durForward = null,
-        float? durBackward = null,
-        Ease? easeForward = null,
-        Ease? easeBackward = null,
+        float? relativeAngle = null,
+        float? durIncrease = null,
+        float? durDecrease = null,
+        Ease? easeIncrease = null,
+        Ease? easeDecrease = null,
         float? delay = null,
-        Vector2? initial = null
+        float? initial = null
     )
     {
         if (loopTimes.HasValue) this.loopTimes = loopTimes.Value;
         if (startOnEnable.HasValue) this.StartOnEnable = startOnEnable.Value;
         if (resetAfterTween.HasValue) this.ResetAfterTween = resetAfterTween.Value;
         if (destroyAfterTween.HasValue) this.DestroyAfterTween = destroyAfterTween.Value;
-        if (targetX.HasValue) this.targetX = targetX.Value;
-        if (targetY.HasValue) this.targetY = targetY.Value;
-        if (durForward.HasValue) this.durForward = Mathf.Max(0, durForward.Value);
-        if (durBackward.HasValue) this.durBackward = Mathf.Max(0, durBackward.Value);
-        if (easeForward.HasValue) this.easeForward = easeForward.Value;
-        if (easeBackward.HasValue) this.easeBackward = easeBackward.Value;
+        if (relativeAngle.HasValue) this.relativeAngle = relativeAngle.Value;
+        if (durIncrease.HasValue) this.durIncrease = Mathf.Max(0, durIncrease.Value);
+        if (durDecrease.HasValue) this.durDecrease = Mathf.Max(0, durDecrease.Value);
+        if (easeIncrease.HasValue) this.easeIncrease = easeIncrease.Value;
+        if (easeDecrease.HasValue) this.easeDecrease = easeDecrease.Value;
         if (delay.HasValue) this.delay = Mathf.Max(0, delay.Value);
         if (initial.HasValue) this.initial = initial.Value;
     }
@@ -67,12 +64,13 @@ public class ImageTweenPosition : MonoBehaviour
 
     private void OnEnable()
     {
-        // 記錄初始位置
-        if (initial != Vector2.zero)
+        // 初始角度
+        if (initial != -1f)
         {
-            rectTransform.localPosition = initial;
+            rectTransform.localEulerAngles = new Vector3(0, 0, initial);
         }
-        initialPosition = rectTransform.localPosition;
+        // 記錄初始旋轉角度
+        initialRotation = rectTransform.localEulerAngles;
 
         // 開始 Tween 動畫
         if (StartOnEnable) StartCoroutine(Tween(delay));
@@ -80,7 +78,7 @@ public class ImageTweenPosition : MonoBehaviour
 
     private void OnDisable()
     {
-        // 停止動畫並重置位置
+        // 停止動畫並重置旋轉
         StopTween();
     }
 
@@ -89,41 +87,36 @@ public class ImageTweenPosition : MonoBehaviour
         yield return new WaitForSeconds(Delay);
 
         // 停止已有的 Tween
-        moveTween?.Kill();
+        angleTween?.Kill();
 
-        // 設定目標位置
-        Vector3 targetPosition = initialPosition + new Vector3(targetX, targetY, 0);
+        // 設定目標旋轉角度為相對於初始旋轉的比例
+        Vector3 targetRotation = initialRotation + new Vector3(0, 0, relativeAngle);
 
         // 創建來回循環 Tween 動畫
-        moveTween = rectTransform.DOLocalMove(targetPosition, 0.5f)
-            .SetEase(easeForward) // 前往目標的緩動效果
+        angleTween = rectTransform.DOLocalRotate(targetRotation, durIncrease, RotateMode.FastBeyond360)
+            .SetEase(easeIncrease) // 增加旋轉的緩動效果
             .SetLoops(loopTimes, LoopType.Yoyo) // 無限來回循環
             .OnStepComplete(() =>
             {
                 // 動畫方向改變時切換 Ease
-                if (moveTween.CompletedLoops() % 2 == 0)
+                if (angleTween.IsPlaying())
                 {
-                    moveTween.SetEase(easeBackward);
-                }
-                else
-                {
-                    moveTween.SetEase(easeForward);
+                    angleTween.SetEase(angleTween.CompletedLoops() % 2 == 0 ? easeDecrease : easeIncrease);
                 }
             })
             .OnComplete(() => 
-            { 
-                if (ResetAfterTween) rectTransform.localPosition = initialPosition;
+            {
+                if (ResetAfterTween) rectTransform.localEulerAngles = initialRotation;
                 if (DestroyAfterTween) Destroy(gameObject); 
             });
-
     }
 
     private void StopTween()
     {
         // 停止動畫
-        moveTween?.Kill();
+        angleTween?.Kill();
 
-        // 回到初始位置
-        rectTransform.localPosition = initialPosition;
+        // 回到初始旋轉
+        rectTransform.localEulerAngles = initialRotation;
     }
 }

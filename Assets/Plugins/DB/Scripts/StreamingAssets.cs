@@ -20,6 +20,47 @@ public class StreamingAssets : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public static List<string> GetAllAssetPaths(string folderName = null, string fileExt = "")
+    {
+        List<string> assetPaths = new List<string>();
+
+        // 獲取 StreamingAssets 資料夾路徑
+        string streamingAssetsPath = Application.streamingAssetsPath;
+
+        // 如果有指定子資料夾，更新資料夾路徑
+        if (!string.IsNullOrEmpty(folderName))
+        {
+            streamingAssetsPath = Path.Combine(streamingAssetsPath, folderName);
+        }
+
+        // 如果資料夾不存在，返回空清單
+        if (!Directory.Exists(streamingAssetsPath))
+        {
+            Debug.LogWarning($"Directory does not exist: {streamingAssetsPath}");
+            return assetPaths;
+        }
+
+        // 遍歷所有檔案與子資料夾
+        foreach (string filePath in Directory.GetFiles(streamingAssetsPath, $"*{fileExt}", SearchOption.AllDirectories))
+        {
+            // 統一使用正斜線 `/`
+            string normalizedFilePath = filePath.Replace("\\", "/");
+
+            // 提取相對於 StreamingAssets 的路徑
+            string relativePath = normalizedFilePath.Substring(streamingAssetsPath.Length + 1);
+
+            // 檢查副檔名是否為 .meta，如果是則跳過
+            if (relativePath.EndsWith(".meta"))
+            {
+                continue;
+            }
+            // 加入清單
+            assetPaths.Add("StreamingAssets://" + relativePath);
+        }
+
+        return assetPaths;
+    }
+
     public string GetFilePath(string fileName)
     {
         string filePath;

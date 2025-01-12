@@ -7,6 +7,10 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using DG.Tweening;
 
+// 引入關於Story的資料結構
+using Story;
+using System.Runtime.InteropServices;
+
 public class AVG : MonoBehaviour
 {
     public static AVG Inst { get; private set; }
@@ -82,9 +86,13 @@ public class AVG : MonoBehaviour
         }
     }
 
-    public IEnumerator StoryQueueStart<T>(Action onComplete) where T : class, new()
+    public IEnumerator StoryQueueStart(Action onComplete)
     {
         yield return null;
+
+        UpdatePPM("Preset");//更新預設值
+        FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
+
         while (PendingStoryTitles.Count > 0)
         {
             // 取出並移除第一個元素
@@ -93,7 +101,7 @@ public class AVG : MonoBehaviour
             
             isStoryEnd = false;
             Debug.Log($"故事開始: {currentTitle}");
-            yield return StoryStart<T>(currentTitle);
+            yield return StoryStart<StoryCut>(currentTitle);
             Debug.Log($"故事已讀: {currentTitle}");
         }
 
@@ -128,6 +136,30 @@ public class AVG : MonoBehaviour
 
         //Debug.Log($"StoryCutStart: {cutIndex}");
         var storyCutDict = StoryEventDicts[cutIndex];
+
+        // 顯示當前cut的內容
+        string charUID = TxR.Inst.Render(ParseEx(storyCutDict["說話者"].ToString()));
+        string charPos = TxR.Inst.Render(ParseEx(storyCutDict["位置"].ToString()));
+        string charEmo = TxR.Inst.Render(ParseEx(storyCutDict["表情"].ToString()));
+
+        string DisplayName = charUID; //這裡的charUID指的是解析後的說話者字串，為DisplayName的預設值
+        // 指定角色
+        Dictionary<string, string> charData = GetCharDataByUID("Chars", charUID);
+        if (charData != null)
+        {
+            //有角色資料
+            Director.Inst.CharIn(charData, charUID, charPos, charEmo);
+            DisplayName = $"{charData["姓"]}{charData["名"]}";
+        }
+        else
+        {
+            //無角色資料，旁白或主角發言
+        }
+        // 顯示名稱
+        if (HasValidValue(storyCutDict, "顯示名稱"))
+        {
+            DisplayName = TxR.Inst.Render(ParseEx(storyCutDict["顯示名稱"].ToString()));
+        }
         // 執行說話前函數集
         if (HasValidValue(storyCutDict, "說話前"))
         {
@@ -138,13 +170,7 @@ public class AVG : MonoBehaviour
             }
             Director.Inst.ExecuteActionPackage(commands);
         }
-        // 顯示當前cut的內容
-        string Name = TxR.Inst.Render(ParseEx(storyCutDict["說話者"].ToString()));
-        string DisplayName = Name;
-        if (HasValidValue(storyCutDict, "顯示名稱"))
-        {
-            DisplayName = TxR.Inst.Render(ParseEx(storyCutDict["顯示名稱"].ToString()));
-        }
+        // 說話
         string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
         Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
 
@@ -259,6 +285,60 @@ public class AVG : MonoBehaviour
     private bool HasValidValue(Dictionary<string, object> dict, string key)
     {
         return dict.ContainsKey(key) && dict[key] != null && !string.IsNullOrWhiteSpace(dict[key].ToString());
+    }
+
+    public Dictionary<string, string> GetCharDataByUID(string pageName, string UID)
+    {
+        // 初始化條件
+        string condition = $"UID = '{UID}'";
+
+        // 呼叫 QueryTable 函數
+        List<CharData> results = dbManager.QueryTable<CharData>(pageName, condition);
+
+        CharData charData = null;
+        // 獲取第一筆查詢結果
+        if (results.Count > 0)
+        {
+            charData = results[0];
+            Debug.Log($"找到資料：{charData.名} ({charData.UID})");
+        }
+        else
+        {
+            Debug.Log("查詢無結果");
+        }
+
+        var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(charData));
+
+        return dict;
+    }
+
+    public void UpdatePPM(string pageName)
+    {
+        // 在 PPM 中設置測試字串數據，同時支援TxR
+        List<Preset> allItems = dbManager.QueryTable<Preset>(pageName);
+        foreach (var item in allItems)
+        {
+            //Debug.Log($"{item.Key}={item.Value}");
+            PPM.Inst.Set(item.Key, item.Value);
+        }
+    }
+
+    public void FilterStories(string pageName)
+    {
+        List<StoryList> allItems = dbManager.QueryTable<StoryList>(pageName);
+
+        foreach (var item in allItems)
+        {
+            Debug.Log($"title:{item.Title}, cond:{item.Condition}, desc:{item.Description}");
+
+            if (Judge.EvaluateCondition(item.Condition))
+            {
+                Debug.Log($"Condition met: {item.Title}");
+
+                // 將符合條件的 Title 添加到 PendingStoryTitles
+                AVG.Inst.PendingStoryTitles.Add(item.Title);
+            }
+        }
     }
 
     /// <summary>

@@ -1,0 +1,10 @@
+namespace Story
+{
+    // 定義表格資料結構
+    public class StoryList
+    {
+        public string Title { get; set; }
+        public string Condition { get; set; }
+        public string Description { get; set; }
+    }
+}

@@ -13,13 +13,14 @@ public class Demo_Transimg : MonoBehaviour
     private Dictionary<string, string> imagePaths = new Dictionary<string, string>(); // 儲存圖片資源路徑
     private List<string> pathKeys; // 用於按順序存取路徑的鍵集合
     private int currentIndex = 0; // 當前圖片索引
+    private string resPathBg = "StreamingAssets://Image/AVG/BG/Landscape/Daily/";
 
     void Start()
     {
         // 初始化圖片資源路徑
-        imagePaths["Image1"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
-        imagePaths["Image2"] = "Resources://Sprites/AVG/BG/Landscape/Daily/130machi_19201080.jpg";
-        imagePaths["Image3"] = "Resources://Sprites/AVG/BG/Landscape/Daily/rtshoppingstreet01_19201080.jpg";
+        imagePaths["Image1"] = resPathBg + "AChos001_19201080.jpg";
+        imagePaths["Image2"] = resPathBg + "130machi_19201080.jpg";
+        imagePaths["Image3"] = resPathBg + "rtshoppingstreet01_19201080.jpg";
 
         pathKeys = new List<string>(imagePaths.Keys);
 

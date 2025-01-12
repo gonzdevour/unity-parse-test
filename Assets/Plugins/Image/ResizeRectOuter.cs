@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResizeRectByScreenWidth : MonoBehaviour
+public class ResizeRectOuter : MonoBehaviour
 {
     private RectTransform rectTransform;
     private Vector2 originalSize;
@@ -49,7 +49,6 @@ public class ResizeRectByScreenWidth : MonoBehaviour
         }
         else 
         {
-            Debug.Log("Window Resized to Portrait");
             newWidth = originalSize.x * (ResRef.y / originalSize.y);
             newHeight = ResRef.y;
             Debug.Log($"Window Resized to Portrait {newWidth},{newHeight}");

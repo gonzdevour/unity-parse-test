@@ -5,6 +5,11 @@ using System.Data;
 using System.Linq;
 using UnityEngine;
 
+using Story;
+using story;
+using System.Reflection;
+using Unity.VisualScripting;
+
 public class Director : MonoBehaviour
 {
     public static Director Inst { get; private set; }
@@ -16,9 +21,16 @@ public class Director : MonoBehaviour
 
     private ITransitionEffect TEffect;
     private string currentTEffectName = "Anim2";
+    public float BgTransitionDur = 2f;
+    private string resPathBg = "StreamingAssets://Image/AVG/BG/Landscape/Daily/";
+    private string resPathChar = "StreamingAssets://Image/AVG/Char/";
+    private string resPathPortrait = "StreamingAssets://Image/AVG/Char/portraits/";
 
     public TransitionImage Background; //背景
-    public float BgTransitionDur = 2f;
+    public TransitionImage Portrait; //頭像
+    public RectTransform LayerChar; //角色層
+    public RectTransform Panel_AVG; //角色層
+    public GameObject CharPrefab; // 角色Prefab
     private Dictionary<string, string> imagePaths = new Dictionary<string, string>(); // 儲存圖片資源路徑
 
     // 定義函數字典
@@ -31,7 +43,8 @@ public class Director : MonoBehaviour
         actions = new Dictionary<string, Action<object[]>>
         {
             { "表情", args => ChangeExpression(args) },
-            { "移動", args => MoveCharacter(args) },
+            { "移動x", args => MoveCharX(args) },
+            { "移動y", args => MoveCharY(args) },
             { "隨機值", args => SetRandomValue(args) },
             { "金錢", args => SetMoney(args) },
             { "淡入", args => FadeIn(args) },
@@ -41,8 +54,8 @@ public class Director : MonoBehaviour
         };
 
         // 初始化圖片資源路徑
-        imagePaths["街道"] = "Resources://Sprites/AVG/BG/Landscape/Daily/AChos001_19201080.jpg";
-        imagePaths["店裡"] = "Resources://Sprites/AVG/BG/Landscape/Daily/130machi_19201080.jpg";
+        imagePaths["街道"] = resPathBg + "AChos001_19201080.jpg";
+        imagePaths["店裡"] = resPathBg + "130machi_19201080.jpg";
 
         // 測試
         //ExecuteAction("移動,角色1,10,20");
@@ -80,6 +93,74 @@ public class Director : MonoBehaviour
     {
         yield return new WaitForSeconds(Delay);
         TEffect.FadeOut();
+    }
+
+    public IChar GetCharByUID(string charUID)
+    {
+        IChar CharResult = null;
+        foreach (RectTransform child in LayerChar)
+        {
+            // 檢查子物件是否有 IChar 組件
+            IChar Char = child.GetComponent<IChar>();
+            if (Char != null && Char.UID == charUID)
+            {
+                CharResult = Char;
+            }
+        }
+        return CharResult;
+    }
+
+    public void CharIn(Dictionary<string, string> charData, string charUID, string charPos, string charEmo)
+    {
+        // 1. 執行 CharsUnfocusAll 函數
+        CharsUnfocusAll();
+
+        // 2. 在 LayerChar 中尋找子物件
+        IChar Char = GetCharByUID(charUID);
+        if (Char != null)
+        {
+            Debug.Log($"畫面上存在{charUID}");
+            Char.Focus(); // 找到符合的 UID，執行 CharFocus
+            if (!string.IsNullOrEmpty(charPos))
+            {
+                Vector2[] fromTo = PositionParser.ParsePos(charPos, Panel_AVG);
+                Char.Move(fromTo, float.Parse(PPM.Inst.Get("位移秒數", "2"))); // 移動到指定位置
+                Debug.Log($"重新定位已存在的角色{charUID}");
+            }
+        }
+        else
+        {
+            Debug.Log($"畫面上不存在{charUID}，生成角色");
+            CharGen(charData, charUID, charPos, charEmo);
+        }
+    }
+
+    public void CharGen(Dictionary<string, string> charData, string charUID, string charPos, string charEmo)
+    {
+        Vector2 SpawnPoint = PositionParser.ParsePoint(charPos, Panel_AVG);
+
+        // 實例化 Prefab
+        GameObject newChar = Instantiate(CharPrefab, LayerChar);
+        newChar.name = charUID;
+        var newCharTransform = newChar.GetComponent<RectTransform>();
+        newCharTransform.anchoredPosition = SpawnPoint;
+
+        IChar Char = newChar.GetComponent<IChar>();
+        Char.Init(charData);
+    }
+
+    public void CharsUnfocusAll()
+    {
+        foreach (RectTransform child in LayerChar)
+        {
+            // 檢查子物件是否有 IChar 組件
+            IChar Char = child.GetComponent<IChar>();
+            if (Char != null)
+            {
+                // 如果找到符合的 UID，執行 CharFocus
+                Char.Unfocus();
+            }
+        }
     }
 
     // 字典中的函數
@@ -233,12 +314,32 @@ public class Director : MonoBehaviour
         Debug.Log($"Change {character}'s expression to {expression}");
     }
 
-    private void MoveCharacter(object[] args)
+    private void MoveCharX(object[] args)
     {
-        string character = args[0]?.ToString();
-        float x = float.Parse(args[1].ToString());
-        float y = float.Parse(args[2].ToString());
-        Debug.Log($"Move {character} to position ({x}, {y})");
+        string charUID = args[0]?.ToString();
+        string charPos = args[1].ToString();
+        string dur = args[2]?.ToString();
+
+        Vector2[] fromTo = PositionParser.ParsePos(charPos, Panel_AVG, "x"); //取x軸位移
+        IChar Char = GetCharByUID(charUID);
+        float duration = string.IsNullOrEmpty(dur) ? 0f : float.Parse(dur); // 預設值為 0f
+        Char.MoveX(fromTo, duration);
+
+        Debug.Log($"Move {charUID}'s X from {fromTo[0].x} to {fromTo[1].x}");
+    }
+
+    private void MoveCharY(object[] args)
+    {
+        string charUID = args[0]?.ToString();
+        string charPos = args[1].ToString();
+        string dur = args[2]?.ToString();
+
+        Vector2[] fromTo = PositionParser.ParsePos(charPos, Panel_AVG, "y"); //取y軸位移
+        IChar Char = GetCharByUID(charUID);
+        float duration = string.IsNullOrEmpty(dur) ? 0f : float.Parse(dur); // 預設值為 0f
+        Char.MoveY(fromTo, duration);
+
+        Debug.Log($"Move {charUID}'s Y from {fromTo[0].y} to {fromTo[1].y}");
     }
 
     // 執行函數
