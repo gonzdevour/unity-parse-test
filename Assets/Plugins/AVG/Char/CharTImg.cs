@@ -5,8 +5,12 @@ using DG.Tweening;
 
 public class CharTImg : MonoBehaviour, IChar
 {
+    public TransitionImage TImg;
     public Image TImg0;
     public Image TImg1;
+    private string resPathChar = "StreamingAssets://Image/AVG/Char/";
+    private string resPathPortrait = "StreamingAssets://Image/AVG/Char/portrait/";
+    private Dictionary<string, string> exprPaths = new Dictionary<string, string>(); // 儲存表情資源路徑
 
     public string UID { get; set; } // 唯一識別碼
     public string 姓 { get; set; } // 姓
@@ -19,16 +23,7 @@ public class CharTImg : MonoBehaviour, IChar
     public int YAdd { get; set; } // Y 軸位移
     public string AssetID { get; set; } // 資產 ID
 
-    // 表情相關屬性
-    public string 無 { get; set; } // 無表情
-    public string 喜 { get; set; } // 喜
-    public string 怒 { get; set; } // 怒
-    public string 樂 { get; set; } // 樂
-    public string 驚 { get; set; } // 驚
-    public string 疑 { get; set; } // 疑
-    public string 暈 { get; set; } // 暈
-
-    public void Init(Dictionary<string, string> CharData)
+    public void Init(Dictionary<string, string> CharData, string CharEmo = "無")
     {
         Debug.Log($"初始化角色資料：{CharData["UID"]}");
         // 設置屬性
@@ -39,7 +34,6 @@ public class CharTImg : MonoBehaviour, IChar
         職稱 = CharData.GetValueOrDefault("職稱", string.Empty);
         暱稱1 = CharData.GetValueOrDefault("暱稱1", string.Empty);
         暱稱2 = CharData.GetValueOrDefault("暱稱2", string.Empty);
-        Debug.Log($"初始化角色資料：{UID}");
 
         // 設置 Scale 和 YAdd
         if (CharData.TryGetValue("Scale", out string scale) && float.TryParse(scale, out float parsedScale))
@@ -57,14 +51,16 @@ public class CharTImg : MonoBehaviour, IChar
         // 資產 ID
         AssetID = CharData.GetValueOrDefault("AssetID", string.Empty);
         // 表情相關屬性
-        無 = CharData.GetValueOrDefault("無", string.Empty);
-        喜 = CharData.GetValueOrDefault("喜", string.Empty);
-        怒 = CharData.GetValueOrDefault("怒", string.Empty);
-        樂 = CharData.GetValueOrDefault("樂", string.Empty);
-        驚 = CharData.GetValueOrDefault("驚", string.Empty);
-        疑 = CharData.GetValueOrDefault("疑", string.Empty);
-        暈 = CharData.GetValueOrDefault("暈", string.Empty);
-
+        exprPaths["無"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("無", string.Empty) + ".png";
+        exprPaths["喜"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("喜", string.Empty) + ".png";
+        exprPaths["怒"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("怒", string.Empty) + ".png";
+        exprPaths["樂"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("樂", string.Empty) + ".png";
+        exprPaths["驚"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("驚", string.Empty) + ".png";
+        exprPaths["疑"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("疑", string.Empty) + ".png";
+        exprPaths["暈"] = resPathChar + AssetID + "-" + CharData.GetValueOrDefault("暈", string.Empty) + ".png";
+        // 設定初始表情
+        SpriteCacher.Inst.GetSprite(exprPaths[CharEmo], (sprite) => TImg0.sprite = sprite);
+        TImg0.SetNativeSize();
         Debug.Log($"Character {UID} initialized with name {姓}{名}.");
     }
 
@@ -97,6 +93,13 @@ public class CharTImg : MonoBehaviour, IChar
             TImg1.DOColor(new Color(0.3f, 0.3f, 0.3f), 0.5f);
         }
     }
+
+    public void SetExpression(string expression = "無", string transitionType = "fade", float dur = 2f ) 
+    {
+        var imgUrl = exprPaths[expression];
+        TImg.StartTransition(imgUrl, transitionType, dur);
+    }
+
     public void Move(Vector2[] fromTo, float dur = 0f)
     {
         if (fromTo == null || fromTo.Length < 2)

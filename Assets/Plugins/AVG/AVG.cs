@@ -300,11 +300,11 @@ public class AVG : MonoBehaviour
         if (results.Count > 0)
         {
             charData = results[0];
-            Debug.Log($"找到資料：{charData.名} ({charData.UID})");
+            //Debug.Log($"找到資料：{charData.名} ({charData.UID})");
         }
         else
         {
-            Debug.Log("查詢無結果");
+            //Debug.Log("查詢無結果");
         }
 
         var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(charData));
@@ -350,7 +350,7 @@ public class AVG : MonoBehaviour
     {
         if (string.IsNullOrEmpty(expression))
         {
-            Debug.LogError("表達式為空或 null");
+            //Debug.LogError("表達式為空或 null");
             return string.Empty;
         }
 

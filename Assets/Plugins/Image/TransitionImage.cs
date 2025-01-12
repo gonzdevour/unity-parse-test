@@ -7,6 +7,7 @@ using System.Collections;
 
 public class TransitionImage : MonoBehaviour
 {
+    public bool SetNativeSize = true;
     public Image activeImage; // 當前顯示的圖片
     public Image readyImage;  // 下一步將顯示的圖片
 
@@ -60,6 +61,10 @@ public class TransitionImage : MonoBehaviour
             if (readyImage != null) //避免回傳時物件已刪除
             {
                 readyImage.sprite = sprite;
+                if (SetNativeSize)
+                {
+                    readyImage.SetNativeSize();
+                }
             };
         });
         readyImage.gameObject.SetActive(true); // 顯示 ReadyImage

@@ -5,9 +5,7 @@ using System.Data;
 using System.Linq;
 using UnityEngine;
 
-using Story;
 using story;
-using System.Reflection;
 using Unity.VisualScripting;
 
 public class Director : MonoBehaviour
@@ -69,8 +67,15 @@ public class Director : MonoBehaviour
     }
     public void Off()
     {
+        // 停止過場特效
         TEffect.Stop();
+        // 清除背景sprites
         Background.Clear();
+        // 清除角色
+        foreach (Transform child in LayerChar)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     public void FadeIn()
@@ -125,7 +130,12 @@ public class Director : MonoBehaviour
             {
                 Vector2[] fromTo = PositionParser.ParsePos(charPos, Panel_AVG);
                 Char.Move(fromTo, float.Parse(PPM.Inst.Get("位移秒數", "2"))); // 移動到指定位置
-                Debug.Log($"重新定位已存在的角色{charUID}");
+                Debug.Log($"重新定位已存在的角色{charUID}至{fromTo[1]}");
+            }
+            if (!string.IsNullOrEmpty(charEmo))
+            {
+                Char.SetExpression(charEmo); // 設定表情
+                Debug.Log($"{charUID}的表情轉變為：{charEmo}");
             }
         }
         else
@@ -146,7 +156,7 @@ public class Director : MonoBehaviour
         newCharTransform.anchoredPosition = SpawnPoint;
 
         IChar Char = newChar.GetComponent<IChar>();
-        Char.Init(charData);
+        Char.Init(charData, charEmo);
     }
 
     public void CharsUnfocusAll()
