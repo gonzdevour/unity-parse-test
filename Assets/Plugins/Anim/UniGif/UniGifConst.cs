@@ -50,7 +50,7 @@ public static partial class UniGif
         public bool m_sortFlag;
         // Size of Global Color Table
         public int m_sizeOfGlobalColorTable;
-        // Background Color Index
+        // AVGBackground Color Index
         public byte m_bgColorIndex;
         // Pixel Aspect Ratio
         public byte m_pixelAspectRatio;

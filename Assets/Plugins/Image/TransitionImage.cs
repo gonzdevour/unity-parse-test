@@ -11,13 +11,13 @@ public class TransitionImage : MonoBehaviour
     public Image activeImage; // 當前顯示的圖片
     public Image readyImage;  // 下一步將顯示的圖片
 
-    private Dictionary<string, Action<float>> transitionEffects; // 儲存特效對應方法
+    private Dictionary<string, Action<float, Ease, Ease>> transitionEffects; // 儲存特效對應方法
     private Tween currentTween; // 當前執行的過渡動畫
 
     private void Awake()
     {
         // 初始化特效字典
-        transitionEffects = new Dictionary<string, Action<float>>
+        transitionEffects = new Dictionary<string, Action<float,Ease,Ease>>
         {
             { "fade", FadeTransition },
             { "slide", SlideTransition },
@@ -50,7 +50,7 @@ public class TransitionImage : MonoBehaviour
     /// <param name="transitionType">過渡特效類型</param>
     /// <param name="dur">過渡特效時間</param>
     /// <param name="onComplete">過渡完成時的回調</param>
-    public void StartTransition(string imgUrl, string transitionType = "fade", float dur = 2f, Action onComplete = null)
+    public void StartTransition(string imgUrl, string transitionType = "fade", float dur = 1f, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear, Action onComplete = null)
     {
         // 若有正在執行的過渡效果，先完成它
         CompleteCurrentTransition();
@@ -70,11 +70,6 @@ public class TransitionImage : MonoBehaviour
         readyImage.gameObject.SetActive(true); // 顯示 ReadyImage
 
         // 檢查並執行特效
-        if (string.IsNullOrEmpty(transitionType))
-        {
-            transitionType = "fade";
-        }
-
         if (transitionEffects == null)
         {
             Debug.LogError("Transition effects dictionary is null.");
@@ -86,7 +81,7 @@ public class TransitionImage : MonoBehaviour
             var effect = transitionEffects[transitionType.ToLower()];
             if (effect != null)
             {
-                effect(dur); // 執行特效
+                effect(dur, easeOut, easeIn); // 執行特效
             }
             else
             {
@@ -109,109 +104,118 @@ public class TransitionImage : MonoBehaviour
     /// <summary>
     /// 淡入淡出過渡 (DOTween 實現)
     /// </summary>
-    private void FadeTransition(float duration)
+    private void FadeTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
-        readyImage.color = new Color(1, 1, 1, 0); // 初始化 ReadyImage
+        // 初始化 ReadyImage 的透明度，保留當前 RGB
+        var readyImageColor = readyImage.color;
+        readyImage.color = new Color(readyImageColor.r, readyImageColor.g, readyImageColor.b, 0);
+
         currentTween = DOTween.Sequence()
-            .Append(activeImage.DOFade(0, duration).OnComplete(() =>
+            // 修改 activeImage 的透明度
+            .Append(activeImage.DOFade(0, duration).SetEase(easeOut).OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
-                activeImage.color = new Color(1, 1, 1, 1); // 恢復透明度
+
+                // 恢復 activeImage 的透明度，保留當前 RGB
+                var activeImageColor = activeImage.color;
+                activeImage.color = new Color(activeImageColor.r, activeImageColor.g, activeImageColor.b, 1);
             }))
-            .Join(readyImage.DOFade(1, duration).OnComplete(SwapImages));
+            // 修改 readyImage 的透明度
+            .Join(readyImage.DOFade(1, duration).SetEase(easeIn).OnComplete(SwapImages));
     }
+
 
     /// <summary>
     /// 從左到右滑動過渡 (DOTween 實現)
     /// </summary>
-    private void SlideRightTransition(float duration)
+    private void SlideRightTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
         float width = activeImage.rectTransform.rect.width;
         readyImage.rectTransform.anchoredPosition = new Vector2(-width, 0); // 從左側滑入
 
         currentTween = DOTween.Sequence()
-            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(width, 0), duration).OnComplete(() =>
+            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(width, 0), duration).SetEase(easeOut).OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
                 activeImage.rectTransform.anchoredPosition = Vector2.zero; // 重置位置
             }))
-            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).OnComplete(SwapImages));
+            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).SetEase(easeIn).OnComplete(SwapImages));
     }
 
     /// <summary>
     /// 從上到下滑動過渡 (DOTween 實現)
     /// </summary>
-    private void SlideDownTransition(float duration)
+    private void SlideDownTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
         float height = activeImage.rectTransform.rect.height;
         readyImage.rectTransform.anchoredPosition = new Vector2(0, height); // 從上方滑入
 
         currentTween = DOTween.Sequence()
-            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(0, -height), duration).OnComplete(() =>
+            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(0, -height), duration).SetEase(easeOut).OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
                 activeImage.rectTransform.anchoredPosition = Vector2.zero; // 重置位置
             }))
-            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).OnComplete(SwapImages));
+            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).SetEase(easeIn).OnComplete(SwapImages));
     }
 
     /// <summary>
     /// 從下到上滑動過渡 (DOTween 實現)
     /// </summary>
-    private void SlideUpTransition(float duration)
+    private void SlideUpTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
         float height = activeImage.rectTransform.rect.height;
         readyImage.rectTransform.anchoredPosition = new Vector2(0, -height); // 從下方滑入
 
         currentTween = DOTween.Sequence()
-            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(0, height), duration).OnComplete(() =>
+            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(0, height), duration).SetEase(easeOut).OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
                 activeImage.rectTransform.anchoredPosition = Vector2.zero; // 重置位置
             }))
-            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).OnComplete(SwapImages));
+            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).SetEase(easeIn).OnComplete(SwapImages));
     }
 
     /// <summary>
     /// 滑動過渡 (DOTween 實現)
     /// </summary>
-    private void SlideTransition(float duration)
+    private void SlideTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
         float width = activeImage.rectTransform.rect.width;
         readyImage.rectTransform.anchoredPosition = new Vector2(width, 0); // 從右側滑入
 
         currentTween = DOTween.Sequence()
-            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(-width, 0), duration).OnComplete(() =>
+            .Append(activeImage.rectTransform.DOAnchorPos(new Vector2(-width, 0), duration).SetEase(easeOut).OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
                 activeImage.rectTransform.anchoredPosition = Vector2.zero; // 重置位置
             }))
-            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).OnComplete(SwapImages));
+            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).SetEase(easeIn).OnComplete(SwapImages));
     }
 
     /// <summary>
     /// 縮放過渡 (DOTween 實現)
     /// </summary>
-    private void ScaleTransition(float duration)
+    private void ScaleTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
         // 初始化 ReadyImage
         readyImage.rectTransform.localScale = Vector3.zero;
         // 只scale readyImage
-        currentTween = readyImage.rectTransform.DOScale(Vector3.one, duration).OnComplete(SwapImages);
+        currentTween = readyImage.rectTransform.DOScale(Vector3.one, duration).SetEase(easeOut).OnComplete(SwapImages);
     }
 
-    private void Scale2Transition(float duration)
+    private void Scale2Transition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
         // 初始化 ReadyImage
         readyImage.rectTransform.localScale = Vector3.zero;
         // scale readyImage & activeImage
         currentTween = DOTween.Sequence()
-            .Append(activeImage.rectTransform.DOScale(Vector3.zero, duration).OnComplete(() =>
+            .Append(activeImage.rectTransform.DOScale(Vector3.zero, duration).SetEase(easeOut).OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
                 activeImage.rectTransform.localScale = Vector3.one; // 恢復縮放
             }))
-            .Join(readyImage.rectTransform.DOScale(Vector3.one, duration).OnComplete(SwapImages));
+            .Join(readyImage.rectTransform.DOScale(Vector3.one, duration).SetEase(easeIn).OnComplete(SwapImages));
     }
 
     /// <summary>

@@ -20,10 +20,16 @@ public class AVG : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public GameObject AVGPanel; //主舞台面板
-    public GameObject choicePanel; // 選擇面板
+    public RectTransform MainPanel; //主舞台
     public GameObject TEffectPanel; // 淡入淡出特效面板
-    public GameObject choicePrefab; // 選項按鈕Prefab
+    public GameObject ChoicePanel; // 選擇面板
+    public GameObject ChoicePrefab; // 選項按鈕Prefab
+
+    public AVGBackground Background; //背景
+    public AVGPortrait Portrait; //頭像
+    public RectTransform LayerChar; //角色層
+    public GameObject CharPrefab; // 角色Prefab
+
     public Button Btn_Next; //下一步面板(按鈕)
     public List<string> PendingStoryTitles;
     private List<Dictionary<string, object>> StoryEventDicts = new();
@@ -34,8 +40,8 @@ public class AVG : MonoBehaviour
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
         
         // 初始隱藏Panel
-        choicePanel.SetActive(false);
-        AVGPanel.SetActive(false);
+        ChoicePanel.SetActive(false);
+        MainPanel.gameObject.SetActive(false);
 
         // 確保全畫面下一步按鈕可用並添加監聽
         if (Btn_Next != null)
@@ -43,6 +49,12 @@ public class AVG : MonoBehaviour
             Btn_Next.onClick.AddListener(OnProcessButtonClicked);
         }
     }
+
+    public bool DisplayChar = true;
+    public bool DisplayPortrait = true;
+    public bool DisplayStoryBox = true;
+    public bool DisplayBubble = false;
+    public bool SingleCharMode = false;
 
     private bool isReadyToNext = false;
     private bool isTyping = false;
@@ -52,17 +64,25 @@ public class AVG : MonoBehaviour
     private int gotoIndex = -1; // 選項選擇後將前往的cutIndex
     public int nextCutIndex; //下一卡的索引值，可以讓外部控制
 
+    public IEnumerator Init()
+    {
+        yield return null;
+        UpdatePPM("Preset");//更新預設值
+        Background.Init(GetBgData("Bgs"));
+        Portrait.Init(GetCharDataAll("Chars"));
+    }
+
     public void On()
     {
-        AVGPanel.SetActive(true);
+        MainPanel.gameObject.SetActive(true);
         TEffectPanel.SetActive(true);
     }
 
     public void Off()
     {
         Director.Inst.Off(); //清空Director管制的物件群，如Background與TEffect
-        SetInactive(choicePanel);
-        SetInactive(AVGPanel);
+        SetInactive(ChoicePanel);
+        SetInactive(MainPanel.gameObject);
     }
 
     private void SetInactive(GameObject gameObject) 
@@ -88,11 +108,7 @@ public class AVG : MonoBehaviour
 
     public IEnumerator StoryQueueStart(Action onComplete)
     {
-        yield return null;
-
-        UpdatePPM("Preset");//更新預設值
         FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
-
         while (PendingStoryTitles.Count > 0)
         {
             // 取出並移除第一個元素
@@ -145,15 +161,37 @@ public class AVG : MonoBehaviour
         string DisplayName = charUID; //這裡的charUID指的是解析後的說話者字串，為DisplayName的預設值
         // 指定角色
         Dictionary<string, string> charData = GetCharDataByUID("Chars", charUID);
-        if (charData != null)
+        bool HasChar = charData["立繪"].ToLower() == "y";
+        bool HasPortrait = charData["頭圖"].ToLower() == "y";
+
+        var gbjLayerChar = LayerChar.gameObject;
+        var gbjPortrait = Portrait.gameObject;
+        if (charData != null) //有角色資料
         {
-            //有角色資料
-            Director.Inst.CharIn(charData, charUID, charPos, charEmo);
+            if (DisplayChar) 
+            {
+                Director.Inst.CharsUnfocusAll(); //其他角色變黑
+                if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
+                if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo); //角色進場
+            }
+            else
+            {
+                if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
+            }
+            if (DisplayPortrait && HasPortrait) //有頭圖且允許頭圖，才顯示頭圖
+            {
+                if(!gbjPortrait.activeSelf) gbjPortrait.SetActive(true);//顯示頭圖
+                Director.Inst.PortraitIn(charUID,charEmo);
+            }
+            else
+            {
+                if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
+            }
             DisplayName = $"{charData["姓"]}{charData["名"]}";
         }
-        else
+        else //無角色資料，旁白或主角發言
         {
-            //無角色資料，旁白或主角發言
+            if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
         }
         // 顯示名稱
         if (HasValidValue(storyCutDict, "顯示名稱"))
@@ -223,7 +261,7 @@ public class AVG : MonoBehaviour
     IEnumerator StartChoose(Dictionary<string, object> storyCutDict)
     {
         // 初始化面板
-        choicePanel.SetActive(true);
+        ChoicePanel.SetActive(true);
         ClearExistingButtons();
 
         // 初始化選擇狀態
@@ -236,7 +274,7 @@ public class AVG : MonoBehaviour
         for (int i = 0; i < options.Length && i < targets.Length; i++)
         {
             // 創建按鈕
-            GameObject button = Instantiate(choicePrefab, choicePanel.transform);
+            GameObject button = Instantiate(ChoicePrefab, ChoicePanel.transform);
             button.GetComponentInChildren<Text>().text = TxR.Inst.Render(ParseEx(options[i])); // 設置按鈕文字
             int resultCutIndex = int.Parse(ParseEx(targets[i]));
 
@@ -264,12 +302,12 @@ public class AVG : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         // 隱藏面板
-        choicePanel.SetActive(false);
+        ChoicePanel.SetActive(false);
     }
 
     private void ClearExistingButtons()
     {
-        foreach (Transform child in choicePanel.transform)
+        foreach (Transform child in ChoicePanel.transform)
         {
             Destroy(child.gameObject);
         }
@@ -300,7 +338,7 @@ public class AVG : MonoBehaviour
         if (results.Count > 0)
         {
             charData = results[0];
-            //Debug.Log($"找到資料：{charData.名} ({charData.UID})");
+            //Debug.Log($"找到資料：{bgData.名} ({bgData.UID})");
         }
         else
         {
@@ -310,6 +348,28 @@ public class AVG : MonoBehaviour
         var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(charData));
 
         return dict;
+    }
+
+    public List<Dictionary<string, string>> GetCharDataAll(string pageName)
+    {
+        // 呼叫 QueryTable 函數
+        List<CharData> results = dbManager.QueryTable<CharData>(pageName);
+        var dictList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(
+                JsonConvert.SerializeObject(results)
+            );
+
+        return dictList;
+    }
+
+    public List<Dictionary<string, string>> GetBgData(string pageName)
+    {
+        // 呼叫 QueryTable 函數
+        List<BgData> results = dbManager.QueryTable<BgData>(pageName);
+        var dictList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(
+                JsonConvert.SerializeObject(results)
+            );
+
+        return dictList;
     }
 
     public void UpdatePPM(string pageName)

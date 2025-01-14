@@ -126,7 +126,7 @@ public static partial class UniGif
             gifData.m_sizeOfGlobalColorTable = (int)Math.Pow(2, val);
         }
 
-        // Background Color Index(1 Byte)
+        // AVGBackground Color Index(1 Byte)
         gifData.m_bgColorIndex = gifBytes[11];
 
         // Pixel Aspect Ratio(1 Byte)
@@ -484,7 +484,7 @@ public static partial class UniGif
         // Not supported
         byteIndex++;
 
-        // Text Background Color Index(1 Bytes)
+        // Text AVGBackground Color Index(1 Bytes)
         // Not supported
         byteIndex++;
 

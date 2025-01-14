@@ -135,7 +135,7 @@ public class ItemsGenFromDB : MonoBehaviour
         ToggleVariables toggleVar = newToggle.GetComponent<ToggleVariables>();
         toggleVar.SetLabelName(eventItem.name);
 
-        // 找到 Background 的 Image 組件
+        // 找到 AVGBackground 的 Image 組件
         Image backgroundImage = newToggle.transform.Find("Background").GetComponent<Image>();
 
         string imgUrl = $"https://playoneapps.com.tw/images/roc/portrait/{eventItem.name}.png";

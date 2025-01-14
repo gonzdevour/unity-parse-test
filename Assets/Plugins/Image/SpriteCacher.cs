@@ -31,19 +31,21 @@ public class SpriteCacher : MonoBehaviour
     public void GetAllSpritesInSA(Action onAllDone, string folderName = null)
     {
         var PngPathsInSA = StreamingAssets.GetAllAssetPaths(folderName: folderName, fileExt: ".png"); //一定要加.
+        var JpgPathsInSA = StreamingAssets.GetAllAssetPaths(folderName: folderName, fileExt: ".jpg"); //一定要加.
+        var combinedList = PngPathsInSA.Concat(JpgPathsInSA).ToList(); // 合併成新列表
 
         // 防呆：如果沒有任何地址，就直接呼叫 onAllDone
-        if (PngPathsInSA == null || PngPathsInSA.Count == 0)
+        if (combinedList == null || combinedList.Count == 0)
         {
             onAllDone?.Invoke();
             return;
         }
 
-        int totalRequests = PngPathsInSA.Count;
+        int totalRequests = combinedList.Count;
         int completedCount = 0;
 
         // 並行地一次送出所有請求
-        foreach (string path in PngPathsInSA)
+        foreach (string path in combinedList)
         {
             GetSprite(path, (sprite) =>
             {

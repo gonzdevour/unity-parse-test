@@ -45,10 +45,13 @@ public class DemoGlobal : MonoBehaviour
 
     public IEnumerator Test()
     {
-        yield return new WaitForSeconds(1f);
+        var spinner = CanvasUI.Inst.panelSpinner;
+        spinner.On( message: "讀取StreamingAssets圖檔");
+        yield return null;
         SpriteCacher.Inst.GetAllSpritesInSA(() => 
         {
             Debug.Log("GetAllSpritesInSA Done");
+            spinner.Off();
         });
         //yield return TestProgress();
 
