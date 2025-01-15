@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using static UnityEditor.Progress;
 
 public class CharTImg : MonoBehaviour, IChar
 {
     public TransitionImage TImg;
     public Image TImg0;
     public Image TImg1;
-    private Dictionary<string, string> exprPaths = new Dictionary<string, string>(); // 儲存表情資源路徑
+    private Dictionary<string, string> exprPaths = new(); // 儲存表情資源路徑
 
     public string UID { get; set; } // 唯一識別碼
     public string 姓 { get; set; } // 姓
@@ -56,16 +57,41 @@ public class CharTImg : MonoBehaviour, IChar
         var assetRoot = PPM.Inst.Get("素材來源");
         var assetPath = PPM.Inst.Get("角色素材路徑");
         var resPath = assetRoot + "://" + assetPath;
-        exprPaths["無"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("無", string.Empty) + ".png";
-        exprPaths["喜"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("喜", string.Empty) + ".png";
-        exprPaths["怒"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("怒", string.Empty) + ".png";
-        exprPaths["樂"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("樂", string.Empty) + ".png";
-        exprPaths["驚"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("驚", string.Empty) + ".png";
-        exprPaths["疑"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("疑", string.Empty) + ".png";
-        exprPaths["暈"] = resPath + AssetID + "-" + CharData.GetValueOrDefault("暈", string.Empty) + ".png";
+        string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
+        string[] emos = emoTypes.Split(",");
+        // 組合每個表情的鍵值對
+        foreach (string emo in emos)
+        {
+            string fileName = CharData.GetValueOrDefault(emo, string.Empty);
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                // ex: exprPaths["怒"] = StreamingAssets://Image/AVG/Char/A-anger.png
+                exprPaths[emo] = resPath + AssetID + "-" + fileName + ".png";
+            }
+        }
         // 設定初始表情
-        SpriteCacher.Inst.GetSprite(exprPaths[CharEmo], (sprite) => TImg0.sprite = sprite);
-        TImg0.SetNativeSize();
+        if (exprPaths != null)
+        {
+            // 表情列表內有值
+            if (exprPaths.ContainsKey(CharEmo))
+            {
+                // 指定表情有值
+                SpriteCacher.Inst.GetSprite(exprPaths[CharEmo], (sprite) => TImg0.sprite = sprite);
+                TImg0.SetNativeSize();
+            }
+            else
+            {
+                // 指定表情無值，尋找預設表情
+                string defaultEmoKey = GetDefaultExpression("無");
+                SpriteCacher.Inst.GetSprite(exprPaths[defaultEmoKey], (sprite) => TImg0.sprite = sprite);
+                TImg0.SetNativeSize();
+            }
+        }
+        else
+        {
+            // 表情列表內無值
+            Debug.Log($"{UID} has no expressions");
+        }
         Debug.Log($"Character {UID} initialized with name {姓}{名}.");
     }
 
@@ -101,9 +127,34 @@ public class CharTImg : MonoBehaviour, IChar
 
     public void SetExpression(string expression = "無", string transitionType = "slideup", float dur = 1f ) 
     {
+        if (string.IsNullOrEmpty(expression)) expression = GetDefaultExpression("無");
         Debug.Log("表情轉換特效：" + transitionType);
         var imgUrl = exprPaths[expression];
         TImg.StartTransition(imgUrl, transitionType, dur);
+    }
+
+    private string GetDefaultExpression(string defaultEmoKey = "無")
+    {
+        // 指定表情無值，找預設值
+        if (exprPaths != null)
+        {
+            if (exprPaths.ContainsKey("無") && !string.IsNullOrEmpty(exprPaths["無"]))
+            {
+                defaultEmoKey = "無";
+            }
+            else
+            {
+                foreach (var pair in exprPaths)
+                {
+                    if (!string.IsNullOrEmpty(pair.Key) && !string.IsNullOrEmpty(pair.Value))
+                    {
+                        defaultEmoKey = pair.Key;
+                        break;
+                    }
+                }
+            }
+        }
+        return defaultEmoKey;
     }
 
     public void Move(Vector2[] fromTo, float dur = 0f)

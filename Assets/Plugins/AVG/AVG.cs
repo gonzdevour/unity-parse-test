@@ -30,6 +30,11 @@ public class AVG : MonoBehaviour
     public RectTransform LayerChar; //角色層
     public GameObject CharPrefab; // 角色Prefab
 
+    public StoryBoxName BoxName;
+    public StoryBoxContent BoxContent;
+    public StoryBubbleName BubbleName;
+    public StoryBubbleContent BubbleContent;
+
     public Button Btn_Next; //下一步面板(按鈕)
     public List<string> PendingStoryTitles;
     private List<Dictionary<string, object>> StoryEventDicts = new();
@@ -55,6 +60,7 @@ public class AVG : MonoBehaviour
     public bool DisplayStoryBox = true;
     public bool DisplayBubble = false;
     public bool SingleCharMode = false;
+    public bool CGMode = false;
 
     private bool isReadyToNext = false;
     private bool isTyping = false;
@@ -161,13 +167,14 @@ public class AVG : MonoBehaviour
         string DisplayName = charUID; //這裡的charUID指的是解析後的說話者字串，為DisplayName的預設值
         // 指定角色
         Dictionary<string, string> charData = GetCharDataByUID("Chars", charUID);
-        bool HasChar = charData["立繪"].ToLower() == "y";
-        bool HasPortrait = charData["頭圖"].ToLower() == "y";
 
         var gbjLayerChar = LayerChar.gameObject;
         var gbjPortrait = Portrait.gameObject;
         if (charData != null) //有角色資料
         {
+            bool HasChar = charData["立繪"].ToLower() == "y";
+            bool HasPortrait = charData["頭圖"].ToLower() == "y";
+
             if (DisplayChar) 
             {
                 Director.Inst.CharsUnfocusAll(); //其他角色變黑
@@ -191,6 +198,7 @@ public class AVG : MonoBehaviour
         }
         else //無角色資料，旁白或主角發言
         {
+            Director.Inst.CharsUnfocusAll(); //其他角色變黑
             if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
         }
         // 顯示名稱

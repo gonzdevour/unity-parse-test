@@ -76,7 +76,7 @@ public class SpriteCacher : MonoBehaviour
     /// <param name="onComplete">加載完成時的回調，如不傳入回調則只進行Cache</param>
     public void GetSprite(string address, Action<Sprite> onComplete = null)
     {
-        Debug.Log($"呼叫GetSprite取得{address}");
+        //Debug.Log($"呼叫GetSprite取得{address}");
         // 如果地址正在加載，將回調加入隊列
         if (LoadingSprites.Contains(address))
         {
@@ -179,7 +179,7 @@ public class SpriteCacher : MonoBehaviour
     // 從 StreamingAssets 資源加載 Sprite
     private IEnumerator CacheFromStreamingAssets(string filePath, string address)
     {
-        Debug.Log($"開始從sa讀取{filePath}");
+        //Debug.Log($"開始從sa讀取{filePath}");
         var sa = StreamingAssets.Inst;
         yield return sa.LoadImg(filePath, (texture) => 
         {
@@ -220,7 +220,7 @@ public class SpriteCacher : MonoBehaviour
         if (sprite != null)
         {
             SpriteCache[address] = sprite;
-            Debug.Log($"Sprite cached: {address}");
+            //Debug.Log($"Sprite cached: {address}");
         }
 
         if (CallbackMap.TryGetValue(address, out var callbacks))
@@ -230,7 +230,7 @@ public class SpriteCacher : MonoBehaviour
                 callback?.Invoke(sprite);
             }
             CallbackMap.Remove(address);
-            Debug.Log($"Removed callback from CallbackMap: {address}");
+            //Debug.Log($"Removed callback from CallbackMap: {address}");
         }
 
         LoadingSprites.Remove(address);

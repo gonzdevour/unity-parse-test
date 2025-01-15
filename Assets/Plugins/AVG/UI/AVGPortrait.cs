@@ -26,16 +26,18 @@ public class AVGPortrait : MonoBehaviour
     }
     public void GoTo(string key, string effectType = "fade", float duration = 0.5f)
     {
-        if (!imagePaths.ContainsKey(key))
+        string imagePath = "Resources://Sprites/Dummy/portrait/PortraitDefault.png";
+        if (imagePaths.ContainsKey(key))
+        {
+            var fileName = imagePaths[key];
+            var assetRoot = PPM.Inst.Get("素材來源");
+            var assetPath = PPM.Inst.Get("頭圖素材路徑");
+            imagePath = assetRoot + "://" + assetPath + fileName;
+        }
+        else
         {
             Debug.LogError($"Key '{key}' does not exist in imagePaths.");
-            return;
         }
-        var fileName = imagePaths[key];
-        var assetRoot = PPM.Inst.Get("素材來源");
-        var assetPath = PPM.Inst.Get("頭圖素材路徑");
-        var imagePath = assetRoot + "://" + assetPath + fileName;
-
         Portrait.StartTransition(imagePath, effectType, duration);
     }
 
