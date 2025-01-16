@@ -6,7 +6,7 @@ public partial class Director
     {
         string key = args?.ElementAtOrDefault(0)?.ToString() ?? "defaultKey";
         string effectType = args?.ElementAtOrDefault(1)?.ToString() ?? "fade";
-        float duration = float.TryParse(args?.ElementAtOrDefault(2)?.ToString(), out float parsedDuration) ? parsedDuration : 2f;
+        float duration = float.TryParse(args?.ElementAtOrDefault(2)?.ToString(), out float parsedDuration) ? parsedDuration : DefaultBgTransDur;
 
         Avg.Background.GoTo(key, effectType, duration);
     }

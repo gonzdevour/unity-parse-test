@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CGBoxContent : MonoBehaviour
+public class StoryCGContent : MonoBehaviour
 {
     public Text TxContent;
 

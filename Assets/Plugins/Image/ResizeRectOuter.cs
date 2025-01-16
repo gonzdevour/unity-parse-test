@@ -47,7 +47,7 @@ public class ResizeRectOuter : MonoBehaviour
             newHeight = originalSize.y * (ResRef.y / ResRef.x);
             Debug.Log($"Window Resized to LandScape {newWidth},{newHeight}");
         }
-        else 
+        else //portrait
         {
             newWidth = originalSize.x * (ResRef.y / originalSize.y);
             newHeight = ResRef.y;

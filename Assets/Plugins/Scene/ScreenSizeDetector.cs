@@ -1,5 +1,4 @@
 // ¿Ã¹õ¤Ø¤oÀË´ú¾¹
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

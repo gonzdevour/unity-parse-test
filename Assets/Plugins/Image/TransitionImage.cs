@@ -61,44 +61,39 @@ public class TransitionImage : MonoBehaviour
             if (readyImage != null) //避免回傳時物件已刪除
             {
                 readyImage.sprite = sprite;
-                if (SetNativeSize)
+                // 設定為原始大小
+                if (SetNativeSize) readyImage.SetNativeSize();
+                // 顯示 ReadyImage
+                readyImage.gameObject.SetActive(true);
+                // 檢查並執行特效
+                if (transitionEffects == null)
                 {
-                    readyImage.SetNativeSize();
+                    Debug.LogError("Transition effects dictionary is null.");
+                    return;
+                }
+                if (transitionEffects.ContainsKey(transitionType.ToLower()))
+                {
+                    var effect = transitionEffects[transitionType.ToLower()];
+                    if (effect != null)
+                    {
+                        effect(dur, easeOut, easeIn); // 執行特效
+                    }
+                    else
+                    {
+                        Debug.LogError($"特效 '{transitionType}' 未定義行為。");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"無效的過渡特效類型: {transitionType}");
+                }
+                // 設置完成時的回調
+                if (onComplete != null)
+                {
+                    currentTween?.OnComplete(() => onComplete());
                 }
             };
         });
-        readyImage.gameObject.SetActive(true); // 顯示 ReadyImage
-
-        // 檢查並執行特效
-        if (transitionEffects == null)
-        {
-            Debug.LogError("Transition effects dictionary is null.");
-            return;
-        }
-
-        if (transitionEffects.ContainsKey(transitionType.ToLower()))
-        {
-            var effect = transitionEffects[transitionType.ToLower()];
-            if (effect != null)
-            {
-                effect(dur, easeOut, easeIn); // 執行特效
-            }
-            else
-            {
-                Debug.LogError($"特效 '{transitionType}' 未定義行為。");
-            }
-        }
-        else
-        {
-            Debug.LogError($"無效的過渡特效類型: {transitionType}");
-        }
-
-
-        // 設置完成時的回調
-        if (onComplete != null)
-        {
-            currentTween?.OnComplete(() => onComplete());
-        }
     }
 
     /// <summary>

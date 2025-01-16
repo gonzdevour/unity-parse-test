@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using static UnityEditor.Progress;
 
 public class CharTImg : MonoBehaviour, IChar
 {
@@ -76,15 +75,21 @@ public class CharTImg : MonoBehaviour, IChar
             if (exprPaths.ContainsKey(CharEmo))
             {
                 // 指定表情有值
-                SpriteCacher.Inst.GetSprite(exprPaths[CharEmo], (sprite) => TImg0.sprite = sprite);
-                TImg0.SetNativeSize();
+                SpriteCacher.Inst.GetSprite(exprPaths[CharEmo], (sprite) =>
+                {
+                    TImg0.sprite = sprite;
+                    TImg0.SetNativeSize();
+                });
             }
             else
             {
                 // 指定表情無值，尋找預設表情
                 string defaultEmoKey = GetDefaultExpression("無");
-                SpriteCacher.Inst.GetSprite(exprPaths[defaultEmoKey], (sprite) => TImg0.sprite = sprite);
-                TImg0.SetNativeSize();
+                SpriteCacher.Inst.GetSprite(exprPaths[defaultEmoKey], (sprite) =>
+                {
+                    TImg0.sprite = sprite;
+                    TImg0.SetNativeSize();
+                });
             }
         }
         else
@@ -95,33 +100,33 @@ public class CharTImg : MonoBehaviour, IChar
         Debug.Log($"Character {UID} initialized with name {姓}{名}.");
     }
 
-    public void Focus()
+    public void Focus(float dur = 0.5f)
     {
         // 將物件移到所有同層物件的最前方
         transform.SetAsLastSibling();
         // 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 1
         if (TImg0 != null)
         {
-            TImg0.DOColor(new Color(1f, 1f, 1f), 0.5f).SetEase(Ease.Linear);
+            TImg0.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
         }
 
         if (TImg1 != null)
         {
-            TImg1.DOColor(new Color(1f, 1f, 1f), 0.5f).SetEase(Ease.Linear);
+            TImg1.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
         }
     }
 
-    public void Unfocus()
+    public void Unfocus(float dur = 0f)
     {
         // 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 0.3
         if (TImg0 != null)
         {
-            TImg0.DOColor(new Color(0.3f, 0.3f, 0.3f), 0f).SetEase(Ease.Linear);
+            TImg0.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
         }
 
         if (TImg1 != null)
         {
-            TImg1.DOColor(new Color(0.3f, 0.3f, 0.3f), 0f).SetEase(Ease.Linear);
+            TImg1.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
         }
     }
 

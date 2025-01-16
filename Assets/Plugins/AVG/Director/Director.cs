@@ -13,14 +13,19 @@ public partial class Director : MonoBehaviour
 
     public AVG Avg;
     private ITransitionEffect TEffect;
-    private string currentTEffectName = "Anim2";
+    public string CurTEffectName = "Anim2";
+    public float DefaultBgTransDur = 1f;
+    public float DefaultCharTransDur = 1f;
+    public float DefaultCharFocusDur = 0.5f;
+    public float DefaultCharUnfocusDur = 0f;
+    public float DefaultCharMoveDur = 0f;
 
     // 定義函數字典
     private Dictionary<string, Action<object[]>> actions;
     private void Start()
     {
         // 取得TEffect組件
-        TEffect = GetComponent<TEffectsManager>().Init(currentTEffectName);
+        TEffect = GetComponent<TEffectsManager>().Init(CurTEffectName);
         // 初始化字典並綁定函數
         actions = new Dictionary<string, Action<object[]>>
         {

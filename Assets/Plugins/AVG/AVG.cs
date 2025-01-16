@@ -9,7 +9,6 @@ using DG.Tweening;
 
 // 引入關於Story的資料結構
 using Story;
-using System.Runtime.InteropServices;
 
 public class AVG : MonoBehaviour
 {
@@ -30,10 +29,13 @@ public class AVG : MonoBehaviour
     public RectTransform LayerChar; //角色層
     public GameObject CharPrefab; // 角色Prefab
 
-    public StoryBoxName BoxName;
-    public StoryBoxContent BoxContent;
-    public StoryBubbleName BubbleName;
-    public StoryBubbleContent BubbleContent;
+    public GameObject StoryBox; //對話框
+    public StoryBoxName StoryBoxName; //對話框的說話者名稱
+    public StoryBoxContent StoryBoxContent; //對話框的說話內容
+    public GameObject StoryBubble; //對話氣泡
+    public StoryBubbleName StoryBubbleName; //對話氣泡的說話者名稱
+    public StoryBubbleContent StoryBubbleContent; //對話氣泡的說話內容
+    public StoryCGContent StoryCGContent; //對話氣泡的說話內容
 
     public Button Btn_Next; //下一步面板(按鈕)
     public List<string> PendingStoryTitles;
@@ -67,6 +69,8 @@ public class AVG : MonoBehaviour
     private bool isWaiting = false;
     private bool isChoiceSelected = true;
     private bool isStoryEnd = false;
+
+    private string lastDisplayName = string.Empty;
     private int gotoIndex = -1; // 選項選擇後將前往的cutIndex
     public int nextCutIndex; //下一卡的索引值，可以讓外部控制
 
@@ -80,7 +84,7 @@ public class AVG : MonoBehaviour
 
     public void On()
     {
-        MainPanel.gameObject.SetActive(true);
+        if (MainPanel != null) MainPanel.gameObject.SetActive(true);
         TEffectPanel.SetActive(true);
     }
 
@@ -88,7 +92,7 @@ public class AVG : MonoBehaviour
     {
         Director.Inst.Off(); //清空Director管制的物件群，如Background與TEffect
         SetInactive(ChoicePanel);
-        SetInactive(MainPanel.gameObject);
+        if (MainPanel != null) SetInactive(MainPanel.gameObject);
     }
 
     private void SetInactive(GameObject gameObject) 
@@ -167,41 +171,8 @@ public class AVG : MonoBehaviour
         string DisplayName = charUID; //這裡的charUID指的是解析後的說話者字串，為DisplayName的預設值
         // 指定角色
         Dictionary<string, string> charData = GetCharDataByUID("Chars", charUID);
-
-        var gbjLayerChar = LayerChar.gameObject;
-        var gbjPortrait = Portrait.gameObject;
-        if (charData != null) //有角色資料
-        {
-            bool HasChar = charData["立繪"].ToLower() == "y";
-            bool HasPortrait = charData["頭圖"].ToLower() == "y";
-
-            if (DisplayChar) 
-            {
-                Director.Inst.CharsUnfocusAll(); //其他角色變黑
-                if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
-                if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo); //角色進場
-            }
-            else
-            {
-                if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
-            }
-            if (DisplayPortrait && HasPortrait) //有頭圖且允許頭圖，才顯示頭圖
-            {
-                if(!gbjPortrait.activeSelf) gbjPortrait.SetActive(true);//顯示頭圖
-                Director.Inst.PortraitIn(charUID,charEmo);
-            }
-            else
-            {
-                if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
-            }
-            DisplayName = $"{charData["姓"]}{charData["名"]}";
-        }
-        else //無角色資料，旁白或主角發言
-        {
-            Director.Inst.CharsUnfocusAll(); //其他角色變黑
-            if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
-        }
-        // 顯示名稱
+        if (charData != null) DisplayName = $"{charData["姓"]}{charData["名"]}";
+        // 名稱
         if (HasValidValue(storyCutDict, "顯示名稱"))
         {
             DisplayName = TxR.Inst.Render(ParseEx(storyCutDict["顯示名稱"].ToString()));
@@ -219,6 +190,9 @@ public class AVG : MonoBehaviour
         // 說話
         string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
         Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
+
+        // 顯示名稱並開始說話
+        StoryCutDisplay(charData, charUID, charPos, charEmo, DisplayName, Content);
 
         //Debug.Log($"=> 前往的值：{storyCutDict["前往"]}");
         if (HasValidValue(storyCutDict, "前往"))
@@ -263,6 +237,74 @@ public class AVG : MonoBehaviour
         else
         {
             StartCoroutine(StoryCutStart(nextCutIndex));
+        }
+    }
+
+    public void StoryCutDisplay(
+        Dictionary<string, string> charData,
+        string charUID,
+        string charPos,
+        string charEmo,
+        string DisplayName, 
+        string Content
+        )
+    {
+        bool isDifferentSayer = DisplayName != lastDisplayName;
+        lastDisplayName = DisplayName;
+
+        var gbjLayerChar = LayerChar.gameObject;
+        var gbjPortrait = Portrait.gameObject;
+        if (charData != null) //有角色資料
+        {
+            bool HasChar = charData["立繪"].ToLower() == "y";
+            bool HasPortrait = charData["頭圖"].ToLower() == "y";
+
+            if (DisplayChar)
+            {
+                Director.Inst.CharsUnfocusAll(); //其他角色變黑
+                if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
+                if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo); //角色進場
+
+                if (DisplayBubble)
+                {
+                    if (!StoryBubble.activeSelf) StoryBubble.SetActive(true);//顯示bubble
+                    StoryBoxName.Display(DisplayName, isDifferentSayer);
+                    StoryBoxContent.Display(Content, isDifferentSayer);
+                }
+                else
+                {
+                    if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
+                }
+            }
+            else
+            {
+                if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
+            }
+            if (DisplayPortrait && HasPortrait) //有頭圖且允許頭圖，才顯示頭圖
+            {
+                if (!gbjPortrait.activeSelf) gbjPortrait.SetActive(true);//顯示頭圖
+                Director.Inst.PortraitIn(charUID, charEmo);
+            }
+            else
+            {
+                if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
+            }
+        }
+        else //無角色資料，旁白或主角發言
+        {
+            Director.Inst.CharsUnfocusAll(); //其他角色變黑
+            if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
+            if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
+        }
+        if (DisplayStoryBox)
+        {
+            if (!StoryBox.activeSelf) StoryBox.SetActive(true);//顯示box
+            StoryBoxName.Display(DisplayName, isDifferentSayer);
+            StoryBoxContent.Display(Content, isDifferentSayer);
+        }
+        else
+        {
+            if (StoryBox.activeSelf) StoryBox.SetActive(false);//隱藏box
         }
     }
 

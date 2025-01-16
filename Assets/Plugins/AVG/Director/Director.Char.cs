@@ -27,16 +27,16 @@ public partial class Director
         if (Char != null)
         {
             Debug.Log($"畫面上存在{charUID}");
-            Char.Focus(); // 找到符合的 UID，執行 CharFocus
+            Char.Focus(DefaultCharFocusDur); // 找到符合的 UID，執行 CharFocus
             if (!string.IsNullOrEmpty(charPos))
             {
                 Vector2[] fromTo = PositionParser.ParsePos(charPos, Avg.MainPanel);
-                Char.Move(fromTo, float.Parse(PPM.Inst.Get("位移秒數", "2"))); // 移動到指定位置
+                Char.Move(fromTo, float.Parse(PPM.Inst.Get("位移秒數", "0.5"))); // 移動到指定位置
                 Debug.Log($"重新定位已存在的角色{charUID}至{fromTo[1]}");
             }
             if (!string.IsNullOrEmpty(charEmo))
             {
-                Char.SetExpression(charEmo, "fade", 0.5f); // 設定表情
+                Char.SetExpression(charEmo, "fade", DefaultCharTransDur); // 設定表情
                 Debug.Log($"{charUID}的表情轉變為：{charEmo}");
             }
         }
@@ -66,7 +66,7 @@ public partial class Director
         foreach (RectTransform child in Avg.LayerChar) //找出所有Char子物件
         {
             IChar Char = child.GetComponent<IChar>(); // 檢查子物件是否有 IChar 組件
-            Char?.Unfocus(); // 如果找到符合的 UID，執行 CharFocus
+            Char?.Unfocus(DefaultCharUnfocusDur); // 如果找到符合的 UID，執行 CharFocus
         }
     }
 
@@ -78,7 +78,7 @@ public partial class Director
 
         Vector2[] fromTo = PositionParser.ParsePos(charPos, Avg.MainPanel, "x"); //取x軸位移
         IChar Char = GetCharByUID(charUID);
-        float duration = string.IsNullOrEmpty(dur) ? 0f : float.Parse(dur); // 預設值為 0f
+        float duration = string.IsNullOrEmpty(dur) ? DefaultCharMoveDur : float.Parse(dur);
         Char.MoveX(fromTo, duration);
 
         Debug.Log($"Move {charUID}'s X from {fromTo[0].x} to {fromTo[1].x}");
@@ -92,7 +92,7 @@ public partial class Director
 
         Vector2[] fromTo = PositionParser.ParsePos(charPos, Avg.MainPanel, "y"); //取y軸位移
         IChar Char = GetCharByUID(charUID);
-        float duration = string.IsNullOrEmpty(dur) ? 0f : float.Parse(dur); // 預設值為 0f
+        float duration = string.IsNullOrEmpty(dur) ? DefaultCharMoveDur : float.Parse(dur);
         Char.MoveY(fromTo, duration);
 
         Debug.Log($"Move {charUID}'s Y from {fromTo[0].y} to {fromTo[1].y}");
