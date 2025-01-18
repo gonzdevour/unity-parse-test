@@ -14,11 +14,15 @@ public partial class Director : MonoBehaviour
     public AVG Avg;
     private ITransitionEffect TEffect;
     public string CurTEffectName = "Anim2";
+    public float DefaultTypingInterval = 0.05f;
     public float DefaultBgTransDur = 1f;
     public float DefaultCharTransDur = 1f;
     public float DefaultCharFocusDur = 0.5f;
     public float DefaultCharUnfocusDur = 0f;
     public float DefaultCharMoveDur = 0f;
+
+    public float MusicVolume = 1f;
+    public float SEVolume = 1f;
 
     // ©w¸q¨ç¼Æ¦r¨å
     private Dictionary<string, Action<object[]>> actions;

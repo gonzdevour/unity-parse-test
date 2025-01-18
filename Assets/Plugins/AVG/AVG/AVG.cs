@@ -1,16 +1,16 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-using DG.Tweening;
 
 // 引入關於Story的資料結構
 using Story;
 
-public class AVG : MonoBehaviour
+public partial class AVG : MonoBehaviour
 {
     public static AVG Inst { get; private set; }
     private void Awake()
@@ -19,16 +19,21 @@ public class AVG : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    [Header("舞台")]
     public RectTransform MainPanel; //主舞台
     public GameObject TEffectPanel; // 淡入淡出特效面板
+    public AVGBackground Background; //背景
+
+    [Header("選項")]
     public GameObject ChoicePanel; // 選擇面板
     public GameObject ChoicePrefab; // 選項按鈕Prefab
 
-    public AVGBackground Background; //背景
-    public AVGPortrait Portrait; //頭像
+    [Header("角色")]
     public RectTransform LayerChar; //角色層
     public GameObject CharPrefab; // 角色Prefab
 
+    [Header("對話框")]
+    public AVGPortrait Portrait; //頭像
     public GameObject StoryBox; //對話框
     public StoryBoxName StoryBoxName; //對話框的說話者名稱
     public StoryBoxContent StoryBoxContent; //對話框的說話內容
@@ -37,7 +42,15 @@ public class AVG : MonoBehaviour
     public StoryBubbleContent StoryBubbleContent; //對話氣泡的說話內容
     public StoryCGContent StoryCGContent; //對話氣泡的說話內容
 
+    [Header("操作面板")]
     public Button Btn_Next; //下一步面板(按鈕)
+    public Toggle ToolsMenu; //功能列選單
+    public Toggle ToogleAuto; //自動播放(遇到選項則自動停止)
+    public Toggle ToogleSkipping; //自動跳過已讀(遇到未讀&選項則自動停止)
+    public Button Btn_HideUI; //隱藏介面(啟動wait hide，介面alpha歸0，要再點一下next才會恢復介面)
+    public Button Btn_Save; //呼叫記錄面板
+    public Button Btn_Load; //呼叫讀取面板
+
     public List<string> PendingStoryTitles;
     private List<Dictionary<string, object>> StoryEventDicts = new();
     SQLiteManager dbManager;
@@ -45,16 +58,21 @@ public class AVG : MonoBehaviour
     private void Start()
     {
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
-        
+
         // 初始隱藏Panel
+        ToolsMenu.isOn = false;
         ChoicePanel.SetActive(false);
         MainPanel.gameObject.SetActive(false);
 
         // 確保全畫面下一步按鈕可用並添加監聽
-        if (Btn_Next != null)
-        {
-            Btn_Next.onClick.AddListener(OnProcessButtonClicked);
-        }
+        if (Btn_Next != null) Btn_Next.onClick.AddListener(OnProcessButtonClicked);
+
+        // 功能列初始化
+        if (ToogleAuto != null) ToogleAuto.onValueChanged.AddListener(OnAutoToggleChanged);
+        if (ToogleSkipping != null) ToogleSkipping.onValueChanged.AddListener(OnSkippingToggleChanged);
+        if (Btn_HideUI != null) Btn_HideUI.onClick.AddListener(OnHideUIButtonClicked);
+        if (Btn_Save != null) Btn_Save.onClick.AddListener(OnSaveButtonClicked);
+        if (Btn_Load != null) Btn_Load.onClick.AddListener(OnLoadButtonClicked);
     }
 
     public bool DisplayChar = true;
@@ -67,14 +85,17 @@ public class AVG : MonoBehaviour
     private bool isReadyToNext = false;
     private bool isTyping = false;
     private bool isWaiting = false;
+    private bool isAuto = false;
+    private bool isSkipping = false;
     private bool isChoiceSelected = true;
     private bool isStoryEnd = false;
 
     private string lastDisplayName = string.Empty;
+    private string curContent = string.Empty;
     private int gotoIndex = -1; // 選項選擇後將前往的cutIndex
     public int nextCutIndex; //下一卡的索引值，可以讓外部控制
 
-    public IEnumerator Init()
+    public IEnumerator Init() //外部呼叫初始化資料
     {
         yield return null;
         UpdatePPM("Preset");//更新預設值
@@ -90,17 +111,10 @@ public class AVG : MonoBehaviour
 
     public void Off()
     {
-        Director.Inst.Off(); //清空Director管制的物件群，如Background與TEffect
-        SetInactive(ChoicePanel);
-        if (MainPanel != null) SetInactive(MainPanel.gameObject);
-    }
-
-    private void SetInactive(GameObject gameObject) 
-    {
-        if (gameObject != null)
-        {
-            gameObject.SetActive(false);
-        }
+        Director.Inst.Off(); // 清空 Director 管制的物件群，如 Background 與 TEffect
+        if (ChoicePanel != null) ChoicePanel.SetActive(false);
+        if (MainPanel != null) MainPanel.gameObject.SetActive(false);
+        ToolsMenu.isOn = false;
     }
 
     private void OnProcessButtonClicked()
@@ -110,10 +124,32 @@ public class AVG : MonoBehaviour
 
     private void CheckIfReadyToNext()
     {
+        isTyping = CheckIfTyping();
         if (!isTyping && !isWaiting && isChoiceSelected)
         {
             isReadyToNext = true;
         }
+    }
+
+    private void OnTypingComplete()
+    {
+        // 排除標點符號計算中文字數
+        int characterCount = curContent.Count(c => char.IsLetterOrDigit(c));
+        float watingSec = Math.Clamp((float)characterCount / 4f, 1f, 5f);
+        if (isAuto)
+        {
+            StartCoroutine(AutoNext(watingSec));
+        }
+        else if (isSkipping)
+        {
+            StartCoroutine(AutoNext(0f));
+        }
+    }
+
+    private IEnumerator AutoNext(float waitingSec)
+    {
+        yield return new WaitForSeconds(waitingSec);
+        CheckIfReadyToNext();
     }
 
     public IEnumerator StoryQueueStart(Action onComplete)
@@ -190,7 +226,8 @@ public class AVG : MonoBehaviour
         // 說話
         string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
         Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
-
+        // 記錄目前對白，以估計auto模式的等待時間
+        curContent = Content;
         // 顯示名稱並開始說話
         StoryCutDisplay(charData, charUID, charPos, charEmo, DisplayName, Content);
 
@@ -252,122 +289,67 @@ public class AVG : MonoBehaviour
         bool isDifferentSayer = DisplayName != lastDisplayName;
         lastDisplayName = DisplayName;
 
-        var gbjLayerChar = LayerChar.gameObject;
-        var gbjPortrait = Portrait.gameObject;
-        if (charData != null) //有角色資料
+        if (CGMode)
         {
-            bool HasChar = charData["立繪"].ToLower() == "y";
-            bool HasPortrait = charData["頭圖"].ToLower() == "y";
-
-            if (DisplayChar)
-            {
-                Director.Inst.CharsUnfocusAll(); //其他角色變黑
-                if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
-                if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo); //角色進場
-
-                if (DisplayBubble)
-                {
-                    if (!StoryBubble.activeSelf) StoryBubble.SetActive(true);//顯示bubble
-                    StoryBoxName.Display(DisplayName, isDifferentSayer);
-                    StoryBoxContent.Display(Content, isDifferentSayer);
-                }
-                else
-                {
-                    if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
-                }
-            }
-            else
-            {
-                if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
-            }
-            if (DisplayPortrait && HasPortrait) //有頭圖且允許頭圖，才顯示頭圖
-            {
-                if (!gbjPortrait.activeSelf) gbjPortrait.SetActive(true);//顯示頭圖
-                Director.Inst.PortraitIn(charUID, charEmo);
-            }
-            else
-            {
-                if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
-            }
-        }
-        else //無角色資料，旁白或主角發言
-        {
-            Director.Inst.CharsUnfocusAll(); //其他角色變黑
-            if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
-            if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
-        }
-        if (DisplayStoryBox)
-        {
-            if (!StoryBox.activeSelf) StoryBox.SetActive(true);//顯示box
-            StoryBoxName.Display(DisplayName, isDifferentSayer);
-            StoryBoxContent.Display(Content, isDifferentSayer);
+            StoryCGContent.Display(Content, isDifferentSayer, OnTypingComplete);
         }
         else
         {
-            if (StoryBox.activeSelf) StoryBox.SetActive(false);//隱藏box
+            var gbjLayerChar = LayerChar.gameObject;
+            var gbjPortrait = Portrait.gameObject;
+            if (charData != null) //有角色資料
+            {
+                bool HasChar = charData["立繪"].ToLower() == "y";
+                bool HasPortrait = charData["頭圖"].ToLower() == "y";
+
+                if (DisplayChar)
+                {
+                    Director.Inst.CharsUnfocusAll(); //其他角色變黑
+                    if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
+                    if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo); //角色進場
+
+                    if (DisplayBubble)
+                    {
+                        if (!StoryBubble.activeSelf) StoryBubble.SetActive(true);//顯示bubble
+                        StoryBubbleName.Display(DisplayName, isDifferentSayer);
+                        StoryBubbleContent.Display(Content, isDifferentSayer, OnTypingComplete);
+                    }
+                    else
+                    {
+                        if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
+                    }
+                }
+                else
+                {
+                    if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
+                }
+                if (DisplayPortrait && HasPortrait) //有頭圖且允許頭圖，才顯示頭圖
+                {
+                    if (!gbjPortrait.activeSelf) gbjPortrait.SetActive(true);//顯示頭圖
+                    Director.Inst.PortraitIn(charUID, charEmo);
+                }
+                else
+                {
+                    if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
+                }
+            }
+            else //無角色資料，旁白或主角發言
+            {
+                Director.Inst.CharsUnfocusAll(); //其他角色變黑
+                if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
+                if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
+            }
+            if (DisplayStoryBox)
+            {
+                if (!StoryBox.activeSelf) StoryBox.SetActive(true);//顯示box
+                StoryBoxName.Display(DisplayName, isDifferentSayer);
+                StoryBoxContent.Display(Content, isDifferentSayer, OnTypingComplete);
+            }
+            else
+            {
+                if (StoryBox.activeSelf) StoryBox.SetActive(false);//隱藏box
+            }
         }
-    }
-
-    IEnumerator StartChoose(Dictionary<string, object> storyCutDict)
-    {
-        // 初始化面板
-        ChoicePanel.SetActive(true);
-        ClearExistingButtons();
-
-        // 初始化選擇狀態
-        isChoiceSelected = false;
-
-        string[] targets = storyCutDict["前往"].ToString().Split('\n');
-        string[] options = storyCutDict["選項"].ToString().Split('\n');
-        List<GameObject> buttons = new List<GameObject>();
-
-        for (int i = 0; i < options.Length && i < targets.Length; i++)
-        {
-            // 創建按鈕
-            GameObject button = Instantiate(ChoicePrefab, ChoicePanel.transform);
-            button.GetComponentInChildren<Text>().text = TxR.Inst.Render(ParseEx(options[i])); // 設置按鈕文字
-            int resultCutIndex = int.Parse(ParseEx(targets[i]));
-
-            // 設置按鈕回調
-            Button btn = button.GetComponent<Button>();
-            btn.onClick.AddListener(() => OnChoiceSelected(resultCutIndex, button));
-
-            // 按鈕飛入動畫
-            //button.transform.localPosition = new Vector3(0, 500, 0); // 初始位置
-            //button.transform.DOLocalMoveY(0, 0.5f).SetEase(Ease.OutBounce); // 飛入動畫
-            buttons.Add(button);
-        }
-
-        // 等待選擇完成
-        yield return new WaitUntil(() => isChoiceSelected);
-
-        // 按鈕飛出動畫
-        foreach (var button in buttons)
-        {
-            button.transform.DOLocalMoveY(500, 0.5f).SetEase(Ease.InBack)
-                .OnComplete(() => Destroy(button)); // 動畫完成後銷毀按鈕
-        }
-
-        // 等待飛出動畫完成
-        yield return new WaitForSeconds(0.5f);
-
-        // 隱藏面板
-        ChoicePanel.SetActive(false);
-    }
-
-    private void ClearExistingButtons()
-    {
-        foreach (Transform child in ChoicePanel.transform)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-
-    private void OnChoiceSelected(int resultIndex, GameObject button)
-    {
-        gotoIndex = resultIndex;
-        isChoiceSelected = true;
-        Debug.Log($"choose to go to cut: {gotoIndex}");
     }
 
     private bool HasValidValue(Dictionary<string, object> dict, string key)
@@ -375,79 +357,21 @@ public class AVG : MonoBehaviour
         return dict.ContainsKey(key) && dict[key] != null && !string.IsNullOrWhiteSpace(dict[key].ToString());
     }
 
-    public Dictionary<string, string> GetCharDataByUID(string pageName, string UID)
+    public bool CheckIfTyping() 
     {
-        // 初始化條件
-        string condition = $"UID = '{UID}'";
-
-        // 呼叫 QueryTable 函數
-        List<CharData> results = dbManager.QueryTable<CharData>(pageName, condition);
-
-        CharData charData = null;
-        // 獲取第一筆查詢結果
-        if (results.Count > 0)
+        bool boxIsTyping = StoryBoxContent.IsTyping();
+        bool bubbleIsTyping = StoryBubbleContent.IsTyping();
+        bool cgIsTyping = StoryCGContent.IsTyping();
+        if (boxIsTyping || bubbleIsTyping || cgIsTyping) 
         {
-            charData = results[0];
-            //Debug.Log($"找到資料：{bgData.名} ({bgData.UID})");
+            if (StoryBoxContent.IsTyping()) StoryBoxContent.SkipTyping();
+            if (StoryBubbleContent.IsTyping()) StoryBubbleContent.SkipTyping();
+            if (StoryCGContent.IsTyping()) StoryCGContent.SkipTyping();
+            return true;
         }
         else
         {
-            //Debug.Log("查詢無結果");
-        }
-
-        var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(charData));
-
-        return dict;
-    }
-
-    public List<Dictionary<string, string>> GetCharDataAll(string pageName)
-    {
-        // 呼叫 QueryTable 函數
-        List<CharData> results = dbManager.QueryTable<CharData>(pageName);
-        var dictList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(
-                JsonConvert.SerializeObject(results)
-            );
-
-        return dictList;
-    }
-
-    public List<Dictionary<string, string>> GetBgData(string pageName)
-    {
-        // 呼叫 QueryTable 函數
-        List<BgData> results = dbManager.QueryTable<BgData>(pageName);
-        var dictList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(
-                JsonConvert.SerializeObject(results)
-            );
-
-        return dictList;
-    }
-
-    public void UpdatePPM(string pageName)
-    {
-        // 在 PPM 中設置測試字串數據，同時支援TxR
-        List<Preset> allItems = dbManager.QueryTable<Preset>(pageName);
-        foreach (var item in allItems)
-        {
-            //Debug.Log($"{item.Key}={item.Value}");
-            PPM.Inst.Set(item.Key, item.Value);
-        }
-    }
-
-    public void FilterStories(string pageName)
-    {
-        List<StoryList> allItems = dbManager.QueryTable<StoryList>(pageName);
-
-        foreach (var item in allItems)
-        {
-            Debug.Log($"title:{item.Title}, cond:{item.Condition}, desc:{item.Description}");
-
-            if (Judge.EvaluateCondition(item.Condition))
-            {
-                Debug.Log($"Condition met: {item.Title}");
-
-                // 將符合條件的 Title 添加到 PendingStoryTitles
-                AVG.Inst.PendingStoryTitles.Add(item.Title);
-            }
+            return false;
         }
     }
 

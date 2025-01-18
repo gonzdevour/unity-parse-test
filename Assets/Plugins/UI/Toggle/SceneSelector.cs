@@ -57,7 +57,7 @@ public class SceneSelector : ToggleSelector
             if (tv == null) continue;
 
             string targetSceneName = tv.LabelName;
-            //Debug.Log($"toggle's LabelName = {targetSceneName}");
+            //Debug.Log($"Btn's LabelName = {targetSceneName}");
             // 如果該 Toggle 對應的場景名稱在目前已加載場景列表中，將它設為 isOn
             if (loadedSceneNames.Contains(targetSceneName))
             {

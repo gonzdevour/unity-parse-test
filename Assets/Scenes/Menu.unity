@@ -2362,6 +2362,10 @@ PrefabInstance:
       propertyPath: reciever
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8420252851190567570, guid: 07443ed4a41bf984cb438b2d4ed4ced3, type: 3}
+      propertyPath: m_Name
+      value: Inp_Submit
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
