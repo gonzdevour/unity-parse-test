@@ -24,6 +24,9 @@ public partial class Director : MonoBehaviour
     public float MusicVolume = 1f;
     public float SEVolume = 1f;
 
+    public Dictionary<string, string> imagePathsPortrait = new(); // 頭圖路徑表
+    public string DefaultPortraitImgUrl = "Resources://Sprites/Dummy/portrait/PortraitDefault.png";
+
     // 定義函數字典
     private Dictionary<string, Action<object[]>> actions;
     private void Start()
@@ -60,5 +63,24 @@ public partial class Director : MonoBehaviour
         string character = args[0]?.ToString();
         string expression = args[1]?.ToString();
         Debug.Log($"Change {character}'s expression to {expression}");
+    }
+
+    public void InitImagePathsPortrait(List<Dictionary<string, string>> charDataList)
+    {
+        // 定義表情屬性鍵值列表
+        string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
+        string[] emos = emoTypes.Split(",");
+        foreach (var charData in charDataList)
+        {
+            // 組合每個表情的鍵值對
+            foreach (string emo in emos)
+            {
+                if (charData.ContainsKey(emo) && !string.IsNullOrEmpty(charData[emo]))
+                {
+                    imagePathsPortrait[charData["UID"] + emo] = charData["AssetID"] + "-" + charData[emo] + ".png";
+                    // ex: imagePathsPortrait["高德君怒"] = A-anger
+                }
+            }
+        }
     }
 }

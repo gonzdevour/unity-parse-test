@@ -7,8 +7,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 
-// 引入關於Story的資料結構
+// 引入關於Story的資料結構(如BgData、CharData等容易重名的class)
 using Story;
+// 引入LSR以製作Logger
+using LSR;
 
 public partial class AVG : MonoBehaviour
 {
@@ -27,6 +29,7 @@ public partial class AVG : MonoBehaviour
     [Header("選項")]
     public GameObject ChoicePanel; // 選擇面板
     public GameObject ChoicePrefab; // 選項按鈕Prefab
+    public GameObject ChoiceCover; //選項彈出時遮住Char與Bg
 
     [Header("角色")]
     public RectTransform LayerChar; //角色層
@@ -40,16 +43,22 @@ public partial class AVG : MonoBehaviour
     public GameObject StoryBubble; //對話氣泡
     public StoryBubbleName StoryBubbleName; //對話氣泡的說話者名稱
     public StoryBubbleContent StoryBubbleContent; //對話氣泡的說話內容
-    public StoryCGContent StoryCGContent; //對話氣泡的說話內容
+    public GameObject StoryCG; //CG面板
+    public StoryCGContent StoryCGContent; //CG面板的說話內容
 
     [Header("操作面板")]
     public Button Btn_Next; //下一步面板(按鈕)
-    public Toggle ToolsMenu; //功能列選單
+    public GameObject Toolbar;//功能列選單
+    public Toggle ToggleMenu; //功能列開關
     public Toggle ToogleAuto; //自動播放(遇到選項則自動停止)
     public Toggle ToogleSkipping; //自動跳過已讀(遇到未讀&選項則自動停止)
     public Button Btn_HideUI; //隱藏介面(啟動wait hide，介面alpha歸0，要再點一下next才會恢復介面)
     public Button Btn_Save; //呼叫記錄面板
     public Button Btn_Load; //呼叫讀取面板
+
+    [Header("LOG面板")]
+    public GameObject AVGLoggerModal;
+    public LoopScrollView AVGLogger;
 
     public List<string> PendingStoryTitles;
     private List<Dictionary<string, object>> StoryEventDicts = new();
@@ -60,8 +69,9 @@ public partial class AVG : MonoBehaviour
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
 
         // 初始隱藏Panel
-        ToolsMenu.isOn = false;
+        ToggleMenu.isOn = false;
         ChoicePanel.SetActive(false);
+        ChoiceCover.SetActive(false);
         MainPanel.gameObject.SetActive(false);
 
         // 確保全畫面下一步按鈕可用並添加監聽
@@ -100,7 +110,7 @@ public partial class AVG : MonoBehaviour
         yield return null;
         UpdatePPM("Preset");//更新預設值
         Background.Init(GetBgData("Bgs"));
-        Portrait.Init(GetCharDataAll("Chars"));
+        Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger
     }
 
     public void On()
@@ -113,13 +123,21 @@ public partial class AVG : MonoBehaviour
     {
         Director.Inst.Off(); // 清空 Director 管制的物件群，如 Background 與 TEffect
         if (ChoicePanel != null) ChoicePanel.SetActive(false);
+        if (ChoiceCover != null) ChoiceCover.SetActive(false);
         if (MainPanel != null) MainPanel.gameObject.SetActive(false);
-        ToolsMenu.isOn = false;
+        ToggleMenu.isOn = false;
     }
 
     private void OnProcessButtonClicked()
     {
-        CheckIfReadyToNext();
+        if (Toolbar.activeSelf)
+        {
+            CheckIfReadyToNext();
+        }
+        else
+        {
+            UIUnhide();
+        }
     }
 
     private void CheckIfReadyToNext()
@@ -157,6 +175,8 @@ public partial class AVG : MonoBehaviour
         FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
         while (PendingStoryTitles.Count > 0)
         {
+            // 清除log
+            AVGLogger.Clear();
             // 取出並移除第一個元素
             string currentTitle = PendingStoryTitles[0];
             PendingStoryTitles.RemoveAt(0);
@@ -289,12 +309,27 @@ public partial class AVG : MonoBehaviour
         bool isDifferentSayer = DisplayName != lastDisplayName;
         lastDisplayName = DisplayName;
 
+        // 創建一個新的log資料字典
+        var imgUrl = GetPortraitImgUrl(charUID, charEmo);
+        var logData = new Dictionary<string, object>
+            {
+                { "userName", DisplayName },
+                { "message", Content },
+                { "imgUrl", imgUrl },
+            };
+        var name1st = PPM.Inst.Get("姓");
+        var name2nd = PPM.Inst.Get("名");
+        var myCurrentName = $"{name1st}{name2nd}";
+        AVGLogger.UpdateChatBox(logData, myCurrentName);
+
         if (CGMode)
         {
+            if (!StoryCG.activeSelf) StoryCG.SetActive(true);//顯示CG面板
             StoryCGContent.Display(Content, isDifferentSayer, OnTypingComplete);
         }
         else
         {
+            if (StoryCG.activeSelf) StoryCG.SetActive(false);//隱藏CG面板
             var gbjLayerChar = LayerChar.gameObject;
             var gbjPortrait = Portrait.gameObject;
             if (charData != null) //有角色資料

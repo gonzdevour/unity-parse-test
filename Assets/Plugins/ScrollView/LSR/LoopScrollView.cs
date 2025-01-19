@@ -21,11 +21,15 @@ namespace LSR
 
         void Start()
         {
+            //StartCoroutine(TestUpdateChatBox(100));
+        }
+
+        private void OnEnable()
+        {
             ls = GetComponent<LoopScrollRect>();
             ls.prefabSource = this;
             ls.dataSource = this;
             Refresh();
-            //StartCoroutine(TestUpdateChatBox(100));
         }
 
         void Refresh()
@@ -34,11 +38,16 @@ namespace LSR
             ls.totalCount = chatBubbleMessages.Count;
             //ls.RefillCells();//ls.RefillCells會讓scroll歸0，其實設定totoalCount時會自動ls.refresh，好像不必每次都手動ls.Refresh或ls.Refill
             bool AtBottom = IsScrolledToBottom();
-            //Debug.Log(AtBottom);
+            Debug.Log("At Bottom: " + AtBottom);
             if (AtBottom) //如果在最底部才允許自動scroll
             {
                 ls.ScrollToCell(chatBubbleMessages.Count - 1, 2000);
             }
+        }
+
+        public void Clear()
+        {
+            chatBubbleMessages.Clear();
         }
 
         public GameObject GetObject(int index)
@@ -78,8 +87,9 @@ namespace LSR
             // 錨定位置的 Y 值
             float anchoredPositionY = content.anchoredPosition.y;
 
-            // 滾動到最下方的條件：錨定位置 + 視窗高度 >= 總內容高度
-            return anchoredPositionY + viewHeight >= contentHeight;
+            // 滾動到最下方的條件：錨定位置 + 視窗高度 >= 總內容高度-誤差容許值
+            //Debug.Log($"{anchoredPositionY}+{viewHeight}>={contentHeight}-10({contentHeight - 10f})  {anchoredPositionY + viewHeight >= contentHeight - 10f}");
+            return anchoredPositionY + viewHeight >= contentHeight-10f;
         }
 
         public void UpdateChatBox(Dictionary<string, object> serverMessage, string currentUserName)
@@ -101,7 +111,7 @@ namespace LSR
 
             // 將新的訊息資料推入 chatBubbleMessages
             chatBubbleMessages.Add(chatData);
-            Refresh();
+            if (gameObject.activeInHierarchy) Refresh();
         }
 
         public IEnumerator TestUpdateChatBox(int cnt)

@@ -10,6 +10,7 @@ public partial class AVG
     {
         // 初始化面板
         ChoicePanel.SetActive(true);
+        ChoiceCover.SetActive(true);
         ClearExistingButtons();
 
         // 初始化選擇狀態
@@ -51,6 +52,7 @@ public partial class AVG
 
         // 隱藏面板
         ChoicePanel.SetActive(false);
+        ChoiceCover.SetActive(false);
     }
 
     private void ClearExistingButtons()

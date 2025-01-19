@@ -52,6 +52,21 @@ public partial class AVG
         return dictList;
     }
 
+    public string GetPortraitImgUrl(string charUID, string charEmo)
+    {
+        var key = charUID + charEmo;
+        var imgPathsPortrait = Director.Inst.imagePathsPortrait;
+        string imagePath = Director.Inst.DefaultPortraitImgUrl;
+        if (imgPathsPortrait.ContainsKey(key))
+        {
+            var fileName = imgPathsPortrait[key];
+            var assetRoot = PPM.Inst.Get("素材來源");
+            var assetPath = PPM.Inst.Get("頭圖素材路徑");
+            imagePath = assetRoot + "://" + assetPath + fileName;
+        }
+        return imagePath;
+    }
+
     public void UpdatePPM(string pageName)
     {
         // 在 PPM 中設置測試字串數據，同時支援TxR

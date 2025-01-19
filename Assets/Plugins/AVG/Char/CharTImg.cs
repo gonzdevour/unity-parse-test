@@ -8,7 +8,7 @@ public class CharTImg : MonoBehaviour, IChar
     public TransitionImage TImg;
     public Image TImg0;
     public Image TImg1;
-    private Dictionary<string, string> exprPaths = new(); // 儲存表情資源路徑
+    private Dictionary<string, string> imagePathsExpression = new(); // 這個角色的表情立繪路徑表
 
     public string UID { get; set; } // 唯一識別碼
     public string 姓 { get; set; } // 姓
@@ -64,18 +64,18 @@ public class CharTImg : MonoBehaviour, IChar
             string fileName = CharData.GetValueOrDefault(emo, string.Empty);
             if (!string.IsNullOrEmpty(fileName))
             {
-                // ex: exprPaths["怒"] = StreamingAssets://Image/AVG/Char/A-anger.png
-                exprPaths[emo] = resPath + AssetID + "-" + fileName + ".png";
+                // ex: imagePathsExpression["怒"] = StreamingAssets://Image/AVG/Char/A-anger.png
+                imagePathsExpression[emo] = resPath + AssetID + "-" + fileName + ".png";
             }
         }
         // 設定初始表情
-        if (exprPaths != null)
+        if (imagePathsExpression != null)
         {
             // 表情列表內有值
-            if (exprPaths.ContainsKey(CharEmo))
+            if (imagePathsExpression.ContainsKey(CharEmo))
             {
                 // 指定表情有值
-                SpriteCacher.Inst.GetSprite(exprPaths[CharEmo], (sprite) =>
+                SpriteCacher.Inst.GetSprite(imagePathsExpression[CharEmo], (sprite) =>
                 {
                     TImg0.sprite = sprite;
                     TImg0.SetNativeSize();
@@ -85,7 +85,7 @@ public class CharTImg : MonoBehaviour, IChar
             {
                 // 指定表情無值，尋找預設表情
                 string defaultEmoKey = GetDefaultExpression("無");
-                SpriteCacher.Inst.GetSprite(exprPaths[defaultEmoKey], (sprite) =>
+                SpriteCacher.Inst.GetSprite(imagePathsExpression[defaultEmoKey], (sprite) =>
                 {
                     TImg0.sprite = sprite;
                     TImg0.SetNativeSize();
@@ -134,22 +134,22 @@ public class CharTImg : MonoBehaviour, IChar
     {
         if (string.IsNullOrEmpty(expression)) expression = GetDefaultExpression("無");
         Debug.Log("表情轉換特效：" + transitionType);
-        var imgUrl = exprPaths[expression];
+        var imgUrl = imagePathsExpression[expression];
         TImg.StartTransition(imgUrl, transitionType, dur);
     }
 
     private string GetDefaultExpression(string defaultEmoKey = "無")
     {
         // 指定表情無值，找預設值
-        if (exprPaths != null)
+        if (imagePathsExpression != null)
         {
-            if (exprPaths.ContainsKey("無") && !string.IsNullOrEmpty(exprPaths["無"]))
+            if (imagePathsExpression.ContainsKey("無") && !string.IsNullOrEmpty(imagePathsExpression["無"]))
             {
                 defaultEmoKey = "無";
             }
             else
             {
-                foreach (var pair in exprPaths)
+                foreach (var pair in imagePathsExpression)
                 {
                     if (!string.IsNullOrEmpty(pair.Key) && !string.IsNullOrEmpty(pair.Value))
                     {
