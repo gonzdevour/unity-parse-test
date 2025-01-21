@@ -38,7 +38,7 @@ namespace LSR
             ls.totalCount = chatBubbleMessages.Count;
             //ls.RefillCells();//ls.RefillCells會讓scroll歸0，其實設定totoalCount時會自動ls.refresh，好像不必每次都手動ls.Refresh或ls.Refill
             bool AtBottom = IsScrolledToBottom();
-            Debug.Log("At Bottom: " + AtBottom);
+            //Debug.Log("At Bottom: " + AtBottom);
             if (AtBottom) //如果在最底部才允許自動scroll
             {
                 ls.ScrollToCell(chatBubbleMessages.Count - 1, 2000);

@@ -4,6 +4,7 @@ namespace Story
     public class StoryList
     {
         public string Title { get; set; }
+        public string Once { get; set; }
         public string Condition { get; set; }
         public string Description { get; set; }
     }

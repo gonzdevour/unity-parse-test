@@ -21,6 +21,9 @@ public partial class AVG : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    [Header("記錄")]
+    public bool ClearReadList = true; //初始化時清除已讀標題
+
     [Header("舞台")]
     public RectTransform MainPanel; //主舞台
     public GameObject TEffectPanel; // 淡入淡出特效面板
@@ -60,7 +63,9 @@ public partial class AVG : MonoBehaviour
     public GameObject AVGLoggerModal;
     public LoopScrollView AVGLogger;
 
-    public List<string> PendingStoryTitles;
+    public string ReadlistKey = "AVGReadList"; // PlayerPrefs 中存放的 key
+    public string CurrentStoryTitle; //目前播放中的劇本標題
+    public List<StoryList> PendingStories = new();
     private List<Dictionary<string, object>> StoryEventDicts = new();
     SQLiteManager dbManager;
 
@@ -108,6 +113,7 @@ public partial class AVG : MonoBehaviour
     public IEnumerator Init() //外部呼叫初始化資料
     {
         yield return null;
+        if (ClearReadList) PlayerPrefs.DeleteKey("AVGReadList");
         UpdatePPM("Preset");//更新預設值
         Background.Init(GetBgData("Bgs"));
         Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger
@@ -173,18 +179,21 @@ public partial class AVG : MonoBehaviour
     public IEnumerator StoryQueueStart(Action onComplete)
     {
         FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
-        while (PendingStoryTitles.Count > 0)
+        while (PendingStories.Count > 0)
         {
             // 清除log
             AVGLogger.Clear();
             // 取出並移除第一個元素
-            string currentTitle = PendingStoryTitles[0];
-            PendingStoryTitles.RemoveAt(0);
+            CurrentStoryTitle = PendingStories[0].Title;
+            string Once = PendingStories[0].Once;
+            PendingStories.RemoveAt(0);
             
             isStoryEnd = false;
-            Debug.Log($"故事開始: {currentTitle}");
-            yield return StoryStart<StoryCut>(currentTitle);
-            Debug.Log($"故事已讀: {currentTitle}");
+            Debug.Log($"故事開始: {CurrentStoryTitle}");
+            yield return StoryStart<StoryCut>(CurrentStoryTitle);
+            // 若Once為Y，將故事標題加入已讀列表
+            if (Once == "Y") AddTitleToReadList(CurrentStoryTitle);
+            Debug.Log($"故事已讀: {CurrentStoryTitle}");
         }
 
         Debug.Log("All stories processed.");
