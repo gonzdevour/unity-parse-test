@@ -22,6 +22,7 @@ public class Typing : MonoBehaviour
         fullMessage = message;
         if (Director.Inst != null) DefaultTypingInterval = Director.Inst.DefaultTypingInterval;
         if (typingSpeed == -1f) typingSpeed = DefaultTypingInterval;
+        if (AVG.Inst.isSkipping) typingSpeed = 0f;
         //if (typingSpeed == -1f) typingSpeed = 1f;
         //Debug.Log($"typingSpeed: {typingSpeed}");
         // 停止之前的協程（如果有）

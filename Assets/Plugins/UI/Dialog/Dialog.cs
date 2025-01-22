@@ -47,6 +47,20 @@ public class Dialog : MonoBehaviour
         cbkN = CallbackN;
     }
 
+    public void Y(string Title = "", string Content = "", Action CallbackY = null)
+    {
+        Modal.SetActive(true);
+        TxTitle.gameObject.SetActive(!string.IsNullOrEmpty(Title));
+        TxContent.gameObject.SetActive(!string.IsNullOrEmpty(Content));
+        BtnY.gameObject.SetActive(true);
+        BtnN.gameObject.SetActive(false);
+
+        TxTitle.text = Title;
+        TxContent.text = Content;
+
+        cbkY = CallbackY;
+    }
+
     private void OnYesClicked()
     {
         cbkY?.Invoke();

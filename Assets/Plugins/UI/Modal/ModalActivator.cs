@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BtnActivator : MonoBehaviour
+public class ModalActivator : MonoBehaviour
 {
     [Header("面板組件")]
     public Button Btn_Open;
@@ -12,6 +12,7 @@ public class BtnActivator : MonoBehaviour
     public float transitionDuration = 0.5f; // 動畫時間
 
     private CanvasGroup canvasGroup;
+    private Button lastClickedButton; // 記錄最後觸發的按鈕
 
     private void Awake()
     {
@@ -21,12 +22,19 @@ public class BtnActivator : MonoBehaviour
         {
             canvasGroup = Board.AddComponent<CanvasGroup>();
         }
-        Btn_Open.onClick.AddListener(Open);
+        Btn_Open.onClick.AddListener(() => Open(Btn_Open.name)); // 傳遞按鈕名稱
         Btn_Close.onClick.AddListener(Close);
     }
 
-    public void Open()
+    public void Open(string activatorName)
     {
+        Debug.Log($"開啟面板的按鈕: {activatorName}");
+        var modalReciever = Modal.GetComponent<ModalReciever>();
+        if (modalReciever != null) modalReciever.activatorName = activatorName; // 傳遞觸發的按鈕
+
+        if (modalReciever == null) Debug.Log("modalReciever == null");
+        if (modalReciever != null) Debug.Log($"modalReciever.activatorName = {modalReciever.activatorName}");
+
         Modal.SetActive(true); // 啟用主物件
         Board.SetActive(true); // 啟用 Board
 

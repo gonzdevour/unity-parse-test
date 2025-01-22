@@ -39,24 +39,9 @@ public class DemoAVG : MonoBehaviour
         AVG.Inst.On();
 
         yield return sheetToDB.LoadExcel("Story.xlsx");
-        yield return AVG.Inst.Init(); //讀取資料完成後才能初始化
         panelSpinner.gameObject.SetActive(false);
-
-        StartCoroutine(Director.Inst.TEffectFadeInWithDelay(1f));//等待背景讀入後再TEffectFadeIn
-
-        //啟動AVG
-        yield return AVG.Inst.StoryQueueStart(() => 
-        {
-            StartCoroutine(EndAVG());
-        });
-    }
-
-    IEnumerator EndAVG()
-    {
-        Director.Inst.TEffectFadeOut();
-        yield return new WaitForSeconds(1f);
-        AVG.Inst.Off();
-        Debug.Log("Story Fin");
+        yield return AVG.Inst.Init(); //讀取資料完成後才能初始化
+        yield return AVG.Inst.AVGStart();
     }
 
     void DataSet<T>(string key, T value)

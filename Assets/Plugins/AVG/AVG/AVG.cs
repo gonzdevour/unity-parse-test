@@ -23,6 +23,7 @@ public partial class AVG : MonoBehaviour
 
     [Header("記錄")]
     public bool ClearReadList = true; //初始化時清除已讀標題
+    public GameObject SaveLoadPanel;
 
     [Header("舞台")]
     public RectTransform MainPanel; //主舞台
@@ -66,6 +67,13 @@ public partial class AVG : MonoBehaviour
     public string ReadlistKey = "AVGReadList"; // PlayerPrefs 中存放的 key
     public string CurrentStoryTitle; //目前播放中的劇本標題
     public List<StoryList> PendingStories = new();
+
+    public Coroutine CoroutineStoryQueue;
+    public Coroutine CoroutineStory;
+    public Coroutine CoroutineStoryCut;
+    public Coroutine CoroutineStoryChoose;
+    public Coroutine CoroutineStoryQueueEnd;
+    
     private List<Dictionary<string, object>> StoryEventDicts = new();
     SQLiteManager dbManager;
 
@@ -86,8 +94,8 @@ public partial class AVG : MonoBehaviour
         if (ToogleAuto != null) ToogleAuto.onValueChanged.AddListener(OnAutoToggleChanged);
         if (ToogleSkipping != null) ToogleSkipping.onValueChanged.AddListener(OnSkippingToggleChanged);
         if (Btn_HideUI != null) Btn_HideUI.onClick.AddListener(OnHideUIButtonClicked);
-        if (Btn_Save != null) Btn_Save.onClick.AddListener(OnSaveButtonClicked);
-        if (Btn_Load != null) Btn_Load.onClick.AddListener(OnLoadButtonClicked);
+        //if (Btn_Save != null) Btn_Save.onClick.AddListener(OnSaveButtonClicked);
+        //if (Btn_Load != null) Btn_Load.onClick.AddListener(OnLoadButtonClicked);
     }
 
     public bool DisplayChar = true;
@@ -96,12 +104,12 @@ public partial class AVG : MonoBehaviour
     public bool DisplayBubble = false;
     public bool SingleCharMode = false;
     public bool CGMode = false;
+    public bool isAuto = false;
+    public bool isSkipping = false;
 
     private bool isReadyToNext = false;
     private bool isTyping = false;
     private bool isWaiting = false;
-    private bool isAuto = false;
-    private bool isSkipping = false;
     private bool isChoiceSelected = true;
     private bool isStoryEnd = false;
 
@@ -119,6 +127,38 @@ public partial class AVG : MonoBehaviour
         Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger
     }
 
+    public IEnumerator AVGStart(string storyTitle = "")
+    {
+        On();
+        yield return null;
+        StartCoroutine(Director.Inst.TEffectFadeInWithDelay(1f));//等待背景讀入後再TEffectFadeIn
+
+        //啟動AVG
+        CoroutineStoryQueue = StartCoroutine(StoryQueueStart(() =>
+        {
+            CoroutineStoryQueueEnd = StartCoroutine(AVGEnd());
+        }));
+    }
+
+    public IEnumerator AVGEnd()
+    {
+        Director.Inst.TEffectFadeOut();
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Story Fin");
+        Off();
+    }
+
+    public void AVGRestart(string storyTitle = "")
+    {
+        StartCoroutine(AVGRestartCoroutine(storyTitle));
+    }
+
+    public IEnumerator AVGRestartCoroutine(string storyTitle = "")
+    {
+        yield return AVGEnd();
+        yield return AVGStart();
+    }
+
     public void On()
     {
         if (MainPanel != null) MainPanel.gameObject.SetActive(true);
@@ -127,11 +167,31 @@ public partial class AVG : MonoBehaviour
 
     public void Off()
     {
+        isReadyToNext = false;
+        isTyping = false;
+        isWaiting = false;
+        isAuto = false;
+        isSkipping = false;
+        isChoiceSelected = true;
+        isStoryEnd = false;
+
+        ToggleMenu.isOn = false;
+
+        PendingStories.Clear();
+        AVGLogger.Clear();
         Director.Inst.Off(); // 清空 Director 管制的物件群，如 Background 與 TEffect
+
+        if (CoroutineStoryQueue != null) StopCoroutine(CoroutineStoryQueue);
+        if (CoroutineStory != null) StopCoroutine(CoroutineStory);
+        if (CoroutineStoryCut != null) StopCoroutine(CoroutineStoryCut);
+        if (CoroutineStoryChoose != null) StopCoroutine(CoroutineStoryChoose);
+        if (CoroutineStoryQueueEnd != null) StopCoroutine(CoroutineStoryQueueEnd);
+
         if (ChoicePanel != null) ChoicePanel.SetActive(false);
         if (ChoiceCover != null) ChoiceCover.SetActive(false);
         if (MainPanel != null) MainPanel.gameObject.SetActive(false);
-        ToggleMenu.isOn = false;
+        if (SaveLoadPanel != null) SaveLoadPanel.SetActive(false);
+        if (AVGLoggerModal != null) AVGLoggerModal.SetActive(false);
     }
 
     private void OnProcessButtonClicked()
@@ -190,7 +250,9 @@ public partial class AVG : MonoBehaviour
             
             isStoryEnd = false;
             Debug.Log($"故事開始: {CurrentStoryTitle}");
-            yield return StoryStart<StoryCut>(CurrentStoryTitle);
+
+            CoroutineStory = StartCoroutine(StoryStart<StoryCut>(CurrentStoryTitle));
+            yield return CoroutineStory;
             // 若Once為Y，將故事標題加入已讀列表
             if (Once == "Y") AddTitleToReadList(CurrentStoryTitle);
             Debug.Log($"故事已讀: {CurrentStoryTitle}");
@@ -214,7 +276,7 @@ public partial class AVG : MonoBehaviour
         }
         var startIndex = 0;
         var endIndex = StoryEvents.Count;
-        StartCoroutine(StoryCutStart(startIndex));
+        CoroutineStoryCut = StartCoroutine(StoryCutStart(startIndex));
         yield return new WaitUntil(() => isStoryEnd); // 等待直到這個故事結束
     }
 
@@ -267,7 +329,8 @@ public partial class AVG : MonoBehaviour
             if (HasValidValue(storyCutDict, "選項"))
             {
                 // 用選項的callback回傳index
-                yield return StartChoose(storyCutDict);
+                CoroutineStoryChoose = StartCoroutine(StartChoose(storyCutDict));
+                yield return CoroutineStoryChoose;
                 nextCutIndex = gotoIndex;
                 CheckIfReadyToNext(); //強制判斷是否可以執行下一步
             }

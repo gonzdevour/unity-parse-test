@@ -1,5 +1,5 @@
-using Story;
 using UnityEngine;
+
 public partial class AVG
 {
     private void OnAutoToggleChanged(bool isOn)
@@ -38,17 +38,5 @@ public partial class AVG
         if (DisplayBubble) StoryBubble.SetActive(true);
         if (DisplayStoryBox) StoryBox.SetActive(true);
         Toolbar.SetActive(true);
-    }
-
-    private void OnSaveButtonClicked()
-    {
-        Debug.Log("Save Button Clicked");
-        // TODO: 顯示記錄面板
-    }
-
-    private void OnLoadButtonClicked()
-    {
-        Debug.Log("Load Button Clicked");
-        // TODO: 顯示讀取面板
     }
 }

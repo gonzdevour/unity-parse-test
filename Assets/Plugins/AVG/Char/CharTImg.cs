@@ -134,7 +134,15 @@ public class CharTImg : MonoBehaviour, IChar
     {
         if (string.IsNullOrEmpty(expression)) expression = GetDefaultExpression("無");
         Debug.Log("表情轉換特效：" + transitionType);
-        var imgUrl = imagePathsExpression[expression];
+        string imgUrl = imagePathsExpression["無"]; ;
+        if (imagePathsExpression.ContainsKey(expression))
+        {
+            imgUrl = imagePathsExpression[expression];
+        }
+        else
+        {
+            Debug.LogWarning($"Key '{expression}' 不存在於 imagePathsExpression，改用預設值 無。");
+        }
         TImg.StartTransition(imgUrl, transitionType, dur);
     }
 
