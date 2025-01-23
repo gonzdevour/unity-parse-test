@@ -125,6 +125,7 @@ public partial class AVG : MonoBehaviour
         UpdatePPM("Preset");//更新預設值
         Background.Init(GetBgData("Bgs"));
         Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger
+        yield return new WaitForSeconds(2f);
     }
 
     public IEnumerator AVGStart(string storyTitle = "")
@@ -132,7 +133,6 @@ public partial class AVG : MonoBehaviour
         On();
         yield return null;
         StartCoroutine(Director.Inst.TEffectFadeInWithDelay(1f));//等待背景讀入後再TEffectFadeIn
-
         //啟動AVG
         CoroutineStoryQueue = StartCoroutine(StoryQueueStart(() =>
         {
@@ -170,10 +170,11 @@ public partial class AVG : MonoBehaviour
         isReadyToNext = false;
         isTyping = false;
         isWaiting = false;
-        isAuto = false;
-        isSkipping = false;
         isChoiceSelected = true;
         isStoryEnd = false;
+
+        isAuto = false;
+        isSkipping = false;
 
         ToggleMenu.isOn = false;
 
@@ -238,29 +239,48 @@ public partial class AVG : MonoBehaviour
 
     public IEnumerator StoryQueueStart(Action onComplete)
     {
-        FilterStories("StoryList");//遍歷判斷目前符合條件的劇本，將劇本名稱加入AVG player
+        // 過濾符合條件的劇本
+        FilterStories("StoryList", "Tag LIKE '%主線%'");
+
         while (PendingStories.Count > 0)
         {
-            // 清除log
-            AVGLogger.Clear();
-            // 取出並移除第一個元素
-            CurrentStoryTitle = PendingStories[0].Title;
-            string Once = PendingStories[0].Once;
+            string storyTitle = PendingStories[0].Title;
             PendingStories.RemoveAt(0);
-            
-            isStoryEnd = false;
-            Debug.Log($"故事開始: {CurrentStoryTitle}");
 
-            CoroutineStory = StartCoroutine(StoryStart<StoryCut>(CurrentStoryTitle));
-            yield return CoroutineStory;
-            // 若Once為Y，將故事標題加入已讀列表
-            if (Once == "Y") AddTitleToReadList(CurrentStoryTitle);
-            Debug.Log($"故事已讀: {CurrentStoryTitle}");
+            yield return StartCoroutine(StorySingleStart(storyTitle));
+
+            Debug.Log($"故事已讀: {storyTitle}");
         }
 
         Debug.Log("All stories processed.");
         onComplete?.Invoke(); // 執行回調
     }
+
+    /// <summary>
+    /// 播放單一故事
+    /// </summary>
+    public IEnumerator StorySingleStart(string storyTitle, Action onComplete = null)
+    {
+        CurrentStoryTitle = storyTitle;
+        StoryList storyMeta = GetStoryByTitle("StoryList", storyTitle);
+
+        // 清除日誌
+        AVGLogger.Clear();
+
+        isStoryEnd = false;
+        Debug.Log($"故事開始: {CurrentStoryTitle}");
+
+        CoroutineStory = StartCoroutine(StoryStart<StoryCut>(CurrentStoryTitle));
+        yield return CoroutineStory;
+
+        // 若 Once 為 "Y"，將故事標題加入已讀列表
+        if (storyMeta.Once == "Y") AddTitleToReadList(CurrentStoryTitle);
+
+        Debug.Log($"故事結束: {CurrentStoryTitle}");
+
+        onComplete?.Invoke(); // 執行回調
+    }
+
 
     public IEnumerator StoryStart<T>(string StoryTitle) where T : class, new()
     {

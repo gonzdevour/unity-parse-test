@@ -159,13 +159,13 @@ public partial class AVG
         return loadedData;
     }
 
-    public void FilterStories(string pageName)
+    public void FilterStories(string pageName, string condition = "")
     {
-        List<StoryList> allItems = dbManager.QueryTable<StoryList>(pageName);
+        List<StoryList> allItems = dbManager.QueryTable<StoryList>(pageName, condition);
 
         foreach (var item in allItems)
         {
-            Debug.Log($"title:{item.Title}, once:{item.Once}, cond:{item.Condition}, desc:{item.Description}");
+            Debug.Log($"title:{item.Title}, once:{item.Once}, cond:{item.Condition}, desc:{item.Description}, tag:{item.Tag}");
 
             if (item.Once == "Y" && IsTitleInReadList(item.Title)) continue;
 
@@ -178,6 +178,19 @@ public partial class AVG
             }
         }
     }
+
+    public StoryList GetStoryByTitle(string pageName, string title)
+    {
+        // 確保 title 被正確地包在單引號內
+        string condition = $"Title = '{title}'";
+
+        // 查詢資料庫
+        List<StoryList> results = dbManager.QueryTable<StoryList>(pageName, condition);
+
+        // 如果結果有資料，回傳第一筆；否則回傳 null
+        return results.Count > 0 ? results[0] : null;
+    }
+
 
     public void AddTitleToReadList(string newTitle)
     {

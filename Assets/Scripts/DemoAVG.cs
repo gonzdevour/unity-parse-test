@@ -36,11 +36,11 @@ public class DemoAVG : MonoBehaviour
         panelSpinner.gameObject.SetActive(true);
         panelSpinner.SetMessage("「與怪物戰鬥之人，應當小心自己不要成為怪物。」");
 
-        AVG.Inst.On();
+        //AVG.Inst.On();
 
         yield return sheetToDB.LoadExcel("Story.xlsx");
-        panelSpinner.gameObject.SetActive(false);
         yield return AVG.Inst.Init(); //讀取資料完成後才能初始化
+        panelSpinner.gameObject.SetActive(false);
         yield return AVG.Inst.AVGStart();
     }
 
