@@ -7,13 +7,7 @@ public partial class Director
     {
         TEffect.Stop();// 停止過場特效
         Avg.Background.Clear();// 清除背景sprites
-        if (Avg.LayerChar != null)
-        {
-            foreach (Transform child in Avg.LayerChar)
-            {
-                GameObject.Destroy(child.gameObject);// 清除角色
-            }
-        }
+        CharDestroyAll();// 清除所有角色
     }
 
     public void TEffectFadeIn()

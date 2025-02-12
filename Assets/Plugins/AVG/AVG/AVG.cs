@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Story;
 // 引入LSR以製作Logger
 using LSR;
+using System.Reflection;
 
 public partial class AVG : MonoBehaviour
 {
@@ -66,7 +67,8 @@ public partial class AVG : MonoBehaviour
 
     public string ReadlistKey = "AVGReadList"; // PlayerPrefs 中存放的 key
     public string CurrentStoryTitle; //目前播放中的劇本標題
-    public List<StoryList> PendingStories = new();
+    public List<StoryMeta> PendingStories = new();
+    public List<StoryMeta> PendingStoriesForSave = new();
 
     public Coroutine CoroutineStoryQueue;
     public Coroutine CoroutineStory;
@@ -124,11 +126,11 @@ public partial class AVG : MonoBehaviour
         if (ClearReadList) PlayerPrefs.DeleteKey("AVGReadList");
         UpdatePPM("Preset");//更新預設值
         Background.Init(GetBgData("Bgs"));
-        Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger
+        Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger，所以不像background將列表歸屬於特定物件
         yield return new WaitForSeconds(2f);
     }
 
-    public IEnumerator AVGStart(string storyTitle = "")
+    public IEnumerator AVGStart()
     {
         On();
         yield return null;
@@ -148,15 +150,11 @@ public partial class AVG : MonoBehaviour
         Off();
     }
 
-    public void AVGRestart(string storyTitle = "")
+    public IEnumerator AVGRestart(List<StoryMeta> stories)
     {
-        StartCoroutine(AVGRestartCoroutine(storyTitle));
-    }
-
-    public IEnumerator AVGRestartCoroutine(string storyTitle = "")
-    {
-        yield return AVGEnd();
-        yield return AVGStart();
+        yield return StartCoroutine(AVGEnd());   // 確保等待 AVGEnd 完成
+        PendingStories = stories;
+        yield return StartCoroutine(AVGStart()); // 確保等待 AVGStart 執行
     }
 
     public void On()
@@ -239,17 +237,16 @@ public partial class AVG : MonoBehaviour
 
     public IEnumerator StoryQueueStart(Action onComplete)
     {
-        // 過濾符合條件的劇本
-        FilterStories("StoryList", "Tag LIKE '%主線%'");
-
         while (PendingStories.Count > 0)
         {
-            string storyTitle = PendingStories[0].Title;
+            StoryMeta story = PendingStories[0];
+            CurrentStoryTitle = story.Title;
+            PendingStoriesForSave = PendingStories.ToList(); // 為Save建立副本
             PendingStories.RemoveAt(0);
-
-            yield return StartCoroutine(StorySingleStart(storyTitle));
-
-            Debug.Log($"故事已讀: {storyTitle}");
+            Save("Preset", $"AVGSaveSlotAuto"); //讀故事前自動存檔
+            yield return StartCoroutine(StorySingleStart(story));
+            PendingStoriesForSave.RemoveAt(0);
+            Save("Preset", $"AVGSaveSlotAuto"); //讀完故事自動存檔
         }
 
         Debug.Log("All stories processed.");
@@ -259,13 +256,12 @@ public partial class AVG : MonoBehaviour
     /// <summary>
     /// 播放單一故事
     /// </summary>
-    public IEnumerator StorySingleStart(string storyTitle, Action onComplete = null)
+    public IEnumerator StorySingleStart(StoryMeta story, Action onComplete = null)
     {
-        CurrentStoryTitle = storyTitle;
-        StoryList storyMeta = GetStoryByTitle("StoryList", storyTitle);
-
         // 清除日誌
         AVGLogger.Clear();
+        // 清場
+        Director.Inst.CharDestroyAll();
 
         isStoryEnd = false;
         Debug.Log($"故事開始: {CurrentStoryTitle}");
@@ -274,10 +270,9 @@ public partial class AVG : MonoBehaviour
         yield return CoroutineStory;
 
         // 若 Once 為 "Y"，將故事標題加入已讀列表
-        if (storyMeta.Once == "Y") AddTitleToReadList(CurrentStoryTitle);
+        if (story.Once == "Y") AddTitleToReadList(CurrentStoryTitle);
 
         Debug.Log($"故事結束: {CurrentStoryTitle}");
-
         onComplete?.Invoke(); // 執行回調
     }
 

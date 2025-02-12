@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Localization-Asset-Tables-Chinese (Traditional) (zh-TW)
   m_EditorClassIdentifier: 
   m_GroupName: Localization-Asset-Tables-Chinese (Traditional) (zh-TW)
-  m_Data:
-    m_SerializedData: []
   m_GUID: 3cf1cb2f784f21d4b94ce7269bf909f3
   m_SerializeEntries:
   - m_GUID: 03c836cc87bd50f468caf0aa61ad4652

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Modal_SaveLoad : ModalReciever
 {
     public AVGSaveSlotList avgSaveSlotList;

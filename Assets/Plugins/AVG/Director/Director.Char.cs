@@ -20,6 +20,17 @@ public partial class Director
         return CharResult;
     }
 
+    public void CharDestroyAll()
+    {
+        if (Avg.LayerChar != null)
+        {
+            foreach (Transform child in Avg.LayerChar)
+            {
+                GameObject.Destroy(child.gameObject);// 清除角色
+            }
+        }
+    }
+
     public void CharIn(Dictionary<string, string> charData, string charUID, string charPos, string charEmo)
     {
         // 在 LayerChar 中尋找子物件

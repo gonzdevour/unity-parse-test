@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Newtonsoft.Json;
+using Story;
 
 public class AVGSaveSlotList : MonoBehaviour
 {
@@ -122,17 +124,18 @@ public class AVGSaveSlotList : MonoBehaviour
 
     private void OnAVGSave(Button button, int index)
     {
-        button.transform.DOScale(1.1f, 0.2f).SetLoops(2, LoopType.Yoyo);
         Debug.Log($"儲存至 AVGSaveSlot{index}");
-        AVG.Inst.SavePPM("Preset", $"AVGSaveSlot{index}");
-        InitSave();
+        AVG.Inst.Save("Preset", $"AVGSaveSlot{index}");
+
+        button.transform.DOScale(1.1f, 0.2f).SetLoops(2, LoopType.Yoyo); // UI動態
+        InitSave(); // UI內容更新
     }
 
     private void OnAVGLoad(Button button, int index)
     {
-        button.transform.DOScale(1.1f, 0.2f).SetLoops(2, LoopType.Yoyo);
         Debug.Log($"讀取 AVGSaveSlot{index}");
-        AVG.Inst.LoadPPM("Preset", $"AVGSaveSlot{index}");
-        AVG.Inst.AVGRestart();
+        AVG.Inst.Load("Preset", $"AVGSaveSlot{index}");
+
+        button.transform.DOScale(1.1f, 0.2f).SetLoops(2, LoopType.Yoyo); // UI動態
     }
 }

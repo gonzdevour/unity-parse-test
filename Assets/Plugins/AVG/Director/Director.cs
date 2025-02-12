@@ -43,6 +43,7 @@ public partial class Director : MonoBehaviour
             { "金錢", args => SetMoney(args) },
             { "淡入", args => FadeIn(args) },
             { "淡出", args => FadeOut(args) },
+            { "章節", args => GoTo(args) },
             { "結束", args => Cut(args) },
             { "背景", args => SetBackground(args) },
         };

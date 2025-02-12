@@ -2,6 +2,13 @@ using System.Linq;
 
 public partial class Director
 {
+    private void GoTo(object[] args = null)
+    {
+        string nextStoryTitle = args[0]?.ToString();
+        AVG.Inst.PrependStoryByTitle(nextStoryTitle);//強制指定下一個故事
+        AVG.Inst.nextCutIndex = 99999; //使下一卡索引超出範圍，強制結束
+    }
+
     private void Cut(object[] args = null)
     {
         AVG.Inst.nextCutIndex = 99999; //使下一卡索引超出範圍，強制結束
