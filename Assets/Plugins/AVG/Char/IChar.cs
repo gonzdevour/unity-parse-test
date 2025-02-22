@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public interface IChar
 {
     string UID { get; set; }
-    void Init(Dictionary<string, string> charData, string charEmo = "킠");
+    string Expression { get; set; }
+    void Init(Dictionary<string, string> charData, string charEmo = "킠", string charSimbol = "킠");
     void Focus(float dur = 0.5f);
     void Unfocus(float dur = 0f);
     void SetExpression(string expression = "킠", string transitionType = "fade", float dur = 1f);

@@ -22,18 +22,18 @@ public class ModalActivator : MonoBehaviour
         {
             canvasGroup = Board.AddComponent<CanvasGroup>();
         }
-        Btn_Open.onClick.AddListener(() => Open(Btn_Open.name)); // 傳遞按鈕名稱
+        Btn_Open.onClick.AddListener(() => Open(this)); // 傳遞activator給reciever
         Btn_Close.onClick.AddListener(Close);
     }
 
-    public void Open(string activatorName)
+    public void Open(ModalActivator activator)
     {
-        Debug.Log($"開啟面板的按鈕: {activatorName}");
+        Debug.Log($"開啟面板的按鈕: {activator.name}");
         var modalReciever = Modal.GetComponent<ModalReciever>();
-        if (modalReciever != null) modalReciever.activatorName = activatorName; // 傳遞觸發的按鈕
+        if (modalReciever != null) modalReciever.activator = activator; // 傳遞觸發的按鈕
 
         if (modalReciever == null) Debug.Log("modalReciever == null");
-        if (modalReciever != null) Debug.Log($"modalReciever.activatorName = {modalReciever.activatorName}");
+        if (modalReciever != null) Debug.Log($"modalReciever.activator.name = {modalReciever.activator.name}");
 
         Modal.SetActive(true); // 啟用主物件
         Board.SetActive(true); // 啟用 Board

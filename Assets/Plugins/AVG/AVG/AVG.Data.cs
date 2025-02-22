@@ -55,8 +55,8 @@ public partial class AVG
             // 取得現有的 PlayerPrefs 值
             string existingValue = PPM.Inst.Get(item.Key);
 
-            // 只有當現有值為 null 或空字串時，才更新
-            if (string.IsNullOrEmpty(existingValue))
+            // 只有當現有值為 null 或空字串，或該item屬性為AlwaysUpdate時，才更新
+            if (string.IsNullOrEmpty(existingValue) || item.AlwaysUpdate == "Y")
             {
                 Debug.Log($"PPM更新：{item.Key}={item.Value}");
                 PPM.Inst.Set(item.Key, item.Value);
@@ -185,8 +185,9 @@ public partial class AVG
         return imagePath;
     }
 
-    public void FilterStories(string pageName, string condition = "")
+    public List<StoryMeta> FilterStories(string pageName, string condition = "")
     {
+        List<StoryMeta> resultStories = new();
         List<StoryMeta> allItems = dbManager.QueryTable<StoryMeta>(pageName, condition);
 
         foreach (var item in allItems)
@@ -200,9 +201,10 @@ public partial class AVG
                 Debug.Log($"Condition met: {item.Title}");
 
                 // 將符合條件的 Title 添加到 PendingStories
-                AVG.Inst.PendingStories.Add(item);
+                resultStories.Add(item);
             }
         }
+        return resultStories;
     }
 
     public void PrependStoryByTitle(string title)

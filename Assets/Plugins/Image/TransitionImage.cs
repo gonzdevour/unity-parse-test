@@ -4,6 +4,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using static System.TimeZoneInfo;
 
 public class TransitionImage : MonoBehaviour
 {
@@ -39,7 +40,16 @@ public class TransitionImage : MonoBehaviour
     {
         if (image != null)
         {
-            image.sprite = null;
+            Sprite transparentSprite = Resources.Load<Sprite>("Sprites/transparent32x32");
+            if (transparentSprite != null)
+            {
+                image.sprite = transparentSprite;
+            }
+            else
+            {
+                image.sprite = null;
+                Debug.Log("透明素材不存在，改將sprite設定為空");
+            }
         }
     }
 
@@ -52,6 +62,7 @@ public class TransitionImage : MonoBehaviour
     /// <param name="onComplete">過渡完成時的回調</param>
     public void StartTransition(string imgUrl, string transitionType = "fade", float dur = 1f, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear, Action onComplete = null)
     {
+        //Debug.Log($"[TImg開始轉換]類型:{transitionType}, dur:{dur}f, img:{imgUrl}");
         // 若有正在執行的過渡效果，先完成它
         CompleteCurrentTransition();
 

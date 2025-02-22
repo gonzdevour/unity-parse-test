@@ -8,6 +8,8 @@ public class CharTImg : MonoBehaviour, IChar
     public TransitionImage TImg;
     public Image TImg0;
     public Image TImg1;
+    public GameObject SimbolMarker;
+    public GameObject SimbolPrefab;
     private Dictionary<string, string> imagePathsExpression = new(); // 這個角色的表情立繪路徑表
 
     public string UID { get; set; } // 唯一識別碼
@@ -21,9 +23,12 @@ public class CharTImg : MonoBehaviour, IChar
     public string 頭圖 { get; set; } // 暱稱2
     public float Scale { get; set; } // 縮放比例
     public int YAdd { get; set; } // Y 軸位移
+    public int SimbolX { get; set; } // simbol X偏移
+    public int SimbolY { get; set; } // simbol Y偏移
     public string AssetID { get; set; } // 資產 ID
+    public string Expression { get; set; } //目前的表情
 
-    public void Init(Dictionary<string, string> CharData, string CharEmo = "無")
+    public void Init(Dictionary<string, string> CharData, string CharEmo = "無", string CharSimbol = "")
     {
         Debug.Log($"初始化角色資料：{CharData["UID"]}");
         // 設置屬性
@@ -69,6 +74,7 @@ public class CharTImg : MonoBehaviour, IChar
             }
         }
         // 設定初始表情
+        Expression = CharEmo;
         if (imagePathsExpression != null)
         {
             // 表情列表內有值
@@ -85,6 +91,7 @@ public class CharTImg : MonoBehaviour, IChar
             {
                 // 指定表情無值，尋找預設表情
                 string defaultEmoKey = GetDefaultExpression("無");
+                Expression = defaultEmoKey;
                 SpriteCacher.Inst.GetSprite(imagePathsExpression[defaultEmoKey], (sprite) =>
                 {
                     TImg0.sprite = sprite;
@@ -100,34 +107,40 @@ public class CharTImg : MonoBehaviour, IChar
         Debug.Log($"Character {UID} initialized with name {姓}{名}.");
     }
 
-    public void Focus(float dur = 0.5f)
+    public void Focus(float dur = 0f)
     {
         // 將物件移到所有同層物件的最前方
         transform.SetAsLastSibling();
-        // 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 1
-        if (TImg0 != null)
-        {
-            TImg0.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
-        }
+        TImg0.color = new Color(1f, 1f, 1f);
+        TImg1.color = new Color(1f, 1f, 1f);
 
-        if (TImg1 != null)
-        {
-            TImg1.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
-        }
+        //// 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 1
+        //if (TImg0 != null)
+        //{
+        //    TImg0.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
+        //}
+
+        //if (TImg1 != null)
+        //{
+        //    TImg1.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
+        //}
     }
 
     public void Unfocus(float dur = 0f)
     {
-        // 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 0.3
-        if (TImg0 != null)
-        {
-            TImg0.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
-        }
+        TImg0.color = new Color(0.3f, 0.3f, 0.3f);
+        TImg1.color = new Color(0.3f, 0.3f, 0.3f);
 
-        if (TImg1 != null)
-        {
-            TImg1.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
-        }
+        //// 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 0.3
+        //if (TImg0 != null)
+        //{
+        //    TImg0.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
+        //}
+
+        //if (TImg1 != null)
+        //{
+        //    TImg1.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
+        //}
     }
 
     public void SetExpression(string expression = "無", string transitionType = "slideup", float dur = 1f ) 

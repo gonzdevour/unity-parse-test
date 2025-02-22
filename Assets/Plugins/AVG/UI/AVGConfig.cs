@@ -28,9 +28,6 @@ public class AVGConfig : MonoBehaviour
 
     private void Start()
     {
-        // 讀取存儲的值
-        LoadSettings();
-
         // 初始化 UI 控件值
         InitializeUI();
 
@@ -152,27 +149,6 @@ public class AVGConfig : MonoBehaviour
 
         // 確保數據儲存
         PlayerPrefs.Save();
-    }
-
-    private void LoadSettings()
-    {
-        // 讀取 PlayerPrefs
-        AVG.Inst.DisplayChar = PlayerPrefs.GetInt("DisplayChar", 1) == 1;
-        AVG.Inst.DisplayPortrait = PlayerPrefs.GetInt("DisplayPortrait", 1) == 1;
-        AVG.Inst.DisplayStoryBox = PlayerPrefs.GetInt("DisplayStoryBox", 1) == 1;
-        AVG.Inst.DisplayBubble = PlayerPrefs.GetInt("DisplayBubble", 0) == 1;
-        AVG.Inst.SingleCharMode = PlayerPrefs.GetInt("SingleCharMode", 0) == 1;
-        AVG.Inst.CGMode = PlayerPrefs.GetInt("CGMode", 0) == 1;
-
-        Director.Inst.DefaultBgTransDur = PlayerPrefs.GetFloat("DefaultBgTransDur", 1f);
-        Director.Inst.DefaultCharTransDur = PlayerPrefs.GetFloat("DefaultCharTransDur", 1f);
-        Director.Inst.DefaultCharFocusDur = PlayerPrefs.GetFloat("DefaultCharFocusDur", 0.5f);
-        Director.Inst.DefaultCharUnfocusDur = PlayerPrefs.GetFloat("DefaultCharUnfocusDur", 0f);
-        Director.Inst.DefaultCharMoveDur = PlayerPrefs.GetFloat("DefaultCharMoveDur", 0f);
-        Director.Inst.DefaultTypingInterval = PlayerPrefs.GetFloat("DefaultTypingInterval", 0.05f);
-
-        Director.Inst.MusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
-        Director.Inst.SEVolume = PlayerPrefs.GetFloat("SEVolume", 1f);
     }
 
     private float ParseFloat(string value, float defaultValue)

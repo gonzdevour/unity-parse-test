@@ -12,5 +12,8 @@ namespace Story
         public string 說話前 { get; set; }
         public string 說話後 { get; set; }
         public string 顯示名稱 { get; set; }
+        public string 符號 { get; set; }
+        public string 語氣 { get; set; }
+        public string 特效 { get; set; }
     }
 }

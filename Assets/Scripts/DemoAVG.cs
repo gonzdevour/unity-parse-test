@@ -26,7 +26,10 @@ public class DemoAVG : MonoBehaviour
 
     void OnDestroy()
     {
-        AVG.Inst.Off();
+        if (AVG.Inst != null)
+        {
+            AVG.Inst.Off();
+        }
     }
 
     IEnumerator StartAVG()
@@ -38,14 +41,14 @@ public class DemoAVG : MonoBehaviour
 
         //AVG.Inst.On();
 
-        yield return sheetToDB.LoadExcel("Story.xlsx");
+        yield return sheetToDB.LoadExcel("Mods/Official/Scripts/ModData.xlsx");
         yield return AVG.Inst.Init(); //讀取資料完成後才能初始化
         panelSpinner.gameObject.SetActive(false);
 
         // 過濾符合條件的劇本
-        AVG.Inst.FilterStories("StoryList", "Tag LIKE '%主線%'");
+        var stories = AVG.Inst.FilterStories("StoryList", "Tag LIKE '%主線%'");
 
-        yield return AVG.Inst.AVGStart();
+        yield return AVG.Inst.AVGStart(stories);
     }
 
     void DataSet<T>(string key, T value)

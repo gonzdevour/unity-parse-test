@@ -12,6 +12,7 @@ using Story;
 // 引入LSR以製作Logger
 using LSR;
 using System.Reflection;
+using static Unity.Burst.Intrinsics.X86;
 
 public partial class AVG : MonoBehaviour
 {
@@ -130,8 +131,9 @@ public partial class AVG : MonoBehaviour
         yield return new WaitForSeconds(2f);
     }
 
-    public IEnumerator AVGStart()
+    public IEnumerator AVGStart(List<StoryMeta> stories)
     {
+        PendingStories = stories;
         On();
         yield return null;
         StartCoroutine(Director.Inst.TEffectFadeInWithDelay(1f));//等待背景讀入後再TEffectFadeIn
@@ -146,15 +148,14 @@ public partial class AVG : MonoBehaviour
     {
         Director.Inst.TEffectFadeOut();
         yield return new WaitForSeconds(1f);
-        Debug.Log("Story Fin");
+        Debug.Log("AVGEnd");
         Off();
     }
 
     public IEnumerator AVGRestart(List<StoryMeta> stories)
     {
         yield return StartCoroutine(AVGEnd());   // 確保等待 AVGEnd 完成
-        PendingStories = stories;
-        yield return StartCoroutine(AVGStart()); // 確保等待 AVGStart 執行
+        yield return StartCoroutine(AVGStart(stories)); // 確保等待 AVGStart 執行
     }
 
     public void On()
@@ -309,6 +310,9 @@ public partial class AVG : MonoBehaviour
         string charUID = TxR.Inst.Render(ParseEx(storyCutDict["說話者"].ToString()));
         string charPos = TxR.Inst.Render(ParseEx(storyCutDict["位置"].ToString()));
         string charEmo = TxR.Inst.Render(ParseEx(storyCutDict["表情"].ToString()));
+        string charSimbol = TxR.Inst.Render(ParseEx(storyCutDict["符號"].ToString()));
+        string charTone = TxR.Inst.Render(ParseEx(storyCutDict["語氣"].ToString()));
+        string charEffect = TxR.Inst.Render(ParseEx(storyCutDict["特效"].ToString()));
 
         string DisplayName = charUID; //這裡的charUID指的是解析後的說話者字串，為DisplayName的預設值
         // 指定角色
@@ -335,7 +339,7 @@ public partial class AVG : MonoBehaviour
         // 記錄目前對白，以估計auto模式的等待時間
         curContent = Content;
         // 顯示名稱並開始說話
-        StoryCutDisplay(charData, charUID, charPos, charEmo, DisplayName, Content);
+        StoryCutDisplay(charData, charUID, charPos, charEmo, charSimbol, charTone, charEffect, DisplayName, Content);
 
         //Debug.Log($"=> 前往的值：{storyCutDict["前往"]}");
         if (HasValidValue(storyCutDict, "前往"))
@@ -389,6 +393,9 @@ public partial class AVG : MonoBehaviour
         string charUID,
         string charPos,
         string charEmo,
+        string charSimbol,
+        string charTone,
+        string charEffect,
         string DisplayName, 
         string Content
         )
@@ -428,7 +435,7 @@ public partial class AVG : MonoBehaviour
                 {
                     Director.Inst.CharsUnfocusAll(); //其他角色變黑
                     if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
-                    if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo); //角色進場
+                    if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo, charSimbol); //角色進場
 
                     if (DisplayBubble)
                     {

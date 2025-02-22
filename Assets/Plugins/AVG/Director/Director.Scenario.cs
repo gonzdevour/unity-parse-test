@@ -1,4 +1,4 @@
-using System.Linq;
+using UnityEngine;
 
 public partial class Director
 {
@@ -11,6 +11,7 @@ public partial class Director
 
     private void Cut(object[] args = null)
     {
+        Debug.Log("Set nextCutIndex = 99999");
         AVG.Inst.nextCutIndex = 99999; //使下一卡索引超出範圍，強制結束
     }
 

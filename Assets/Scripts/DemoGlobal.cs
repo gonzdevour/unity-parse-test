@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class DemoGlobal : MonoBehaviour
@@ -48,11 +49,11 @@ public class DemoGlobal : MonoBehaviour
         var spinner = CanvasUI.Inst.panelSpinner;
         spinner.On( message: "讀取StreamingAssets圖檔");
         yield return null;
-        SpriteCacher.Inst.GetAllSpritesInSA(() => 
-        {
-            Debug.Log("GetAllSpritesInSA Done");
-            spinner.Off();
-        });
+        yield return StartCoroutine(CacheSprites());
+        spinner.SetMessage("讀取全域設定值");
+        yield return StartCoroutine(CacheSettings());
+        spinner.Off();
+
         //yield return TestProgress();
 
         //panelSpinner.SetActive(true);
@@ -78,6 +79,31 @@ public class DemoGlobal : MonoBehaviour
         //TestDB();
         //panelSpinner.SetActive(false);
 
+    }
+
+    public IEnumerator CacheSprites()
+    {
+        bool isDone = false;
+        SpriteCacher.Inst.GetAllSpritesInSA(() =>
+        {
+            Debug.Log("GetAllSpritesInSA Done");
+            isDone = true;
+        });
+        yield return new WaitUntil(() => isDone); // 等待完成
+    }
+
+    public IEnumerator CacheSettings()
+    {
+        yield return StreamingAssets.Inst.LoadTxt("Mods/ModsList.txt", resultDict => {
+            Debug.Log($"LoadTxt from StreamingAsset result:");
+            Debug.Log($"{resultDict["TextData"]}");
+        });
+        yield return StreamingAssets.Inst.LoadCSV("Mods/Official/Scripts/Loc.csv", csvString => {
+            Debug.Log($"LoadCSV from StreamingAsset result:");
+            Debug.Log($"{csvString}");
+            //讀取本地csv更新本地化檔案
+            StartCoroutine(csv2Loc.Update("StringLoc", csvString));
+        });
     }
 
     /// <summary>

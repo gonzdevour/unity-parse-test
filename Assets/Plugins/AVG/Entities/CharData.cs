@@ -16,7 +16,8 @@ namespace Story
         public string 頭圖 { get; set; } // 使用頭圖
         public float Scale { get; set; } // 縮放比例
         public int YAdd { get; set; } // Y 軸位移
-
+        public int SimbolX { get; set; } // simbol X偏移
+        public int SimbolY { get; set; } // simbol Y偏移
         public string AssetID { get; set; } // 資產 ID
 
         // 表情相關屬性

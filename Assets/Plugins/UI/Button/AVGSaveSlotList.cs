@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Newtonsoft.Json;
-using Story;
 
 public class AVGSaveSlotList : MonoBehaviour
 {
@@ -12,16 +10,19 @@ public class AVGSaveSlotList : MonoBehaviour
     public Color SaveColor;
     public Color LoadColor;
 
+    private ModalActivator modalActivator;
+
     // 起始方法，初始化所有子物件按鈕
-    public void Init(string activatorName)
+    public void Init(ModalActivator activator)
     {
-        if (activatorName == "Btn_Save")
+        modalActivator = activator;
+        if (activator.name == "Btn_Save")
         {
             ListTitle.text = "儲存檔案";
             ListLabel.color = SaveColor;
             InitSave();
         }
-        else if (activatorName == "Btn_Load")
+        else if (activator.name == "Btn_Load")
         {
             ListTitle.text = "讀取檔案";
             ListLabel.color = LoadColor;
@@ -133,9 +134,14 @@ public class AVGSaveSlotList : MonoBehaviour
 
     private void OnAVGLoad(Button button, int index)
     {
-        Debug.Log($"讀取 AVGSaveSlot{index}");
-        AVG.Inst.Load("Preset", $"AVGSaveSlot{index}");
-
-        button.transform.DOScale(1.1f, 0.2f).SetLoops(2, LoopType.Yoyo); // UI動態
+        //取得modal執行Close()
+        button.transform.DOScale(1.1f, 0.2f)
+        .SetLoops(2, LoopType.Yoyo)
+        .OnComplete(() =>
+        {
+            modalActivator.Close();
+            Debug.Log($"讀取 AVGSaveSlot{index}");
+            AVG.Inst.Load("Preset", $"AVGSaveSlot{index}");
+        });
     }
 }

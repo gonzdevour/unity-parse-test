@@ -17,7 +17,7 @@ public partial class Director : MonoBehaviour
     public float DefaultTypingInterval = 0.05f;
     public float DefaultBgTransDur = 1f;
     public float DefaultCharTransDur = 1f;
-    public float DefaultCharFocusDur = 0.5f;
+    public float DefaultCharFocusDur = 0f;
     public float DefaultCharUnfocusDur = 0f;
     public float DefaultCharMoveDur = 0f;
 
@@ -31,6 +31,8 @@ public partial class Director : MonoBehaviour
     private Dictionary<string, Action<object[]>> actions;
     private void Start()
     {
+        // 從PlayerPrefs讀取config設定值
+        LoadSettings();
         // 取得TEffect組件
         TEffect = GetComponent<TEffectsManager>().Init(CurTEffectName);
         // 初始化字典並綁定函數
@@ -57,6 +59,27 @@ public partial class Director : MonoBehaviour
         //ExecuteAction("陣營 = 獲勝陣營");
         //ExecuteAction("HP=MaxHP*50");
         //ExecuteAction("表情,張沐霖,怒");
+    }
+
+    private void LoadSettings()
+    {
+        // 讀取 PlayerPrefs
+        AVG.Inst.DisplayChar = PlayerPrefs.GetInt("DisplayChar", 1) == 1;
+        AVG.Inst.DisplayPortrait = PlayerPrefs.GetInt("DisplayPortrait", 1) == 1;
+        AVG.Inst.DisplayStoryBox = PlayerPrefs.GetInt("DisplayStoryBox", 1) == 1;
+        AVG.Inst.DisplayBubble = PlayerPrefs.GetInt("DisplayBubble", 0) == 1;
+        AVG.Inst.SingleCharMode = PlayerPrefs.GetInt("SingleCharMode", 0) == 1;
+        AVG.Inst.CGMode = PlayerPrefs.GetInt("CGMode", 0) == 1;
+
+        DefaultBgTransDur = PlayerPrefs.GetFloat("DefaultBgTransDur", 1f);
+        DefaultCharTransDur = PlayerPrefs.GetFloat("DefaultCharTransDur", 1f);
+        DefaultCharFocusDur = PlayerPrefs.GetFloat("DefaultCharFocusDur", 0.5f);
+        DefaultCharUnfocusDur = PlayerPrefs.GetFloat("DefaultCharUnfocusDur", 0f);
+        DefaultCharMoveDur = PlayerPrefs.GetFloat("DefaultCharMoveDur", 0f);
+        DefaultTypingInterval = PlayerPrefs.GetFloat("DefaultTypingInterval", 0.05f);
+
+        MusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        SEVolume = PlayerPrefs.GetFloat("SEVolume", 1f);
     }
 
     private void ChangeExpression(object[] args)

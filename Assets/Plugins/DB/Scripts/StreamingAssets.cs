@@ -83,6 +83,7 @@ public class StreamingAssets : MonoBehaviour
     public IEnumerator LoadFile(string fileName, Action<byte[]> onFileLoaded)
     {
         string filePath = GetFilePath(fileName);
+        Debug.Log($"filePath:{filePath}");
         using (UnityWebRequest request = UnityWebRequest.Get(filePath))
         {
             yield return request.SendWebRequest();
@@ -179,7 +180,25 @@ public class StreamingAssets : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadTxt(string fileName, System.Action<Dictionary<string, string>> callback = null)
+    public IEnumerator LoadCSV(string fileName, Action<string> callback = null)
+    {
+        byte[] fileData = null;
+        yield return LoadFile(fileName, data => fileData = data);
+
+        if (fileData != null)
+        {
+            string csvString = Encoding.UTF8.GetString(fileData);
+            Debug.Log($"CSV file loaded successfully\n{csvString}");
+            callback?.Invoke(csvString);
+        }
+        else
+        {
+            Debug.LogError($"Failed to load CSV file: {fileName}");
+            callback?.Invoke(null);
+        }
+    }
+
+    public IEnumerator LoadTxt(string fileName, Action<Dictionary<string, string>> callback = null)
     {
         byte[] fileData = null;
         yield return LoadFile(fileName, data => fileData = data);

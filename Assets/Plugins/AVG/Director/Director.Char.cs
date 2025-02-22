@@ -22,6 +22,8 @@ public partial class Director
 
     public void CharDestroyAll()
     {
+        Avg.Portrait.Clear();//清除頭圖
+
         if (Avg.LayerChar != null)
         {
             foreach (Transform child in Avg.LayerChar)
@@ -31,7 +33,7 @@ public partial class Director
         }
     }
 
-    public void CharIn(Dictionary<string, string> charData, string charUID, string charPos, string charEmo)
+    public void CharIn(Dictionary<string, string> charData, string charUID, string charPos, string charEmo, string charSimbol)
     {
         // 在 LayerChar 中尋找子物件
         IChar Char = GetCharByUID(charUID);
@@ -45,7 +47,7 @@ public partial class Director
                 Char.Move(fromTo, float.Parse(PPM.Inst.Get("位移秒數", "0.5"))); // 移動到指定位置
                 Debug.Log($"重新定位已存在的角色{charUID}至{fromTo[1]}");
             }
-            if (!string.IsNullOrEmpty(charEmo))
+            if (!string.IsNullOrEmpty(charEmo) && charEmo != Char.Expression)
             {
                 Char.SetExpression(charEmo, "fade", DefaultCharTransDur); // 設定表情
                 Debug.Log($"{charUID}的表情轉變為：{charEmo}");
@@ -54,11 +56,11 @@ public partial class Director
         else
         {
             Debug.Log($"畫面上不存在{charUID}，生成角色");
-            CharGen(charData, charUID, charPos, charEmo);
+            CharGen(charData, charUID, charPos, charEmo, charSimbol);
         }
     }
 
-    public void CharGen(Dictionary<string, string> charData, string charUID, string charPos, string charEmo)
+    public void CharGen(Dictionary<string, string> charData, string charUID, string charPos, string charEmo, string charSimbol)
     {
         Vector2 SpawnPoint = PositionParser.ParsePoint(charPos, Avg.MainPanel);
 
@@ -69,7 +71,7 @@ public partial class Director
         newCharTransform.anchoredPosition = SpawnPoint;
 
         IChar Char = newChar.GetComponent<IChar>();
-        Char.Init(charData, charEmo);
+        Char.Init(charData, charEmo, charSimbol);
     }
 
     public void CharsUnfocusAll()
