@@ -13,7 +13,7 @@ public class Demo_Transimg : MonoBehaviour
     private Dictionary<string, string> imagePaths = new Dictionary<string, string>(); // 儲存圖片資源路徑
     private List<string> pathKeys; // 用於按順序存取路徑的鍵集合
     private int currentIndex = 0; // 當前圖片索引
-    private string resPathBg = "StreamingAssets://Image/AVG/BG/Landscape/Daily/";
+    private string resPathBg = "StreamingAssets://Mods/Official/Images/AVG/Backgrounds/";
 
     void Start()
     {

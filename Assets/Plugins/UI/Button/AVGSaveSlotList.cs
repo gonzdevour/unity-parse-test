@@ -53,6 +53,8 @@ public class AVGSaveSlotList : MonoBehaviour
                 Text contentText = contentTransform.GetComponent<Text>();
                 contentText.text = "尚無資料";
 
+                // 先清除舊的監聽事件，避免重複綁定
+                currentButton.onClick.RemoveAllListeners();
                 // 為按鈕新增點擊事件
                 currentButton.onClick.AddListener(() => Dialog.Inst.YN(
                     Content: $"確定要選擇<color=red>檔案{buttonIndex.ToString("D2")}</color>儲存進度嗎？",
@@ -67,6 +69,8 @@ public class AVGSaveSlotList : MonoBehaviour
                 Text contentText = contentTransform.GetComponent<Text>();
                 contentText.text = saveData["存檔日期"];
 
+                // 先清除舊的監聽事件，避免重複綁定
+                currentButton.onClick.RemoveAllListeners();
                 // 為按鈕新增點擊事件
                 currentButton.onClick.AddListener(() => Dialog.Inst.YN(
                     Content: $"<color=red>檔案{buttonIndex.ToString("D2")}</color>已儲存進度，確定要覆蓋嗎？",

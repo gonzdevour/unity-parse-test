@@ -25,6 +25,7 @@ public partial class AVG
     public void Load(string pageName, string slotName)
     {
         LoadPPM(pageName, slotName);
+        UpdatePPM(pageName); //更新存檔中AlwaysUpdate的值
         // 將PendingStories設為存檔中的待讀劇本(如果有)
         Dictionary<string, string> saveData = GetSlotData(slotName);
         var stories = JsonConvert.DeserializeObject<List<StoryMeta>>(saveData["待讀劇本"]) ?? new List<StoryMeta>();

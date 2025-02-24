@@ -18,15 +18,17 @@ public partial class AVG
 
         string[] targets = storyCutDict["前往"].ToString().Split('\n');
         string[] options = storyCutDict["選項"].ToString().Split('\n');
-        List<GameObject> buttons = new List<GameObject>();
+        List<GameObject> buttons = new();
 
         for (int i = 0; i < options.Length && i < targets.Length; i++)
         {
-            // 創建按鈕
-            GameObject button = Instantiate(ChoicePrefab, ChoicePanel.transform);
-            button.GetComponentInChildren<Text>().text = TxR.Inst.Render(ParseEx(options[i])); // 設置按鈕文字
+            string optionString = TxR.Inst.Render(ParseEx(options[i]));
             int resultCutIndex = int.Parse(ParseEx(targets[i]));
 
+            // 創建按鈕
+            GameObject button = Instantiate(ChoicePrefab, ChoicePanel.transform);
+            // 設置按鈕文字
+            button.GetComponentInChildren<Text>().text = optionString;
             // 設置按鈕回調
             Button btn = button.GetComponent<Button>();
             btn.onClick.AddListener(() => OnChoiceSelected(resultCutIndex, button));
@@ -63,7 +65,7 @@ public partial class AVG
         }
     }
 
-    private void OnChoiceSelected(int resultIndex, GameObject button)
+    public void OnChoiceSelected(int resultIndex, GameObject button)
     {
         gotoIndex = resultIndex;
         isChoiceSelected = true;

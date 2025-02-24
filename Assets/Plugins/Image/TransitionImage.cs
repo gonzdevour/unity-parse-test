@@ -112,24 +112,22 @@ public class TransitionImage : MonoBehaviour
     /// </summary>
     private void FadeTransition(float duration, Ease easeOut = Ease.Linear, Ease easeIn = Ease.Linear)
     {
-        // 初始化 ReadyImage 的透明度，保留當前 RGB
+        // 強制ReadyImage的透明度為0，保留當前 RGB
         var readyImageColor = readyImage.color;
         readyImage.color = new Color(readyImageColor.r, readyImageColor.g, readyImageColor.b, 0);
 
         currentTween = DOTween.Sequence()
-            // 修改 activeImage 的透明度
-            .Append(activeImage.DOFade(0, duration).SetEase(easeOut).OnComplete(() =>
+            // 淡出 activeImage
+            .Join(activeImage.DOFade(0, duration).SetEase(easeOut))
+            // 淡入 readyImage
+            .Join(readyImage.DOFade(1, duration).SetEase(easeIn))
+            // 等淡入、淡出完成後再執行 SwapImages
+            .OnComplete(() =>
             {
                 activeImage.gameObject.SetActive(false);
-
-                // 恢復 activeImage 的透明度，保留當前 RGB
-                var activeImageColor = activeImage.color;
-                activeImage.color = new Color(activeImageColor.r, activeImageColor.g, activeImageColor.b, 1);
-            }))
-            // 修改 readyImage 的透明度
-            .Join(readyImage.DOFade(1, duration).SetEase(easeIn).OnComplete(SwapImages));
+                SwapImages();
+            });
     }
-
 
     /// <summary>
     /// 從左到右滑動過渡 (DOTween 實現)
@@ -264,6 +262,7 @@ public class TransitionImage : MonoBehaviour
         {
             currentTween.Complete();
             currentTween = null;
+            Debug.Log("完成並刪除目前Tween");
         }
     }
 }

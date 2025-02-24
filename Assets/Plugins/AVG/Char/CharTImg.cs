@@ -111,36 +111,115 @@ public class CharTImg : MonoBehaviour, IChar
     {
         // 將物件移到所有同層物件的最前方
         transform.SetAsLastSibling();
-        TImg0.color = new Color(1f, 1f, 1f);
-        TImg1.color = new Color(1f, 1f, 1f);
 
-        //// 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 1
-        //if (TImg0 != null)
-        //{
-        //    TImg0.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
-        //}
+        //// 直接將 TImg0 和 TImg1 的顏色變為 RGB = 1
+        //TImg0.color = new Color(1f, 1f, 1f);
+        //TImg1.color = new Color(1f, 1f, 1f);
 
-        //if (TImg1 != null)
-        //{
-        //    TImg1.DOColor(new Color(1f, 1f, 1f), dur).SetEase(Ease.Linear);
-        //}
+        // 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 1
+        if (TImg0 != null)
+        {
+            DOTween.To(() => TImg0.color.r, x =>
+            {
+                Color newColor = TImg0.color;
+                newColor.r = x;
+                TImg0.color = newColor;
+            }, 1f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg0.color.g, x =>
+            {
+                Color newColor = TImg0.color;
+                newColor.g = x;
+                TImg0.color = newColor;
+            }, 1f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg0.color.b, x =>
+            {
+                Color newColor = TImg0.color;
+                newColor.b = x;
+                TImg0.color = newColor;
+            }, 1f, dur).SetEase(Ease.Linear);
+        }
+
+        if (TImg1 != null)
+        {
+            DOTween.To(() => TImg1.color.r, x =>
+            {
+                Color newColor = TImg1.color;
+                newColor.r = x;
+                TImg1.color = newColor;
+            }, 1f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg1.color.g, x =>
+            {
+                Color newColor = TImg1.color;
+                newColor.g = x;
+                TImg1.color = newColor;
+            }, 1f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg1.color.b, x =>
+            {
+                Color newColor = TImg1.color;
+                newColor.b = x;
+                TImg1.color = newColor;
+            }, 1f, dur).SetEase(Ease.Linear);
+        }
     }
 
     public void Unfocus(float dur = 0f)
     {
-        TImg0.color = new Color(0.3f, 0.3f, 0.3f);
-        TImg1.color = new Color(0.3f, 0.3f, 0.3f);
+        //// 直接將 TImg0 和 TImg1 的顏色變為 RGB = 0.3
+        //TImg0.color = new Color(0.3f, 0.3f, 0.3f);
+        //TImg1.color = new Color(0.3f, 0.3f, 0.3f);
 
-        //// 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 0.3
-        //if (TImg0 != null)
-        //{
-        //    TImg0.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
-        //}
+        // 使用 DOTween 將 TImg0 和 TImg1 的顏色變為 RGB = 0.3
+        if (TImg0 != null)
+        {
+            DOTween.To(() => TImg0.color.r, x =>
+            {
+                Color newColor = TImg0.color;
+                newColor.r = x;
+                TImg0.color = newColor;
+            }, 0.3f, dur).SetEase(Ease.Linear);
 
-        //if (TImg1 != null)
-        //{
-        //    TImg1.DOColor(new Color(0.3f, 0.3f, 0.3f), dur).SetEase(Ease.Linear);
-        //}
+            DOTween.To(() => TImg0.color.g, x =>
+            {
+                Color newColor = TImg0.color;
+                newColor.g = x;
+                TImg0.color = newColor;
+            }, 0.3f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg0.color.b, x =>
+            {
+                Color newColor = TImg0.color;
+                newColor.b = x;
+                TImg0.color = newColor;
+            }, 0.3f, dur).SetEase(Ease.Linear);
+        }
+
+        if (TImg1 != null)
+        {
+            DOTween.To(() => TImg1.color.r, x =>
+            {
+                Color newColor = TImg1.color;
+                newColor.r = x;
+                TImg1.color = newColor;
+            }, 0.3f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg1.color.g, x =>
+            {
+                Color newColor = TImg1.color;
+                newColor.g = x;
+                TImg1.color = newColor;
+            }, 0.3f, dur).SetEase(Ease.Linear);
+
+            DOTween.To(() => TImg1.color.b, x =>
+            {
+                Color newColor = TImg1.color;
+                newColor.b = x;
+                TImg1.color = newColor;
+            }, 0.3f, dur).SetEase(Ease.Linear);
+        }
     }
 
     public void SetExpression(string expression = "無", string transitionType = "slideup", float dur = 1f ) 

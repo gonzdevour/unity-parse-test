@@ -113,11 +113,11 @@ public partial class AVG : MonoBehaviour
     private bool isReadyToNext = false;
     private bool isTyping = false;
     private bool isWaiting = false;
-    private bool isChoiceSelected = true;
     private bool isStoryEnd = false;
-
+    private bool isChoiceSelected = true;
     private string lastDisplayName = string.Empty;
     private string curContent = string.Empty;
+
     private int gotoIndex = -1; // 選項選擇後將前往的cutIndex
     public int nextCutIndex; //下一卡的索引值，可以讓外部控制
 
