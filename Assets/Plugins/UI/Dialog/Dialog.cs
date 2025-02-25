@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Dialog : MonoBehaviour
 {
@@ -14,17 +15,27 @@ public class Dialog : MonoBehaviour
     public Transform DialogLayer;
     public GameObject DialogYPrefab;
     public GameObject DialogYNPrefab;
+    public GameObject DialogNamePrefab;
 
-    public void YN(string Title = "", string Content = "", Action CallbackY = null, Action CallbackN = null)
+    public void YN(string Title = "", string Content = "", Action CallbackY = null, Action CallbackN = null, Transform Layer = null)
     {
-        DialogYN dialog = Instantiate(DialogYNPrefab, DialogLayer).GetComponent<DialogYN>();
+        if (Layer == null) { Layer = DialogLayer; };
+        DialogYN dialog = Instantiate(DialogYNPrefab, Layer).GetComponent<DialogYN>();
         dialog.Open(Title, Content, CallbackY, CallbackN);
     }
 
-    public void Y(string Title = "", string Content = "", Action CallbackY = null)
+    public void Y(string Title = "", string Content = "", Action CallbackY = null, Transform Layer = null)
     {
-        DialogY dialog = Instantiate(DialogYNPrefab, DialogLayer).GetComponent<DialogY>();
+        if (Layer == null) { Layer = DialogLayer; };
+        DialogY dialog = Instantiate(DialogYPrefab, Layer).GetComponent<DialogY>();
         dialog.Open(Title, Content, CallbackY);
+    }
+
+    public void Name(string Name0, string Name1, string Title = "", string Content = "", Action<string> CallbackY = null, Transform Layer = null)
+    {
+        if (Layer == null) { Layer = DialogLayer; };
+        DialogName dialog = Instantiate(DialogNamePrefab, Layer).GetComponent<DialogName>();
+        dialog.Open(Name0, Name1, Title, Content, CallbackY);
     }
 }
 

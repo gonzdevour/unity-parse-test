@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 600}
+  m_SizeDelta: {x: 0, y: 610}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4553296093803673918
 CanvasRenderer:
@@ -92,12 +92,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 20
+    m_Right: 20
+    m_Top: 40
+    m_Bottom: 40
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 40
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 1097113611002909544}
   - component: {fileID: 2267858787022151803}
   - component: {fileID: 6563813673640499611}
-  - component: {fileID: 2526659420268508083}
+  - component: {fileID: -946810517095576071}
   m_Layer: 5
   m_Name: DialogYPrefab
   m_TagString: Untagged
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2526659420268508083
+--- !u!114 &-946810517095576071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7825210493846455676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a38bc039696a9840ab8ca97ac2e2e6b, type: 3}
+  m_Script: {fileID: 11500000, guid: b37b1594118cb7f43a435cb245c45201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Modal: {fileID: 7825210493846455676}
@@ -378,7 +378,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 200}
+  m_SizeDelta: {x: 1000, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8887416898821782624
 CanvasRenderer:

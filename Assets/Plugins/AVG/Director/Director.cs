@@ -49,6 +49,7 @@ public partial class Director : MonoBehaviour
             { "章節", args => GoTo(args) },
             { "結束", args => Cut(args) },
             { "背景", args => SetBackground(args) },
+            { "彈出", args => PopUp(args) },
         };
 
         // 測試

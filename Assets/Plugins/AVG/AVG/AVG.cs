@@ -33,6 +33,7 @@ public partial class AVG : MonoBehaviour
     public AVGBackground Background; //背景
 
     [Header("選項")]
+    public Transform ChoiceLayer; // 選項層
     public GameObject ChoicePanel; // 選擇面板
     public GameObject ChoicePrefab; // 選項按鈕Prefab
     public GameObject ChoiceCover; //選項彈出時遮住Char與Bg
@@ -74,6 +75,7 @@ public partial class AVG : MonoBehaviour
     public Coroutine CoroutineStoryQueue;
     public Coroutine CoroutineStory;
     public Coroutine CoroutineStoryCut;
+    public Coroutine CoroutineStoryWatingAutoNext;
     public Coroutine CoroutineStoryChoose;
     public Coroutine CoroutineStoryQueueEnd;
     
@@ -114,12 +116,12 @@ public partial class AVG : MonoBehaviour
     private bool isTyping = false;
     private bool isWaiting = false;
     private bool isStoryEnd = false;
-    private bool isChoiceSelected = true;
     private string lastDisplayName = string.Empty;
     private string curContent = string.Empty;
 
     private int gotoIndex = -1; // 選項選擇後將前往的cutIndex
     public int nextCutIndex; //下一卡的索引值，可以讓外部控制
+    public bool isChoiceSelected = true;
 
     public IEnumerator Init() //外部呼叫初始化資料
     {
@@ -184,6 +186,7 @@ public partial class AVG : MonoBehaviour
         if (CoroutineStoryQueue != null) StopCoroutine(CoroutineStoryQueue);
         if (CoroutineStory != null) StopCoroutine(CoroutineStory);
         if (CoroutineStoryCut != null) StopCoroutine(CoroutineStoryCut);
+        if (CoroutineStoryWatingAutoNext != null) StopCoroutine(CoroutineStoryWatingAutoNext);
         if (CoroutineStoryChoose != null) StopCoroutine(CoroutineStoryChoose);
         if (CoroutineStoryQueueEnd != null) StopCoroutine(CoroutineStoryQueueEnd);
 
@@ -206,7 +209,7 @@ public partial class AVG : MonoBehaviour
         }
     }
 
-    private void CheckIfReadyToNext()
+    public void CheckIfReadyToNext()
     {
         isTyping = CheckIfTyping();
         if (!isTyping && !isWaiting && isChoiceSelected)
@@ -222,11 +225,11 @@ public partial class AVG : MonoBehaviour
         float watingSec = Math.Clamp((float)characterCount / 4f, 1f, 5f);
         if (isAuto)
         {
-            StartCoroutine(AutoNext(watingSec));
+            CoroutineStoryWatingAutoNext = StartCoroutine(AutoNext(watingSec));
         }
         else if (isSkipping)
         {
-            StartCoroutine(AutoNext(0f));
+            CoroutineStoryWatingAutoNext = StartCoroutine(AutoNext(0f));
         }
     }
 
