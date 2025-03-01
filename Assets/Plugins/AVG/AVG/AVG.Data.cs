@@ -149,41 +149,14 @@ public partial class AVG
         return dict;
     }
 
-    public List<Dictionary<string, string>> GetCharDataAll(string pageName)
+    public List<Dictionary<string, string>> GetDictListFromDB<T>(string pageName) where T : new()
     {
         // ©I¥s QueryTable ¨ç¼Æ
-        List<CharData> results = dbManager.QueryTable<CharData>(pageName);
+        List<T> results = dbManager.QueryTable<T>(pageName);
         var dictList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(
                 JsonConvert.SerializeObject(results)
             );
-
         return dictList;
-    }
-
-    public List<Dictionary<string, string>> GetBgData(string pageName)
-    {
-        // ©I¥s QueryTable ¨ç¼Æ
-        List<BgData> results = dbManager.QueryTable<BgData>(pageName);
-        var dictList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(
-                JsonConvert.SerializeObject(results)
-            );
-
-        return dictList;
-    }
-
-    public string GetPortraitImgUrl(string charUID, string charEmo)
-    {
-        var key = charUID + charEmo;
-        var imgPathsPortrait = Director.Inst.imagePathsPortrait;
-        string imagePath = Director.Inst.DefaultPortraitImgUrl;
-        if (imgPathsPortrait.ContainsKey(key))
-        {
-            var fileName = imgPathsPortrait[key];
-            var assetRoot = PPM.Inst.Get("¯À§÷¨Ó·½");
-            var assetPath = PPM.Inst.Get("ÀY¹Ï¯À§÷¸ô®|");
-            imagePath = assetRoot + "://" + assetPath + fileName;
-        }
-        return imagePath;
     }
 
     public List<StoryMeta> FilterStories(string pageName, string condition = "")

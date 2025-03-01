@@ -11,9 +11,8 @@ public partial class Director
         {
             case "姓名輸入框":
                 AVG.Inst.isChoiceSelected = false; //可停止auto與skip
-                Action<string> cbk = ChoiceSelectedCbk;
+                Action<string> cbk = ChoiceContinue;
                 Transform ChoiceLayer = AVG.Inst.ChoiceLayer;
-                Debug.Log($"ChoiceLayerName:{ChoiceLayer.name}");
                 Dialog.Inst.Name("姓", "名", "請輸入姓名", "(最多可支援12個全形字)", cbk, Layer:ChoiceLayer);
                 break;
             case "error":
@@ -28,9 +27,9 @@ public partial class Director
         }
     }
 
-    private void ChoiceSelectedCbk(string cbkdata = "")
+    private void ChoiceContinue(string cbkdata = "")
     {
-        Debug.Log($"ChoiceSelectedCbk: {cbkdata}");
+        // Debug.Log($"ChoiceContinue: {cbkdata}");
         AVG.Inst.isChoiceSelected = true;
         AVG.Inst.CheckIfReadyToNext();
     }

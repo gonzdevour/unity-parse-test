@@ -15,8 +15,8 @@ public class ImageTweenPosition : MonoBehaviour
     public bool DestroyAfterTween = false;
     public float targetX = 0f; // 目標位移量 X
     public float targetY = -20f; // 目標位移量 Y
-    public float durForward = 0.5f; // 目標位移量 X
-    public float durBackward = 0.5f; // 目標位移量 Y
+    public float durForward = 0.5f; // 前往目標時間
+    public float durBackward = 0.5f; // 返回初始位置的時間
     public Ease easeForward = Ease.Linear; // 前往目標的緩動效果
     public Ease easeBackward = Ease.Linear; // 返回初始位置的緩動效果
     public float delay = 0f;
@@ -95,7 +95,7 @@ public class ImageTweenPosition : MonoBehaviour
         Vector3 targetPosition = initialPosition + new Vector3(targetX, targetY, 0);
 
         // 創建來回循環 Tween 動畫
-        moveTween = rectTransform.DOLocalMove(targetPosition, 0.5f)
+        moveTween = rectTransform.DOLocalMove(targetPosition, durForward)
             .SetEase(easeForward) // 前往目標的緩動效果
             .SetLoops(loopTimes, LoopType.Yoyo) // 無限來回循環
             .OnStepComplete(() =>

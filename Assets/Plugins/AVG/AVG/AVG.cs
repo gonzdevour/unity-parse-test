@@ -11,8 +11,6 @@ using Newtonsoft.Json;
 using Story;
 // 引入LSR以製作Logger
 using LSR;
-using System.Reflection;
-using static Unity.Burst.Intrinsics.X86;
 
 public partial class AVG : MonoBehaviour
 {
@@ -34,8 +32,6 @@ public partial class AVG : MonoBehaviour
 
     [Header("選項")]
     public Transform ChoiceLayer; // 選項層
-    public GameObject ChoicePanel; // 選擇面板
-    public GameObject ChoicePrefab; // 選項按鈕Prefab
     public GameObject ChoiceCover; //選項彈出時遮住Char與Bg
 
     [Header("角色")]
@@ -80,7 +76,7 @@ public partial class AVG : MonoBehaviour
     public Coroutine CoroutineStoryQueueEnd;
     
     private List<Dictionary<string, object>> StoryEventDicts = new();
-    SQLiteManager dbManager;
+    public SQLiteManager dbManager;
 
     private void Start()
     {
@@ -88,7 +84,6 @@ public partial class AVG : MonoBehaviour
 
         // 初始隱藏Panel
         ToggleMenu.isOn = false;
-        ChoicePanel.SetActive(false);
         ChoiceCover.SetActive(false);
         MainPanel.gameObject.SetActive(false);
 
@@ -128,8 +123,7 @@ public partial class AVG : MonoBehaviour
         yield return null;
         if (ClearReadList) PlayerPrefs.DeleteKey("AVGReadList");
         UpdatePPM("Preset");//更新預設值
-        Background.Init(GetBgData("Bgs"));
-        Director.Inst.InitImagePathsPortrait(GetCharDataAll("Chars")); //Portrait的imgUrl為公用列表，也用在logger，所以不像background將列表歸屬於特定物件
+        Director.Inst.InitAssets();
         yield return new WaitForSeconds(2f);
     }
 
@@ -168,6 +162,7 @@ public partial class AVG : MonoBehaviour
 
     public void Off()
     {
+        // 重置數值
         isReadyToNext = false;
         isTyping = false;
         isWaiting = false;
@@ -181,8 +176,14 @@ public partial class AVG : MonoBehaviour
 
         PendingStories.Clear();
         AVGLogger.Clear();
-        Director.Inst.Off(); // 清空 Director 管制的物件群，如 Background 與 TEffect
 
+        // 清空掛在ChoiceLayer底下的選項物件群
+        foreach (Transform child in ChoiceLayer){Destroy(child.gameObject);}
+
+        // 清空 Director 管制的物件群，如 Background 與 TEffect
+        Director.Inst.Off(); 
+
+        // 清空Coroutine
         if (CoroutineStoryQueue != null) StopCoroutine(CoroutineStoryQueue);
         if (CoroutineStory != null) StopCoroutine(CoroutineStory);
         if (CoroutineStoryCut != null) StopCoroutine(CoroutineStoryCut);
@@ -190,7 +191,6 @@ public partial class AVG : MonoBehaviour
         if (CoroutineStoryChoose != null) StopCoroutine(CoroutineStoryChoose);
         if (CoroutineStoryQueueEnd != null) StopCoroutine(CoroutineStoryQueueEnd);
 
-        if (ChoicePanel != null) ChoicePanel.SetActive(false);
         if (ChoiceCover != null) ChoiceCover.SetActive(false);
         if (MainPanel != null) MainPanel.gameObject.SetActive(false);
         if (SaveLoadPanel != null) SaveLoadPanel.SetActive(false);
@@ -338,6 +338,8 @@ public partial class AVG : MonoBehaviour
         }
         // 說話
         string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
+        // 解析換行符號
+        Content = Content.Replace("\\n", "\n");
         Debug.Log($"Cut{cutIndex} - {DisplayName}：{Content}");
         // 記錄目前對白，以估計auto模式的等待時間
         curContent = Content;
@@ -406,8 +408,8 @@ public partial class AVG : MonoBehaviour
         bool isDifferentSayer = DisplayName != lastDisplayName;
         lastDisplayName = DisplayName;
 
+        var imgUrl = Director.Inst.GetPortraitImgUrl(charUID + charEmo);
         // 創建一個新的log資料字典
-        var imgUrl = GetPortraitImgUrl(charUID, charEmo);
         var logData = new Dictionary<string, object>
             {
                 { "userName", DisplayName },

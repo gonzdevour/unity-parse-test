@@ -851,7 +851,6 @@ MonoBehaviour:
   uiText: {fileID: 112346104}
   DefaultTypingInterval: 0.05
   typingSound: {fileID: 0}
-  richTextSupport: 1
 --- !u!114 &112346103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3656,6 +3655,7 @@ MonoBehaviour:
   DialogYPrefab: {fileID: 7825210493846455676, guid: 994652a60c33a22458e7819f701da9e6, type: 3}
   DialogYNPrefab: {fileID: 7825210493846455676, guid: 34a6a4d3e03f1134ead4079ce815c650, type: 3}
   DialogNamePrefab: {fileID: 5849452728497121663, guid: 3835cd247e4bd1d4b9dc2d838fc761e9, type: 3}
+  DialogChoicesPrefab: {fileID: 5402577087780676652, guid: 18e37946048fcb34d859ae3bc348cc87, type: 3}
 --- !u!4 &516600836
 Transform:
   m_ObjectHideFlags: 0
@@ -7559,7 +7559,7 @@ MonoBehaviour:
     m_FontSize: 54
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 2
     m_MaxSize: 72
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -7591,7 +7591,6 @@ MonoBehaviour:
   uiText: {fileID: 1325686193}
   DefaultTypingInterval: 0.05
   typingSound: {fileID: 0}
-  richTextSupport: 1
 --- !u!114 &1325686196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8088,8 +8087,6 @@ MonoBehaviour:
   TEffectPanel: {fileID: 1830694277}
   Background: {fileID: 1586056319}
   ChoiceLayer: {fileID: 1023482014}
-  ChoicePanel: {fileID: 267858032}
-  ChoicePrefab: {fileID: 1990757036225052292, guid: 12c4045fe50acdc439e24b965a4bbc1a, type: 3}
   ChoiceCover: {fileID: 639533766}
   LayerChar: {fileID: 1622148760}
   CharPrefab: {fileID: 2713868546816420850, guid: 93e55fd644868b74f9839360ce82586d, type: 3}

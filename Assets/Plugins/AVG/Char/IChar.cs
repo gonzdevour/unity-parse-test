@@ -9,6 +9,7 @@ public interface IChar
     void Focus(float dur = 0.5f);
     void Unfocus(float dur = 0f);
     void SetExpression(string expression = "µL", string transitionType = "fade", float dur = 1f);
+    void SetSimbol(string simbol);
     void Move(Vector2[] fromTo, float dur);
     void MoveX(Vector2[] fromTo, float dur);
     void MoveY(Vector2[] fromTo, float dur);

@@ -133,6 +133,7 @@ public class Uploader : MonoBehaviour
 
     public IEnumerator UploadRequest<T>(string fileName, byte[] fileData, Action<T> onSuccess = null, Action<string> onError = null)
     {
+        Debug.Log($"上傳{fileName}");
         WWWForm form = new WWWForm();
         form.AddBinaryData("file", fileData, fileName); // 添加檔案數據到表單
 

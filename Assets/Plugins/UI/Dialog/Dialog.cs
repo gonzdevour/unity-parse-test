@@ -16,6 +16,7 @@ public class Dialog : MonoBehaviour
     public GameObject DialogYPrefab;
     public GameObject DialogYNPrefab;
     public GameObject DialogNamePrefab;
+    public GameObject DialogChoicesPrefab;
 
     public void YN(string Title = "", string Content = "", Action CallbackY = null, Action CallbackN = null, Transform Layer = null)
     {
@@ -36,6 +37,13 @@ public class Dialog : MonoBehaviour
         if (Layer == null) { Layer = DialogLayer; };
         DialogName dialog = Instantiate(DialogNamePrefab, Layer).GetComponent<DialogName>();
         dialog.Open(Name0, Name1, Title, Content, CallbackY);
+    }
+
+    public void Choices(string[] options, string[] results, string Title = "", string Content = "", Action<string, GameObject> CallbackY = null, Transform Layer = null)
+    {
+        if (Layer == null) { Layer = DialogLayer; };
+        DialogChoices dialog = Instantiate(DialogChoicesPrefab, Layer).GetComponent<DialogChoices>();
+        dialog.Open(options, results, Title, Content, CallbackY);
     }
 }
 

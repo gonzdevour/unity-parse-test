@@ -1,4 +1,3 @@
-using story;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +24,8 @@ public partial class Director : MonoBehaviour
     public float MusicVolume = 1f;
     public float SEVolume = 1f;
 
+    public Dictionary<string, string> imagePathsSimbols = new(); // 符號路徑表
+    public Dictionary<string, string> imagePathsBackground = new(); // 背景路徑表
     public Dictionary<string, string> imagePathsPortrait = new(); // 頭圖路徑表
     public string DefaultPortraitImgUrl = "Resources://Sprites/Dummy/portrait/PortraitDefault.png";
 
@@ -103,25 +104,6 @@ public partial class Director : MonoBehaviour
         else
         {
             Debug.Log($"畫面上不存在{charUID}");
-        }
-    }
-
-    public void InitImagePathsPortrait(List<Dictionary<string, string>> charDataList)
-    {
-        // 定義表情屬性鍵值列表
-        string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
-        string[] emos = emoTypes.Split(",");
-        foreach (var charData in charDataList)
-        {
-            // 組合每個表情的鍵值對
-            foreach (string emo in emos)
-            {
-                if (charData.ContainsKey(emo) && !string.IsNullOrEmpty(charData[emo]))
-                {
-                    imagePathsPortrait[charData["UID"] + emo] = charData["AssetID"] + "-" + charData[emo] + ".png";
-                    // ex: imagePathsPortrait["高德君怒"] = A-anger
-                }
-            }
         }
     }
 }

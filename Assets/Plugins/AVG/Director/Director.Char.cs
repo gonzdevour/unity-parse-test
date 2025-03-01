@@ -52,6 +52,11 @@ public partial class Director
                 Char.SetExpression(charEmo, "fade", DefaultCharTransDur); // 設定表情
                 Debug.Log($"{charUID}的表情轉變為：{charEmo}");
             }
+            if (!string.IsNullOrEmpty(charSimbol))
+            {
+                Char.SetSimbol(charSimbol); // 設定符號
+                Debug.Log($"{charUID}產生符號：{charSimbol}");
+            }
         }
         else
         {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class CharTImg : MonoBehaviour, IChar
 {
@@ -11,6 +12,7 @@ public class CharTImg : MonoBehaviour, IChar
     public GameObject SimbolMarker;
     public GameObject SimbolPrefab;
     private Dictionary<string, string> imagePathsExpression = new(); // 這個角色的表情立繪路徑表
+    private Dictionary<string, string> imagePathsSimbols;
 
     public string UID { get; set; } // 唯一識別碼
     public string 姓 { get; set; } // 姓
@@ -22,14 +24,17 @@ public class CharTImg : MonoBehaviour, IChar
     public string 立繪 { get; set; } // 暱稱2
     public string 頭圖 { get; set; } // 暱稱2
     public float Scale { get; set; } // 縮放比例
-    public int YAdd { get; set; } // Y 軸位移
-    public int SimbolX { get; set; } // simbol X偏移
-    public int SimbolY { get; set; } // simbol Y偏移
+    public float YAdd { get; set; } // Y 軸位移
+    public float SimbolX { get; set; } // simbol X偏移
+    public float SimbolY { get; set; } // simbol Y偏移
     public string AssetID { get; set; } // 資產 ID
     public string Expression { get; set; } //目前的表情
 
     public void Init(Dictionary<string, string> CharData, string CharEmo = "無", string CharSimbol = "")
     {
+        // 設定符號表
+        imagePathsSimbols = Director.Inst.imagePathsSimbols;
+
         Debug.Log($"初始化角色資料：{CharData["UID"]}");
         // 設置屬性
         UID = CharData.GetValueOrDefault("UID", string.Empty);
@@ -42,37 +47,32 @@ public class CharTImg : MonoBehaviour, IChar
         立繪 = CharData.GetValueOrDefault("立繪", string.Empty);
         頭圖 = CharData.GetValueOrDefault("頭圖", string.Empty);
 
-        // 設置 Scale 和 YAdd
+        // 設置 Scale, YAdd, SimbolX, SimbolY
         if (CharData.TryGetValue("Scale", out string scale) && float.TryParse(scale, out float parsedScale))
         {
             Scale = parsedScale;
             //transform.localScale = Vector3.one * parsedScale;
         }
 
-        if (CharData.TryGetValue("YAdd", out string yAdd) && int.TryParse(yAdd, out int parsedYAdd))
+        if (CharData.TryGetValue("YAdd", out string yAdd) && float.TryParse(yAdd, out float parsedYAdd))
         {
             YAdd = parsedYAdd;
-            transform.localPosition += new Vector3(0, parsedYAdd, 0);
+            transform.localPosition += new Vector3(0, YAdd, 0);
         }
 
-        // 資產 ID
-        AssetID = CharData.GetValueOrDefault("AssetID", string.Empty);
-        // 表情相關屬性
-        var assetRoot = PPM.Inst.Get("素材來源");
-        var assetPath = PPM.Inst.Get("角色素材路徑");
-        var resPath = assetRoot + "://" + assetPath;
-        string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
-        string[] emos = emoTypes.Split(",");
-        // 組合每個表情的鍵值對
-        foreach (string emo in emos)
+        if (CharData.TryGetValue("SimbolX", out string simbolX) && float.TryParse(simbolX, out float parsedSimbolX))
         {
-            string fileName = CharData.GetValueOrDefault(emo, string.Empty);
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                // ex: imagePathsExpression["怒"] = StreamingAssets://Image/AVG/Char/A-anger.png
-                imagePathsExpression[emo] = resPath + AssetID + "-" + fileName + ".png";
-            }
+            SimbolX = parsedSimbolX;
         }
+
+        if (CharData.TryGetValue("SimbolY", out string simbolY) && float.TryParse(simbolY, out float parsedSimbolY))
+        {
+            SimbolY = parsedSimbolY;
+        }
+
+        // 取得此角色的所有表情路徑
+        imagePathsExpression = Director.Inst.GetPaths_CharExpressions(CharData);
+
         // 設定初始表情
         Expression = CharEmo;
         if (imagePathsExpression != null)
@@ -104,6 +104,14 @@ public class CharTImg : MonoBehaviour, IChar
             // 表情列表內無值
             Debug.Log($"{UID} has no expressions");
         }
+
+        // 產生符號
+        if (!string.IsNullOrEmpty(CharSimbol))
+        {
+            SetSimbol(CharSimbol); // 設定符號
+            Debug.Log($"{UID}產生符號：{CharSimbol}");
+        }
+
         Debug.Log($"Character {UID} initialized with name {姓}{名}.");
     }
 
@@ -260,6 +268,20 @@ public class CharTImg : MonoBehaviour, IChar
             }
         }
         return defaultEmoKey;
+    }
+
+    public void SetSimbol(string simbolName)
+    {
+        if (imagePathsSimbols.ContainsKey(simbolName))
+        {
+            Image simbolImage = Instantiate(SimbolPrefab, transform).GetComponent<Image>();
+            simbolImage.rectTransform.localPosition = new Vector3(SimbolX, SimbolY, 0f);
+            string simbolAddress = Director.Inst.GetSimbolImgUrl(simbolName);
+            SpriteCacher.Inst.GetSprite(simbolAddress, (sprite) =>
+            {
+                simbolImage.sprite = sprite;
+            });
+        }
     }
 
     public void Move(Vector2[] fromTo, float dur = 0f)
