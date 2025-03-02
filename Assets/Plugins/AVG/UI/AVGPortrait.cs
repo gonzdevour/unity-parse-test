@@ -10,19 +10,7 @@ public class AVGPortrait : MonoBehaviour
     {
         if (key != LastPortraitKey) //不同頭圖時才執行轉換
         {
-            var imgPathsPortrait = Director.Inst.imagePathsPortrait;
-            string imagePath = Director.Inst.DefaultPortraitImgUrl;
-            if (imgPathsPortrait.ContainsKey(key))
-            {
-                var fileName = imgPathsPortrait[key];
-                var assetRoot = PPM.Inst.Get("素材來源");
-                var assetPath = PPM.Inst.Get("頭圖素材路徑");
-                imagePath = assetRoot + "://" + assetPath + fileName;
-            }
-            else
-            {
-                Debug.LogError($"Key '{key}' does not exist in imagePaths.");
-            }
+            string imagePath = Director.Inst.GetPortraitImgUrl(key);
             Portrait.StartTransition(imagePath, effectType, duration);
         }
         LastPortraitKey = key;

@@ -6,26 +6,39 @@ public partial class Director
 {
     public void InitAssets()
     {
-        imagePathsBackground = InitImagePaths(AVG.Inst.GetDictListFromDB<AssetData>("Bgs"));
-        imagePathsSimbols = InitImagePaths(AVG.Inst.GetDictListFromDB<AssetData>("Simbols"));
+        string resourceFrom = PPM.Inst.Get("素材來源");
 
-        imagePathsPortrait = InitImagePathsPortrait(AVG.Inst.GetDictListFromDB<CharData>("Chars"));
+        string backgroundFrom = PPM.Inst.Get("背景素材路徑");
+        List<Dictionary<string, string>> dictListBackgrouds = AVG.Inst.GetDictListFromDB<AssetData>("Bgs");
+        imagePathsBackground = RebuildFilePaths(dictListBackgrouds, resourceFrom, backgroundFrom);
+
+        string simbolFrom = PPM.Inst.Get("符號素材路徑");
+        List<Dictionary<string, string>> dictListSimbols = AVG.Inst.GetDictListFromDB<AssetData>("Simbols");
+        imagePathsSimbols = RebuildFilePaths(dictListSimbols, resourceFrom, simbolFrom);
+
+        string portraitFrom = PPM.Inst.Get("頭圖素材路徑");
+        List<Dictionary<string, string>> dictListPortraits = AVG.Inst.GetDictListFromDB<CharData>("Chars");
+        imagePathsPortrait = RebuildFilePathsPortrait(dictListPortraits, resourceFrom, portraitFrom);
     }
 
-    public Dictionary<string, string> InitImagePaths(List<Dictionary<string, string>> pathsDictList)
+    public Dictionary<string, string> RebuildFilePaths(List<Dictionary<string, string>> idFilenameDict, string assetRoot, string assetPath)
     {
-        Dictionary<string, string> idFilenameDict = new();
-        foreach (var item in pathsDictList)
+        string fileName, filePath;
+        Dictionary<string, string> pathsDictList = new();
+        foreach (var item in idFilenameDict)
         {
-            Debug.Log($"初始化：{item["AssetID"]} = {item["檔名"]}");
-            idFilenameDict[item["AssetID"]] = item["檔名"];
+            fileName = item["檔名"].ToString();
+            filePath = assetRoot + "://" + assetPath + fileName;
+            pathsDictList[item["AssetID"]] = filePath;
+            //Debug.Log($"初始化：{item["AssetID"]} = {filePath}");
         }
-        return idFilenameDict;
+        return pathsDictList;
     }
 
-    public Dictionary<string, string> InitImagePathsPortrait(List<Dictionary<string, string>> charDataList)
+    public Dictionary<string, string> RebuildFilePathsPortrait(List<Dictionary<string, string>> charDataList, string assetRoot, string assetPath)
     {
-        Dictionary<string, string> idFilenameDict = new();
+        Dictionary<string, string> pathsDictList = new();
+        string fileName, filePath;
         // 定義表情屬性鍵值列表
         string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
         string[] emos = emoTypes.Split(",");
@@ -36,12 +49,15 @@ public partial class Director
             {
                 if (charData.ContainsKey(emo) && !string.IsNullOrEmpty(charData[emo]))
                 {
-                    idFilenameDict[charData["UID"] + emo] = charData["AssetID"] + "-" + charData[emo] + ".png";
-                    // ex: imagePathsPortrait["高德君怒"] = A-anger
+                    fileName = charData["AssetID"] + "-" + charData[emo] + ".png";
+                    filePath = assetRoot + "://" + assetPath + fileName;
+                    pathsDictList[charData["UID"] + emo] = filePath;
+                    //Debug.Log($"[Portrait]{charData["UID"] + emo}：{filePath}");
+                    // ex: imagePathsPortrait["高德君怒"] = A-anger的路徑
                 }
             }
         }
-        return idFilenameDict;
+        return pathsDictList;
     }
 
     public string GetSimbolImgUrl(string key)
@@ -51,11 +67,7 @@ public partial class Director
             Debug.LogError($"Key '{key}' does not exist in imagePaths.");
             return string.Empty;
         }
-        var fileName = imagePathsSimbols[key];
-        var assetRoot = PPM.Inst.Get("素材來源");
-        var assetPath = PPM.Inst.Get("符號素材路徑");
-        var imagePath = assetRoot + "://" + assetPath + fileName;
-        return imagePath;
+        return imagePathsSimbols[key]; ;
     }
 
     public string GetBackgroundImgUrl(string key)
@@ -65,24 +77,17 @@ public partial class Director
             Debug.LogError($"Key '{key}' does not exist in imagePaths.");
             return string.Empty;
         }
-        var fileName = imagePathsBackground[key];
-        var assetRoot = PPM.Inst.Get("素材來源");
-        var assetPath = PPM.Inst.Get("背景素材路徑");
-        var imagePath = assetRoot + "://" + assetPath + fileName;
-        return imagePath;
+        return imagePathsBackground[key];
     }
 
     public string GetPortraitImgUrl(string key) //key = charUID + charEmo
     {
-        string imagePath = DefaultPortraitImgUrl;
-        if (imagePathsPortrait.ContainsKey(key))
+        if (!imagePathsPortrait.ContainsKey(key))
         {
-            var fileName = imagePathsPortrait[key];
-            var assetRoot = PPM.Inst.Get("素材來源");
-            var assetPath = PPM.Inst.Get("頭圖素材路徑");
-            imagePath = assetRoot + "://" + assetPath + fileName;
+            Debug.LogError($"Key '{key}' does not exist in imagePaths.");
+            return DefaultPortraitImgUrl;
         }
-        return imagePath;
+        return imagePathsPortrait[key];
     }
 
     public Dictionary<string, string> GetPaths_CharExpressions(Dictionary<string, string> charData)

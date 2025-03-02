@@ -178,7 +178,7 @@ public partial class AVG : MonoBehaviour
         AVGLogger.Clear();
 
         // 清空掛在ChoiceLayer底下的選項物件群
-        foreach (Transform child in ChoiceLayer){Destroy(child.gameObject);}
+        if (ChoiceLayer != null) foreach (Transform child in ChoiceLayer){Destroy(child.gameObject);}
 
         // 清空 Director 管制的物件群，如 Background 與 TEffect
         Director.Inst.Off(); 
