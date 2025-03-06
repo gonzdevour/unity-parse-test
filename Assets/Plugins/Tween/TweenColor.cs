@@ -1,8 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System; // Type
-using System.Collections;
-using System.Reflection;
 using DG.Tweening;
 
 public class TweenColor : TweenBase
@@ -24,7 +21,7 @@ public class TweenColor : TweenBase
         InitColor();
     }
 
-    private void InitColor()
+    private void InitColor() // 將目前顏色設定為非-1的initialRGBA
     {
         Color currentColor = Color.white; // 預設為白色
 
@@ -51,6 +48,33 @@ public class TweenColor : TweenBase
         }
     }
 
+    private void TargetColor() // 將目前顏色設定為非-1的targetRGBA
+    {
+        Color currentColor = Color.white; // 預設為白色
+
+        if (TryGetComponent(out Image img))
+        {
+            colorComponent = img;
+            currentColor = img.color;
+            ApplyTargetColor(ref currentColor);
+            img.color = currentColor;
+        }
+        else if (TryGetComponent(out SpriteRenderer sr))
+        {
+            colorComponent = sr;
+            currentColor = sr.color;
+            ApplyTargetColor(ref currentColor);
+            sr.color = currentColor;
+        }
+        else if (TryGetComponent(out MeshRenderer mr))
+        {
+            colorComponent = mr;
+            currentColor = mr.material.color;
+            ApplyTargetColor(ref currentColor);
+            mr.material.color = currentColor;
+        }
+    }
+
     /// <summary>
     /// 依據 initialR/G/B/A 來修改顏色
     /// </summary>
@@ -60,6 +84,17 @@ public class TweenColor : TweenBase
         if (initialG >= 0) { color.g = initialG; } else { initialG = color.g; }
         if (initialB >= 0) { color.b = initialB; } else { initialB = color.b; }
         if (initialA >= 0) { color.a = initialA; } else { initialA = color.a; }
+    }
+
+    /// <summary>
+    /// 依據 targetR/G/B/A 來修改顏色
+    /// </summary>
+    private void ApplyTargetColor(ref Color color)
+    {
+        if (targetR >= 0) { color.r = targetR; } else { targetR = color.r; }
+        if (targetG >= 0) { color.g = targetG; } else { targetG = color.g; }
+        if (targetB >= 0) { color.b = targetB; } else { targetB = color.b; }
+        if (targetA >= 0) { color.a = targetA; } else { targetA = color.a; }
     }
 
     /// <summary>
@@ -203,7 +238,7 @@ public class TweenColor : TweenBase
                 InitColor();
                 break;
             case 2: // to end
-                //transform.localPosition = targetPosition;
+                TargetColor();
                 break;
             default:
                 break;

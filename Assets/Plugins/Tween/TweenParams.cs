@@ -33,12 +33,12 @@ public class TweenParams
     public Vector2? initialPosition;
 
     // tweenColor
-    public float targetR = -1f;
-    public float targetG = -1f;
-    public float targetB = -1f;
-    public float targetA = -1f;
-    public float initialR = -1f;
-    public float initialG = -1f;
-    public float initialB = -1f;
-    public float initialA = -1f;
+    public float? targetR;
+    public float? targetG;
+    public float? targetB;
+    public float? targetA;
+    public float? initialR;
+    public float? initialG;
+    public float? initialB;
+    public float? initialA;
 }

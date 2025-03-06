@@ -1,7 +1,4 @@
 using UnityEngine;
-using System; // Type
-using System.Collections;
-using System.Reflection;
 using DG.Tweening;
 
 public class TweenPosition : TweenBase
