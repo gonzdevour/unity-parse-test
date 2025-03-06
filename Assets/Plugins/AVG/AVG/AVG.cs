@@ -94,8 +94,8 @@ public partial class AVG : MonoBehaviour
         if (ToogleAuto != null) ToogleAuto.onValueChanged.AddListener(OnAutoToggleChanged);
         if (ToogleSkipping != null) ToogleSkipping.onValueChanged.AddListener(OnSkippingToggleChanged);
         if (Btn_HideUI != null) Btn_HideUI.onClick.AddListener(OnHideUIButtonClicked);
-        //if (Btn_Save != null) Btn_Save.onClick.AddListener(OnSaveButtonClicked);
-        //if (Btn_Load != null) Btn_Load.onClick.AddListener(OnLoadButtonClicked);
+        if (Btn_Save != null) Btn_Save.onClick.AddListener(OnSaveButtonClicked);
+        if (Btn_Load != null) Btn_Load.onClick.AddListener(OnLoadButtonClicked);
     }
 
     public bool DisplayChar = true;

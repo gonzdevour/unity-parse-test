@@ -23,6 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Transimg.unity
     guid: 277a2849ab0938641a17cc6724833042
+  - enabled: 1
+    path: Assets/Scenes/Tween.unity
+    guid: 71670390e227da64bbdcc9b21a7d7330
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: c6fcbe067b4735e45a717af419ca8b19, type: 2}
     com.unity.localization.settings: {fileID: 11400000, guid: fa54467f924dfe448b6bf917446937b9, type: 2}
+  m_UseUCBPForAssetBundles: 0

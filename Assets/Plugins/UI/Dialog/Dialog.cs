@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Dialog : MonoBehaviour
 {
@@ -17,6 +15,8 @@ public class Dialog : MonoBehaviour
     public GameObject DialogYNPrefab;
     public GameObject DialogNamePrefab;
     public GameObject DialogChoicesPrefab;
+    public GameObject DialogSavePrefab;
+    public GameObject DialogLoadPrefab;
 
     public void YN(string Title = "", string Content = "", Action CallbackY = null, Action CallbackN = null, Transform Layer = null)
     {
@@ -44,6 +44,20 @@ public class Dialog : MonoBehaviour
         if (Layer == null) { Layer = DialogLayer; };
         DialogChoices dialog = Instantiate(DialogChoicesPrefab, Layer).GetComponent<DialogChoices>();
         dialog.Open(options, results, Title, Content, CallbackY);
+    }
+
+    public void Save(string Title = "", Action<string, GameObject> CallbackY = null, Transform Layer = null)
+    {
+        if (Layer == null) { Layer = DialogLayer; };
+        DialogSave dialog = Instantiate(DialogSavePrefab, Layer).GetComponent<DialogSave>();
+        dialog.Open(Title, CallbackY);
+    }
+
+    public void Load(string Title = "", Action<string, GameObject> CallbackY = null, Transform Layer = null)
+    {
+        if (Layer == null) { Layer = DialogLayer; };
+        DialogLoad dialog = Instantiate(DialogLoadPrefab, Layer).GetComponent<DialogLoad>();
+        dialog.Open(Title, CallbackY);
     }
 }
 

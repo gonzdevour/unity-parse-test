@@ -18,6 +18,16 @@ public partial class AVG
         if (isOn) CheckIfReadyToNext();
     }
 
+    private void OnSaveButtonClicked()
+    {
+        Dialog.Inst.Save("儲存檔案");
+    }
+
+    private void OnLoadButtonClicked()
+    {
+        Dialog.Inst.Load("讀取檔案");
+    }
+
     private void OnHideUIButtonClicked()
     {
         Debug.Log("Hide UI Button Clicked");

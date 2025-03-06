@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4132568780177467284}
   - component: {fileID: 1299695783352600342}
   m_Layer: 5
-  m_Name: Panel_GridDropdown
+  m_Name: PanelGridDropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 516.25, y: -5}
-  m_SizeDelta: {x: 1022.5, y: 2540}
+  m_SizeDelta: {x: 1022.5, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3725298644582359807
 CanvasRenderer:
@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 1490148899614367233}
   - component: {fileID: 6129807896890370028}
   m_Layer: 5
-  m_Name: LogPanel
+  m_Name: PanelLog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -720,8 +720,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3113664086576216736}
   m_HandleRect: {fileID: 8430936307047761756}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.5184856
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

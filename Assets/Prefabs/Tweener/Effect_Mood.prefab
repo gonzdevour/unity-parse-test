@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loopTimes: 0
-  StartOnEnable: 1
+  StartOnEnable: 0
   ResetAfterTween: 0
   DestroyAfterTween: 0
   relativeWidth: 0.5
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopTimes: 0
   StartOnEnable: 1
+  Yoyo: 0
   ResetAfterTween: 0
   DestroyAfterTween: 1
   targetX: -20
@@ -149,6 +150,8 @@ MonoBehaviour:
   easeForward: 1
   easeBackward: 1
   delay: 0
+  loopDelayForward: 2
+  loopDelayBackward: 0
   initial: {x: 0, y: 0}
 --- !u!114 &8873196522222342653
 MonoBehaviour:

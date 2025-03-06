@@ -178,7 +178,7 @@ public static partial class UniGif
     }
 
     /// <summary>
-    /// Create Texture2D object and initial settings
+    /// Create Texture2D object and initialPosition settings
     /// </summary>
     private static Texture2D CreateTexture2D(GifData gifData, List<GifTexture> gifTexList, int imgIndex, List<ushort> disposalMethodList, Color32 bgColor, FilterMode filterMode, TextureWrapMode wrapMode, out bool filledTexture)
     {
