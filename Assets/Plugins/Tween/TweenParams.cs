@@ -41,4 +41,15 @@ public class TweenParams
     public float? initialG;
     public float? initialB;
     public float? initialA;
+
+    // tweenScale
+    public float? targetScaleX;
+    public float? targetScaleY;
+    public Vector2? initialScale;
+
+    // tweenRotate
+    public float? addRotateX;
+    public float? addRotateY;
+    public float? addRotateZ;
+    public Vector3? initialAngle;
 }

@@ -57,6 +57,7 @@ public abstract class TweenBase : MonoBehaviour
                 }
             }
         }
+        InitTween();
         yield return coroutineTween = StartCoroutine(TweenCoroutine());
     }
 
@@ -106,6 +107,7 @@ public abstract class TweenBase : MonoBehaviour
         ResetTween(caseIdx);
     }
 
+    public abstract void InitTween();
     protected abstract Tween TweenForward();
     protected abstract Tween TweenBackward();
     protected abstract void ResetTween(int caseIdx = 0);

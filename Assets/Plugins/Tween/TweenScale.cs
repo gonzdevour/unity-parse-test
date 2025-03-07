@@ -13,10 +13,10 @@ public class TweenScale : TweenBase
 
     private void Awake()
     {
-        SetStartScale();
+        InitTween();
     }
 
-    private void SetStartScale()
+    public override void InitTween()
     {
         // 取得當前的 localScale
         Vector3 scale = transform.localScale;

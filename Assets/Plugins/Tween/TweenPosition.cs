@@ -13,6 +13,11 @@ public class TweenPosition : TweenBase
 
     private void Awake()
     {
+        InitTween();
+    }
+
+    public override void InitTween()
+    {
         // °O¿ýªì©l¦ì¸m
         if (initialPosition != Vector2.zero)
         {

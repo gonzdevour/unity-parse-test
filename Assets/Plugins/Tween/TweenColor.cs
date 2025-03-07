@@ -18,10 +18,10 @@ public class TweenColor : TweenBase
 
     private void Awake()
     {
-        InitColor();
+        InitTween();
     }
 
-    private void InitColor() // 將目前顏色設定為非-1的initialRGBA
+    public override void InitTween()
     {
         Color currentColor = Color.white; // 預設為白色
 
@@ -235,7 +235,7 @@ public class TweenColor : TweenBase
         switch (caseIdx)
         {
             case 1: // to start
-                InitColor();
+                InitTween();
                 break;
             case 2: // to end
                 TargetColor();
