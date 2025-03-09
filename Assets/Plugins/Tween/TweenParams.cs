@@ -48,8 +48,7 @@ public class TweenParams
     public Vector2? initialScale;
 
     // tweenRotate
-    public float? addRotateX;
-    public float? addRotateY;
-    public float? addRotateZ;
-    public Vector3? initialAngle;
+    public Vector3? addAngle;
+    public bool? enableInitAngle;
+    public Vector3? initAngle;
 }

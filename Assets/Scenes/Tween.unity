@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 1515081998}
   - component: {fileID: 1515081999}
   - component: {fileID: 1515082000}
+  - component: {fileID: 1515082001}
   m_Layer: 0
   m_Name: A-none
   m_TagString: Untagged
@@ -358,7 +359,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515081996}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -427,12 +428,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515081996}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 993d9a9a94d139042a58f9f0307250a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startOnEnable: 1
+  startOnEnable: 0
   loopTimes: -1
   yoyo: 1
   resetAfterTween: 0
@@ -447,8 +448,36 @@ MonoBehaviour:
   loopEndAtFoward: 0
   targetScaleX: 1.2
   targetScaleY: -1
-  initialScale: {x: 0.8, y: -1}
+  initialScale: {x: -1, y: -1}
 --- !u!114 &1515082000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515081996}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 993d9a9a94d139042a58f9f0307250a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startOnEnable: 0
+  loopTimes: -1
+  yoyo: 1
+  resetAfterTween: 0
+  destroyAfterTween: 0
+  durForward: 2
+  durBackward: 2
+  easeForward: 1
+  easeBackward: 1
+  delay: 0
+  loopDelayForward: 0
+  loopDelayBackward: 0
+  loopEndAtFoward: 0
+  targetScaleX: -1
+  targetScaleY: 0.8
+  initialScale: {x: -1, y: -1}
+--- !u!114 &1515082001
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -457,7 +486,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1515081996}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 993d9a9a94d139042a58f9f0307250a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b842e51abf6669419c2344fe2e89dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   startOnEnable: 1
@@ -473,9 +502,9 @@ MonoBehaviour:
   loopDelayForward: 0
   loopDelayBackward: 0
   loopEndAtFoward: 0
-  targetScaleX: -1
-  targetScaleY: 0.8
-  initialScale: {x: -1, y: 1.2}
+  addAngle: {x: 0, y: 0, z: 500}
+  enableInitAngle: 0
+  initAngle: {x: 0, y: 0, z: 0}
 --- !u!1 &1980601132
 GameObject:
   m_ObjectHideFlags: 0
