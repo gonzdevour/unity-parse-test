@@ -26,7 +26,7 @@ public partial class AVG : MonoBehaviour
     public GameObject SaveLoadPanel;
 
     [Header("舞台")]
-    public RectTransform MainPanel; //主舞台
+    public RectTransform MainPanel; //主舞台(為了定位需求，必須是RectTransform)
     public GameObject TEffectPanel; // 淡入淡出特效面板
     public AVGBackground Background; //背景
 
@@ -35,19 +35,25 @@ public partial class AVG : MonoBehaviour
     public GameObject ChoiceCover; //選項彈出時遮住Char與Bg
 
     [Header("角色")]
-    public RectTransform LayerChar; //角色層
+    public Transform LayerChar; //角色層
     public GameObject CharPrefab; // 角色Prefab
 
     [Header("對話框")]
-    public AVGPortrait Portrait; //頭像
-    public GameObject StoryBox; //對話框
-    public StoryBoxName StoryBoxName; //對話框的說話者名稱
-    public StoryBoxContent StoryBoxContent; //對話框的說話內容
-    public GameObject StoryBubble; //對話氣泡
-    public StoryBubbleName StoryBubbleName; //對話氣泡的說話者名稱
-    public StoryBubbleContent StoryBubbleContent; //對話氣泡的說話內容
-    public GameObject StoryCG; //CG面板
-    public StoryCGContent StoryCGContent; //CG面板的說話內容
+    public Transform LayerStoryPlayer;
+    public GameObject StoryPlayerPrefb;
+    [HideInInspector] 
+    public GameObject StoryPlayerObj;
+    [HideInInspector] 
+    public IStoryPlayer StoryPlayer;
+    //public AVGPortrait Portrait; //頭像
+    //public GameObject StoryBox; //對話框
+    //public StoryBoxName StoryBoxName; //對話框的說話者名稱
+    //public StoryBoxContent StoryBoxContent; //對話框的說話內容
+    //public GameObject StoryBubble; //對話氣泡
+    //public StoryBubbleName StoryBubbleName; //對話氣泡的說話者名稱
+    //public StoryBubbleContent StoryBubbleContent; //對話氣泡的說話內容
+    //public GameObject StoryCG; //CG面板
+    //public StoryCGContent StoryCGContent; //CG面板的說話內容
 
     [Header("操作面板")]
     public Button Btn_Next; //下一步面板(按鈕)
@@ -65,6 +71,7 @@ public partial class AVG : MonoBehaviour
 
     public string ReadlistKey = "AVGReadList"; // PlayerPrefs 中存放的 key
     public string CurrentStoryTitle; //目前播放中的劇本標題
+
     public List<StoryMeta> PendingStories = new();
     public List<StoryMeta> PendingStoriesForSave = new();
 
@@ -81,6 +88,10 @@ public partial class AVG : MonoBehaviour
     private void Start()
     {
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
+
+        // 建立故事框
+        StoryPlayerObj = Instantiate(StoryPlayerPrefb, LayerStoryPlayer);
+        StoryPlayer = StoryPlayerObj.GetComponent<IStoryPlayer>();
 
         // 初始隱藏Panel
         ToggleMenu.isOn = false;
@@ -106,6 +117,7 @@ public partial class AVG : MonoBehaviour
     public bool CGMode = false;
     public bool isAuto = false;
     public bool isSkipping = false;
+    public bool isDifferentSayer; //是否換人說話
 
     private bool isReadyToNext = false;
     private bool isTyping = false;
@@ -218,7 +230,7 @@ public partial class AVG : MonoBehaviour
         }
     }
 
-    private void OnTypingComplete()
+    public void OnTypingComplete()
     {
         // 排除標點符號計算中文字數
         int characterCount = curContent.Count(c => char.IsLetterOrDigit(c));
@@ -405,7 +417,7 @@ public partial class AVG : MonoBehaviour
         string Content
         )
     {
-        bool isDifferentSayer = DisplayName != lastDisplayName;
+        isDifferentSayer = DisplayName != lastDisplayName;
         lastDisplayName = DisplayName;
 
         var imgUrl = Director.Inst.GetPortraitImgUrl(charUID + charEmo);
@@ -421,69 +433,17 @@ public partial class AVG : MonoBehaviour
         var myCurrentName = $"{name1st}{name2nd}";
         AVGLogger.UpdateChatBox(logData, myCurrentName);
 
-        if (CGMode)
-        {
-            if (!StoryCG.activeSelf) StoryCG.SetActive(true);//顯示CG面板
-            StoryCGContent.Display(Content, isDifferentSayer, OnTypingComplete);
-        }
-        else
-        {
-            if (StoryCG.activeSelf) StoryCG.SetActive(false);//隱藏CG面板
-            var gbjLayerChar = LayerChar.gameObject;
-            var gbjPortrait = Portrait.gameObject;
-            if (charData != null) //有角色資料
-            {
-                bool HasChar = charData["立繪"].ToLower() == "y";
-                bool HasPortrait = charData["頭圖"].ToLower() == "y";
-
-                if (DisplayChar)
-                {
-                    Director.Inst.CharsUnfocusAll(); //其他角色變黑
-                    if (!gbjLayerChar.activeSelf) gbjLayerChar.SetActive(true);//顯示角色
-                    if (HasChar) Director.Inst.CharIn(charData, charUID, charPos, charEmo, charSimbol); //角色進場
-
-                    if (DisplayBubble)
-                    {
-                        if (!StoryBubble.activeSelf) StoryBubble.SetActive(true);//顯示bubble
-                        StoryBubbleName.Display(DisplayName, isDifferentSayer);
-                        StoryBubbleContent.Display(Content, isDifferentSayer, OnTypingComplete);
-                    }
-                    else
-                    {
-                        if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
-                    }
-                }
-                else
-                {
-                    if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
-                }
-                if (DisplayPortrait && HasPortrait) //有頭圖且允許頭圖，才顯示頭圖
-                {
-                    if (!gbjPortrait.activeSelf) gbjPortrait.SetActive(true);//顯示頭圖
-                    Director.Inst.PortraitIn(charUID, charEmo);
-                }
-                else
-                {
-                    if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
-                }
-            }
-            else //無角色資料，旁白或主角發言
-            {
-                Director.Inst.CharsUnfocusAll(); //其他角色變黑
-                if (gbjPortrait.activeSelf) gbjPortrait.SetActive(false);//隱藏頭圖
-                if (StoryBubble.activeSelf) StoryBubble.SetActive(false);//隱藏bubble
-            }
-            if (DisplayStoryBox)
-            {
-                if (!StoryBox.activeSelf) StoryBox.SetActive(true);//顯示box
-                StoryBoxName.Display(DisplayName, isDifferentSayer);
-                StoryBoxContent.Display(Content, isDifferentSayer, OnTypingComplete);
-            }
-            else
-            {
-                if (StoryBox.activeSelf) StoryBox.SetActive(false);//隱藏box
-            }
-        }
+        StoryPlayer.Display(
+            charData,
+            charUID,
+            charPos,
+            charEmo,
+            charSimbol,
+            charTone,
+            charEffect,
+            DisplayName,
+            Content
+            );
     }
 
     private bool HasValidValue(Dictionary<string, object> dict, string key)
@@ -493,14 +453,9 @@ public partial class AVG : MonoBehaviour
 
     public bool CheckIfTyping() 
     {
-        bool boxIsTyping = StoryBoxContent.IsTyping();
-        bool bubbleIsTyping = StoryBubbleContent.IsTyping();
-        bool cgIsTyping = StoryCGContent.IsTyping();
-        if (boxIsTyping || bubbleIsTyping || cgIsTyping) 
+        if (StoryPlayer.IsTyping()) 
         {
-            if (StoryBoxContent.IsTyping()) StoryBoxContent.SkipTyping();
-            if (StoryBubbleContent.IsTyping()) StoryBubbleContent.SkipTyping();
-            if (StoryCGContent.IsTyping()) StoryCGContent.SkipTyping();
+            StoryPlayer.SkipTyping();
             return true;
         }
         else

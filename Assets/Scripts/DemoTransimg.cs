@@ -35,6 +35,8 @@ public class Demo_Transimg : MonoBehaviour
     {
         if (TImg != null && pathKeys.Count > 0)
         {
+            // 重設透明度(以免被fade的結果影響其他effect)
+            TImg.ResetAlpha();
             // 取得當前索引的圖片路徑
             string currentPath = imagePaths[pathKeys[currentIndex]];
             string effectType = EffectSelector.SelectedToggleNamesString;

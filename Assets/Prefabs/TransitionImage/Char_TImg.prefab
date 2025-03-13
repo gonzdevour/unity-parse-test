@@ -66,12 +66,8 @@ GameObject:
   - component: {fileID: 7333909269421090886}
   - component: {fileID: 8171528200618668360}
   - component: {fileID: 5355386707898559746}
-  - component: {fileID: 9134999568647998228}
-  - component: {fileID: 264510912855247436}
-  - component: {fileID: 6428504355779413631}
-  - component: {fileID: 4424611653539937489}
   m_Layer: 5
-  m_Name: Mood
+  m_Name: MoodMarker
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -134,100 +130,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9134999568647998228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3242013456096459757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa17a2ca9f85a0245b9319a19156e0ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loopTimes: 0
-  StartOnEnable: 0
-  ResetAfterTween: 1
-  DestroyAfterTween: 0
-  relativeWidth: 0.5
-  relativeHeight: 0.5
-  durIncrease: 1
-  durDecrease: 1
-  easeIncrease: 24
-  easeDecrease: 1
-  delay: 3
-  initial: {x: 0, y: 0}
---- !u!114 &264510912855247436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3242013456096459757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84487fc880473bb4baa1bbc23c76fcc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loopTimes: 1
-  StartOnEnable: 0
-  ResetAfterTween: 1
-  DestroyAfterTween: 0
-  relativeOpacity: 1
-  durIncrease: 0.5
-  durDecrease: 0.5
-  easeIncrease: 1
-  easeDecrease: 1
-  delay: 4
-  initial: -1
---- !u!114 &6428504355779413631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3242013456096459757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 632ad213d33324c49851ea5f8411d4bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loopTimes: 0
-  StartOnEnable: 0
-  ResetAfterTween: 1
-  DestroyAfterTween: 0
-  targetX: -20
-  targetY: 30
-  durForward: 0.5
-  durBackward: 0.5
-  easeForward: 1
-  easeBackward: 1
-  delay: 3
-  initial: {x: 0, y: 0}
---- !u!114 &4424611653539937489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3242013456096459757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46303f5c5212ac343b9091b3a5ce54e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loopTimes: 2
-  StartOnEnable: 0
-  ResetAfterTween: 0
-  DestroyAfterTween: 0
-  relativeAngle: 15
-  durIncrease: 0.2
-  durDecrease: 0.2
-  easeIncrease: 1
-  easeDecrease: 1
-  delay: 3
-  initial: -1
 --- !u!1001 &2597415734025335029
 PrefabInstance:
   m_ObjectHideFlags: 0

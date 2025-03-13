@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using System;
 
 public class CharTImg : MonoBehaviour, IChar
 {
@@ -29,6 +28,18 @@ public class CharTImg : MonoBehaviour, IChar
     public float SimbolY { get; set; } // simbol Y偏移
     public string AssetID { get; set; } // 資產 ID
     public string Expression { get; set; } //目前的表情
+
+    private void OnDestroy()
+    {
+        // 停止與該物件相關的所有 Tween，避免存取已刪除物件
+        DOTween.Kill(TImg0);
+        DOTween.Kill(TImg1);
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
 
     public void Init(Dictionary<string, string> CharData, string CharEmo = "無", string CharSimbol = "")
     {

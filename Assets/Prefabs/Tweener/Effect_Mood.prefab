@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6196325361515860158}
   - component: {fileID: 7132362737915055425}
   - component: {fileID: 8532572265112260060}
-  - component: {fileID: 9134062546477758378}
-  - component: {fileID: 2320976498836095912}
-  - component: {fileID: 939658714001508088}
-  - component: {fileID: 8873196522222342653}
+  - component: {fileID: 4935032616861852091}
+  - component: {fileID: -1565648240208968711}
+  - component: {fileID: 8728033463037953358}
+  - component: {fileID: 6407941530094886800}
   m_Layer: 5
   m_Name: Effect_Mood
   m_TagString: Untagged
@@ -29,13 +29,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855830504631979748}
-  m_LocalRotation: {x: -0, y: -0, z: 0.14174853, w: 0.9899027}
+  m_LocalRotation: {x: 0, y: 0, z: 0.13052616, w: 0.9914449}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 16.298}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -72.96829, y: 1021.0093}
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9134062546477758378
+--- !u!114 &4935032616861852091
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,72 +88,59 @@ MonoBehaviour:
   m_GameObject: {fileID: 1855830504631979748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa17a2ca9f85a0245b9319a19156e0ad, type: 3}
+  m_Script: {fileID: 11500000, guid: f69fce4b6acd073408835408dc593ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startOnEnable: 1
   loopTimes: 0
-  StartOnEnable: 0
-  ResetAfterTween: 0
-  DestroyAfterTween: 0
-  relativeWidth: 0.5
-  relativeHeight: 0.5
-  durIncrease: 1
-  durDecrease: 1
-  easeIncrease: 24
-  easeDecrease: 1
-  delay: 0
-  initial: {x: 0, y: 0}
---- !u!114 &2320976498836095912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855830504631979748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84487fc880473bb4baa1bbc23c76fcc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loopTimes: 0
-  StartOnEnable: 0
-  ResetAfterTween: 0
-  DestroyAfterTween: 0
-  relativeOpacity: 1
-  durIncrease: 1
-  durDecrease: 1
-  easeIncrease: 1
-  easeDecrease: 1
-  delay: 2
-  initial: -1
---- !u!114 &939658714001508088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855830504631979748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 632ad213d33324c49851ea5f8411d4bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loopTimes: 0
-  StartOnEnable: 1
-  Yoyo: 0
-  ResetAfterTween: 0
-  DestroyAfterTween: 1
-  targetX: -20
-  targetY: 30
+  yoyo: 0
+  resetAfterTween: 0
+  destroyAfterTween: 0
   durForward: 1
   durBackward: 1
+  easeForward: 24
+  easeBackward: 24
+  delay: 0
+  loopDelayForward: 0
+  loopDelayBackward: 0
+  loopEndAtFoward: 0
+  targetX: -20
+  targetY: 30
+  initialPosition: {x: 0, y: 0}
+--- !u!114 &-1565648240208968711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855830504631979748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a6114b8844a554ea3d3ef30934f21d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startOnEnable: 1
+  loopTimes: 1
+  yoyo: 1
+  resetAfterTween: 0
+  destroyAfterTween: 1
+  durForward: 0.3
+  durBackward: 0.3
   easeForward: 1
   easeBackward: 1
   delay: 0
-  loopDelayForward: 2
+  loopDelayForward: 1.4
   loopDelayBackward: 0
-  initial: {x: 0, y: 0}
---- !u!114 &8873196522222342653
+  loopEndAtFoward: 0
+  targetR: -1
+  targetG: -1
+  targetB: -1
+  targetA: 1
+  initialR: -1
+  initialG: -1
+  initialB: -1
+  initialA: 0
+--- !u!114 &8728033463037953358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,17 +149,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 1855830504631979748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46303f5c5212ac343b9091b3a5ce54e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 993d9a9a94d139042a58f9f0307250a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loopTimes: 2
-  StartOnEnable: 0
-  ResetAfterTween: 0
-  DestroyAfterTween: 0
-  relativeAngle: 15
-  durIncrease: 0.2
-  durDecrease: 0.2
-  easeIncrease: 1
-  easeDecrease: 1
-  delay: 3
-  initial: -1
+  startOnEnable: 1
+  loopTimes: 0
+  yoyo: 0
+  resetAfterTween: 0
+  destroyAfterTween: 0
+  durForward: 1
+  durBackward: 1
+  easeForward: 24
+  easeBackward: 1
+  delay: 0
+  loopDelayForward: 0
+  loopDelayBackward: 0
+  loopEndAtFoward: 0
+  targetScaleX: 1.5
+  targetScaleY: 1.5
+  initialScale: {x: 0.1, y: 0.1}
+--- !u!114 &6407941530094886800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855830504631979748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b842e51abf6669419c2344fe2e89dac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startOnEnable: 1
+  loopTimes: 1
+  yoyo: 1
+  resetAfterTween: 0
+  destroyAfterTween: 0
+  durForward: 0.2
+  durBackward: 0.2
+  easeForward: 1
+  easeBackward: 1
+  delay: 0
+  loopDelayForward: 0
+  loopDelayBackward: 0
+  loopEndAtFoward: 0
+  addAngle: {x: 0, y: 0, z: 15}
+  enableInitAngle: 0
+  initAngle: {x: 0, y: 0, z: 0}

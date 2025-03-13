@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public interface IChar
 {
+    GameObject GetGameObject();
     string UID { get; set; }
     string Expression { get; set; }
     void Init(Dictionary<string, string> charData, string charEmo = "µL", string charSimbol = "µL");

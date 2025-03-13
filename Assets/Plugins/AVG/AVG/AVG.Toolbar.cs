@@ -36,17 +36,13 @@ public partial class AVG
 
     private void UIHide()
     {
-        if (CGMode) StoryCG.SetActive(false);
-        if (DisplayBubble) StoryBubble.SetActive(false);
-        if (DisplayStoryBox) StoryBox.SetActive(false);
+        StoryPlayerObj.SetActive(false);
         Toolbar.SetActive(false);
     }
 
     private void UIUnhide()
     {
-        if (CGMode) StoryCG.SetActive(true);
-        if (DisplayBubble) StoryBubble.SetActive(true);
-        if (DisplayStoryBox) StoryBox.SetActive(true);
+        StoryPlayerObj.SetActive(true);
         Toolbar.SetActive(true);
     }
 }

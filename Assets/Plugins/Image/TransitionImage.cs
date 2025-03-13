@@ -53,6 +53,16 @@ public class TransitionImage : MonoBehaviour
         }
     }
 
+    public void ResetAlpha()
+    {
+        // 強制ReadyImage的透明度為1，保留當前 RGB
+        var readyImageColor = readyImage.color;
+        readyImage.color = new Color(readyImageColor.r, readyImageColor.g, readyImageColor.b, 1);
+        // 強制ActiveImage的透明度為1，保留當前 RGB
+        var activeImageColor = activeImage.color;
+        activeImage.color = new Color(readyImageColor.r, readyImageColor.g, readyImageColor.b, 1);
+    }
+
     /// <summary>
     /// 開始圖片轉換
     /// </summary>
@@ -143,7 +153,8 @@ public class TransitionImage : MonoBehaviour
                 activeImage.gameObject.SetActive(false);
                 activeImage.rectTransform.anchoredPosition = Vector2.zero; // 重置位置
             }))
-            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).SetEase(easeIn).OnComplete(SwapImages));
+            .Join(readyImage.rectTransform.DOAnchorPos(Vector2.zero, duration).SetEase(easeIn))
+            .OnComplete(SwapImages);
     }
 
     /// <summary>

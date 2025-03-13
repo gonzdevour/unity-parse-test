@@ -7,7 +7,7 @@ public partial class Director
     {
         TEffect.Stop();// 停止過場特效
         Avg.Background.Clear();// 清除背景sprites
-        Avg.Portrait.Clear();//清除頭圖
+        Avg.StoryPlayer.ClearPortrait();//清除頭圖
         CharDestroyAll();// 清除所有角色
     }
 

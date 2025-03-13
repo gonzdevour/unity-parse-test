@@ -548,6 +548,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: TImg_BG
       objectReference: {fileID: 0}
+    - target: {fileID: 2363671274675902882, guid: a6c95c3297ba7d1498dbf24081f94fca, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2363671274675902882, guid: a6c95c3297ba7d1498dbf24081f94fca, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2363671274675902882, guid: a6c95c3297ba7d1498dbf24081f94fca, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6861951927417139801, guid: a6c95c3297ba7d1498dbf24081f94fca, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -635,6 +647,10 @@ PrefabInstance:
     - target: {fileID: 7399989475288049212, guid: a6c95c3297ba7d1498dbf24081f94fca, type: 3}
       propertyPath: m_Color.a
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8687744241257720933, guid: a6c95c3297ba7d1498dbf24081f94fca, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
