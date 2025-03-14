@@ -21,22 +21,23 @@ public class CanvasUI : MonoBehaviour
 
     public void ClampToBounds(RectTransform rect, float padding = 0, RectTransform boundRect = null)
     {
-        if (boundRect == null) boundRect = gameObject.GetComponent<RectTransform>(); // boundRect 預設為 Canvas
+        if (boundRect == null) boundRect = gameObject.GetComponent<RectTransform>(); // 預設為 Canvas
 
-        // 取得原始 anchoredPosition
-        Vector2 originalPosition = rect.anchoredPosition;
-        Debug.Log($"[ClampToBounds] 原始位置: {originalPosition}");
+        // 獲取真實大小 (避免使用 sizeDelta)
+        float width = rect.rect.width;
+        float height = rect.rect.height;
+        float boundWidth = boundRect.rect.width;
+        float boundHeight = boundRect.rect.height;
 
-        // 計算最小邊界 (確保 UI 左下角不超出畫面)
+        // 修正：考慮 Pivot 影響 (Y 軸)
         Vector2 minBounds = new Vector2(
-            rect.sizeDelta.x / 2 + padding,
-            rect.sizeDelta.y / 2 + padding
+            -boundWidth / 2 + width * rect.pivot.x + padding,  // X 最小值
+            -boundHeight / 2 + height * (rect.pivot.y) + padding // Y 最小值修正
         );
 
-        // 計算最大邊界 (確保 UI 右上角不超出畫面)
         Vector2 maxBounds = new Vector2(
-            boundRect.sizeDelta.x - rect.sizeDelta.x / 2 - padding,
-            boundRect.sizeDelta.y - rect.sizeDelta.y / 2 - padding
+            boundWidth / 2 - width * (1 - rect.pivot.x) - padding,  // X 最大值
+            boundHeight / 2 - height * (1 - rect.pivot.y) - padding // Y 最大值修正
         );
 
         // 限制 anchoredPosition，確保 UI 在留白範圍內
@@ -47,7 +48,8 @@ public class CanvasUI : MonoBehaviour
         // 更新 UI 位置
         rect.anchoredPosition = clampedPosition;
 
-        // 取得修正後的 anchoredPosition
+        // Debug 訊息
+        Debug.Log($"[ClampToBounds] 原始位置: {rect.anchoredPosition}");
         Debug.Log($"[ClampToBounds] 修正後位置: {clampedPosition}");
     }
 
