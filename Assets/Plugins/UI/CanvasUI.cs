@@ -32,25 +32,36 @@ public class CanvasUI : MonoBehaviour
         // 修正：考慮 Pivot 影響 (Y 軸)
         Vector2 minBounds = new Vector2(
             -boundWidth / 2 + width * rect.pivot.x + padding,  // X 最小值
-            -boundHeight / 2 + height * (rect.pivot.y) + padding // Y 最小值修正
+            -boundHeight / 2 + height * rect.pivot.y + padding // Y 最小值修正
         );
-
         Vector2 maxBounds = new Vector2(
             boundWidth / 2 - width * (1 - rect.pivot.x) - padding,  // X 最大值
             boundHeight / 2 - height * (1 - rect.pivot.y) - padding // Y 最大值修正
         );
+
+        // 儲存原始位置用於調試
+        Vector2 originalPosition = rect.anchoredPosition;
 
         // 限制 anchoredPosition，確保 UI 在留白範圍內
         Vector2 clampedPosition = rect.anchoredPosition;
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, minBounds.x, maxBounds.x);
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minBounds.y, maxBounds.y);
 
+        // Debug 訊息 - 修正前
+        Debug.Log($"[ClampToBounds] 原始位置: {originalPosition}");
+        Debug.Log($"[ClampToBounds] 邊界範圍: X({minBounds.x}~{maxBounds.x}) Y({minBounds.y}~{maxBounds.y})");
+
         // 更新 UI 位置
         rect.anchoredPosition = clampedPosition;
 
-        // Debug 訊息
-        Debug.Log($"[ClampToBounds] 原始位置: {rect.anchoredPosition}");
+        // Debug 訊息 - 修正後
         Debug.Log($"[ClampToBounds] 修正後位置: {clampedPosition}");
+
+        // 檢查是否有修正發生
+        if (originalPosition != clampedPosition)
+        {
+            Debug.Log($"[ClampToBounds] 位置已被修正! X差異:{clampedPosition.x - originalPosition.x} Y差異:{clampedPosition.y - originalPosition.y}");
+        }
     }
 
 }

@@ -1,18 +1,23 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class  StoryBox : MonoBehaviour,IStoryPlayer
+public class StoryPanel : MonoBehaviour,IStoryPlayer
 {
     public AVGPortrait portrait;
     public StoryDisplayCG storyDisplayCG;
     public StoryDisplayBubble storyDisplayBubble;
     public StoryDisplayBox storyDisplayBox;
 
+    private GameObject storyBox;
     private GameObject storyCG;
     private GameObject storyBubble;
 
+    private Tween bubbleJump;
+
     private void Awake()
     {
+        storyBox = storyDisplayBox.gameObject;
         storyCG = storyDisplayCG.gameObject;
         storyBubble = storyDisplayBubble.gameObject;
     }
@@ -97,10 +102,15 @@ public class  StoryBox : MonoBehaviour,IStoryPlayer
                             Vector2 toPos = bbRect.anchoredPosition;
                             toPos.x = charRect.anchoredPosition.x; 
                             bbRect.anchoredPosition = toPos;
-                            CanvasUI.Inst.ClampToBounds(bbRect); // 強制bubble在canvas內
+                            CanvasUI.Inst.ClampToBounds(bbRect, 40f); // 強制bubble在canvas內
+
+                            // bubble特效
+                            bubbleJump.Kill();
+                            bubbleJump = BubbleJumpStart(bbRect, 40, 0.3f);
 
                             // 設定bubble的內容
                             string effectName = AVG.Inst.isDifferentSayer ? "" : "";
+                            storyDisplayBubble.AimX(charRect.anchoredPosition.x - bbRect.anchoredPosition.x);
                             storyDisplayBubble.Name(DisplayName, effectName);
                             storyDisplayBubble.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
                         }
@@ -136,15 +146,29 @@ public class  StoryBox : MonoBehaviour,IStoryPlayer
             }
             if (AVG.Inst.DisplayStoryBox)
             {
-                if (! gameObject.activeSelf)  gameObject.SetActive(true);//顯示box
+                if (!storyBox.activeSelf) storyBox.SetActive(true);//顯示box
                 string effectName = AVG.Inst.isDifferentSayer ? "" : "";
                 storyDisplayBox.Name(DisplayName, effectName);
                 storyDisplayBox.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
             }
             else
             {
-                if ( gameObject.activeSelf)  gameObject.SetActive(false);//隱藏box
+                if (storyBox.activeSelf) storyBox.SetActive(false);//隱藏box
             }
         }
+    }
+
+    public Tween BubbleJumpStart(RectTransform bubble, float jumpHeight = 50f, float duration = 0.5f)
+    {
+        // 取得 UI 當前位置
+        float originalY = bubble.anchoredPosition.y;
+
+        // 使用 Sequence 組合上升與下降
+        Sequence jumpSequence = DOTween.Sequence();
+        jumpSequence
+            .Append(bubble.DOAnchorPosY(originalY + jumpHeight, duration / 2).SetEase(Ease.OutQuad)) // 向上
+            .Append(bubble.DOAnchorPosY(originalY, duration / 2).SetEase(Ease.InQuad)); // 落下
+
+        return jumpSequence;
     }
 }

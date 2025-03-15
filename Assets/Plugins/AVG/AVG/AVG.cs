@@ -45,15 +45,6 @@ public partial class AVG : MonoBehaviour
     public GameObject StoryPlayerObj;
     [HideInInspector] 
     public IStoryPlayer StoryPlayer;
-    //public AVGPortrait Portrait; //頭像
-    //public GameObject StoryBox; //對話框
-    //public StoryBoxName StoryBoxName; //對話框的說話者名稱
-    //public StoryBoxContent StoryBoxContent; //對話框的說話內容
-    //public GameObject StoryBubble; //對話氣泡
-    //public StoryBubbleName StoryBubbleName; //對話氣泡的說話者名稱
-    //public StoryBubbleContent StoryBubbleContent; //對話氣泡的說話內容
-    //public GameObject StoryCG; //CG面板
-    //public StoryCGContent StoryCGContent; //CG面板的說話內容
 
     [Header("操作面板")]
     public Button Btn_Next; //下一步面板(按鈕)

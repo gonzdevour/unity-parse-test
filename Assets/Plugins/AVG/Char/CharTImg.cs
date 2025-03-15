@@ -8,8 +8,10 @@ public class CharTImg : MonoBehaviour, IChar
     public TransitionImage TImg;
     public Image TImg0;
     public Image TImg1;
-    public GameObject SimbolMarker;
+    public Transform SimbolMarker;
     public GameObject SimbolPrefab;
+
+    private Vector2 SimbolMarkerOriginPos;
     private Dictionary<string, string> imagePathsExpression = new(); // 這個角色的表情立繪路徑表
     private Dictionary<string, string> imagePathsSimbols;
 
@@ -116,6 +118,8 @@ public class CharTImg : MonoBehaviour, IChar
             Debug.Log($"{UID} has no expressions");
         }
 
+        // 記錄符號預設位置(以免被偏移值影響)
+        SimbolMarkerOriginPos = new Vector2(SimbolMarker.localPosition.x, SimbolMarker.localPosition.y);
         // 產生符號
         if (!string.IsNullOrEmpty(CharSimbol))
         {
@@ -285,8 +289,8 @@ public class CharTImg : MonoBehaviour, IChar
     {
         if (imagePathsSimbols.ContainsKey(simbolName))
         {
-            Image simbolImage = Instantiate(SimbolPrefab, transform).GetComponent<Image>();
-            simbolImage.rectTransform.localPosition = new Vector3(SimbolX, SimbolY, 0f);
+            SimbolMarker.localPosition = SimbolMarkerOriginPos + new Vector2(SimbolX, SimbolY);
+            Image simbolImage = Instantiate(SimbolPrefab, SimbolMarker).GetComponent<Image>();
             string simbolAddress = Director.Inst.GetSimbolImgUrl(simbolName);
             SpriteCacher.Inst.GetSprite(simbolAddress, (sprite) =>
             {
