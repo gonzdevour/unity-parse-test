@@ -99,7 +99,7 @@ public partial class Director
         Vector2[] fromTo = PositionParser.ParsePos(charPos, Avg.MainPanel, "x"); //取x軸位移
         IChar Char = GetCharByUID(charUID);
         float duration = string.IsNullOrEmpty(dur) ? DefaultCharMoveDur : float.Parse(dur);
-        Char.MoveX(fromTo, duration);
+        Char?.MoveX(fromTo, duration);
 
         Debug.Log($"Move {charUID}'s X from {fromTo[0].x} to {fromTo[1].x}");
     }
@@ -113,7 +113,7 @@ public partial class Director
         Vector2[] fromTo = PositionParser.ParsePos(charPos, Avg.MainPanel, "y"); //取y軸位移
         IChar Char = GetCharByUID(charUID);
         float duration = string.IsNullOrEmpty(dur) ? DefaultCharMoveDur : float.Parse(dur);
-        Char.MoveY(fromTo, duration);
+        Char?.MoveY(fromTo, duration);
 
         Debug.Log($"Move {charUID}'s Y from {fromTo[0].y} to {fromTo[1].y}");
     }

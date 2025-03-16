@@ -106,6 +106,7 @@ public partial class AVG : MonoBehaviour
     public bool DisplayBubble = false;
     public bool SingleCharMode = false;
     public bool CGMode = false;
+    public bool ChoiceMode = false;
     public bool isAuto = false;
     public bool isSkipping = false;
     public bool isDifferentSayer; //是否換人說話
@@ -114,6 +115,8 @@ public partial class AVG : MonoBehaviour
     private bool isTyping = false;
     private bool isWaiting = false;
     private bool isStoryEnd = false;
+    private string curCutMode = string.Empty;
+    private string lastCutMode = string.Empty;
     private string lastDisplayName = string.Empty;
     private string curContent = string.Empty;
 
@@ -223,6 +226,8 @@ public partial class AVG : MonoBehaviour
 
     public void OnTypingComplete()
     {
+        // 每當typing complete時判斷isTyping給storyDisplay coroutine判斷
+        isTyping = CheckIfTyping();
         // 排除標點符號計算中文字數
         int characterCount = curContent.Count(c => char.IsLetterOrDigit(c));
         float watingSec = Math.Clamp((float)characterCount / 4f, 1f, 5f);
@@ -312,6 +317,9 @@ public partial class AVG : MonoBehaviour
         //Debug.Log($"StoryCutStart: {cutIndex}");
         var storyCutDict = StoryEventDicts[cutIndex];
 
+        // 判斷當前cut的播放模式
+        string cutMode = TxR.Inst.Render(ParseEx(storyCutDict["模式"].ToString()));
+        yield return StoryCutMode(cutMode);
         // 顯示當前cut的內容
         string charUID = TxR.Inst.Render(ParseEx(storyCutDict["說話者"].ToString()));
         string charPos = TxR.Inst.Render(ParseEx(storyCutDict["位置"].ToString()));
@@ -339,6 +347,8 @@ public partial class AVG : MonoBehaviour
             }
             Director.Inst.ExecuteActionPackage(commands);
         }
+        // 判斷是否為選項模式
+        ChoiceMode = HasValidValue(storyCutDict, "選項");
         // 說話
         string Content = TxR.Inst.Render(ParseEx(storyCutDict["說話內容"].ToString()));
         // 解析換行符號
@@ -347,14 +357,17 @@ public partial class AVG : MonoBehaviour
         // 記錄目前對白，以估計auto模式的等待時間
         curContent = Content;
         // 顯示名稱並開始說話
+        isTyping = true;
         StoryCutDisplay(charData, charUID, charPos, charEmo, charSimbol, charTone, charEffect, DisplayName, Content);
-
+        // 等待到typing結束
+        yield return new WaitUntil(() => !isTyping);
         //Debug.Log($"=> 前往的值：{storyCutDict["前往"]}");
         if (HasValidValue(storyCutDict, "前往"))
         {
             string[] targets = storyCutDict["前往"].ToString().Split('\n');
             if (HasValidValue(storyCutDict, "選項"))
             {
+                yield return new WaitForSeconds(0.5f);
                 // 用選項的callback回傳index
                 CoroutineStoryChoose = StartCoroutine(StartChoose(storyCutDict));
                 yield return CoroutineStoryChoose;
@@ -376,6 +389,7 @@ public partial class AVG : MonoBehaviour
         //說話後的函數可以改變前往的nextCutIndex
         if (HasValidValue(storyCutDict, "說話後"))
         {
+            yield return new WaitForSeconds(0.5f);
             string[] commands = storyCutDict["說話後"].ToString().Split('\n');
             for (int i = 0; i < commands.Length; i++)
             {
@@ -435,6 +449,34 @@ public partial class AVG : MonoBehaviour
             DisplayName,
             Content
             );
+    }
+
+    private IEnumerator StoryCutMode(string cutMode)
+    {
+        // 是否切換了模式
+        curCutMode = cutMode;
+        bool isDifferentCutMode = lastCutMode != curCutMode;
+        switch (cutMode)
+        {
+            case "CG":
+                CGMode = true;
+                DisplayBubble = false;
+                DisplayStoryBox = false;
+                break;
+            case "Box":
+                DisplayStoryBox = true;
+                DisplayBubble = false;
+                CGMode = false;
+                break;
+            default:
+                DisplayBubble = true;
+                DisplayStoryBox = true;
+                CGMode = false;
+                break;
+        }
+        // 最後再將目前的cutMode設定為上一個cutMode
+        lastCutMode = cutMode;
+        yield return null;
     }
 
     private bool HasValidValue(Dictionary<string, object> dict, string key)

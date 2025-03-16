@@ -3,6 +3,7 @@ namespace Story
     public class StoryCut
     {
         public int 索引 { get; set; }
+        public string 模式 { get; set; }
         public string 位置 { get; set; }
         public string 說話者 { get; set; }
         public string 表情 { get; set; }

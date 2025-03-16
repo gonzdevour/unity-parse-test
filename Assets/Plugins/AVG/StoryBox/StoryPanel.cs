@@ -69,16 +69,19 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
         string Content
         )
     {
+        var gbjLayerChar = AVG.Inst.LayerChar.gameObject; // 取得角色圖層
         if (AVG.Inst.CGMode)
         {
+            if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
+            if (storyBubble.activeSelf) storyBubble.SetActive(false);//隱藏bubble
+            if (storyBox.activeSelf) storyBox.SetActive(false);//隱藏box
             if (!storyCG.activeSelf) storyCG.SetActive(true);//顯示CG面板
             string effectName = AVG.Inst.isDifferentSayer ? "" : "";
             storyDisplayCG.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
         }
-        else
+        else // 不是CGMode
         {
             if (storyCG.activeSelf) storyCG.SetActive(false);//隱藏CG面板
-            var gbjLayerChar = AVG.Inst.LayerChar.gameObject;
             if (charData != null) //有角色資料
             {
                 bool HasChar = charData["立繪"].ToLower() == "y";
@@ -91,7 +94,7 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
                     if (HasChar)
                     {
                         IChar Char = Director.Inst.CharIn(charData, charUID, charPos, charEmo, charSimbol); //角色進場
-                        if (AVG.Inst.DisplayBubble)
+                        if (AVG.Inst.DisplayBubble && !AVG.Inst.ChoiceMode)
                         {
                             //顯示bubble
                             if (!storyBubble.activeSelf) storyBubble.SetActive(true);
@@ -114,17 +117,17 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
                             storyDisplayBubble.Name(DisplayName, effectName);
                             storyDisplayBubble.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
                         }
-                        else
+                        else // !DisplayBubble
                         {
                             if (storyBubble.activeSelf) storyBubble.SetActive(false);//隱藏bubble
                         }
                     }
-                    else
+                    else // !HasChar
                     {
                         if (storyBubble.activeSelf) storyBubble.SetActive(false);//隱藏bubble
                     }
                 }
-                else
+                else // !DisplayChar
                 {
                     if (gbjLayerChar.activeSelf) gbjLayerChar.SetActive(false);//隱藏角色
                 }
@@ -145,13 +148,21 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
                 if (storyBubble.activeSelf) storyBubble.SetActive(false);//隱藏bubble
             }
             if (AVG.Inst.DisplayStoryBox)
-            {
-                if (!storyBox.activeSelf) storyBox.SetActive(true);//顯示box
-                string effectName = AVG.Inst.isDifferentSayer ? "" : "";
-                storyDisplayBox.Name(DisplayName, effectName);
-                storyDisplayBox.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
+            {                
+                if (AVG.Inst.DisplayBubble && !AVG.Inst.ChoiceMode) // bubble與box共存時，box不隱藏但是內容清空
+                {
+                    if (portrait.gameObject.activeSelf) portrait.gameObject.SetActive(false);//隱藏頭圖
+                    storyDisplayBox.Clear();
+                } 
+                else
+                {
+                    if (!storyBox.activeSelf) storyBox.SetActive(true);//顯示box
+                    string effectName = AVG.Inst.isDifferentSayer ? "" : "";
+                    storyDisplayBox.Name(DisplayName, effectName);
+                    storyDisplayBox.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
+                }
             }
-            else
+            else // !DisplayStoryBox
             {
                 if (storyBox.activeSelf) storyBox.SetActive(false);//隱藏box
             }

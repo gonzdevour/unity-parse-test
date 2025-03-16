@@ -29,6 +29,13 @@ public abstract class StoryDisplay : MonoBehaviour
         return SerifTyper != null && SerifTyper.IsTyping();
     }
 
+    public virtual void Clear()
+    {
+        TxName.text = "";
+        SerifTyper.uiText.text = "";
+        SerifTyper.MarkNext.SetActive(false); // 隱藏繼續箭頭
+    }
+
     public virtual void DoEffect(GameObject effectTarget, string effectName)
     {
         //特效
