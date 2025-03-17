@@ -337,16 +337,6 @@ public partial class AVG : MonoBehaviour
         {
             DisplayName = TxR.Inst.Render(ParseEx(storyCutDict["顯示名稱"].ToString()));
         }
-        // 執行說話前函數集
-        if (HasValidValue(storyCutDict, "說話前"))
-        {
-            string[] commands = storyCutDict["說話前"].ToString().Split('\n');
-            for (int i = 0; i < commands.Length; i++)
-            {
-                commands[i] = ParseEx(commands[i]);
-            }
-            Director.Inst.ExecuteActionPackage(commands);
-        }
         // 判斷是否為選項模式
         ChoiceMode = HasValidValue(storyCutDict, "選項");
         // 說話
@@ -359,6 +349,16 @@ public partial class AVG : MonoBehaviour
         // 顯示名稱並開始說話
         isTyping = true;
         StoryCutDisplay(charData, charUID, charPos, charEmo, charSimbol, charTone, charEffect, DisplayName, Content);
+        // 執行說話前函數集(因為需要能控制char，所以要在StoryCutDisplay後執行)
+        if (HasValidValue(storyCutDict, "說話前"))
+        {
+            string[] commands = storyCutDict["說話前"].ToString().Split('\n');
+            for (int i = 0; i < commands.Length; i++)
+            {
+                commands[i] = ParseEx(commands[i]);
+            }
+            Director.Inst.ExecuteActionPackage(commands);
+        }
         // 等待到typing結束
         yield return new WaitUntil(() => !isTyping);
         //Debug.Log($"=> 前往的值：{storyCutDict["前往"]}");
@@ -453,17 +453,18 @@ public partial class AVG : MonoBehaviour
 
     private IEnumerator StoryCutMode(string cutMode)
     {
+        cutMode = cutMode.ToLower();
         // 是否切換了模式
         curCutMode = cutMode;
         bool isDifferentCutMode = lastCutMode != curCutMode;
         switch (cutMode)
         {
-            case "CG":
+            case "cg":
                 CGMode = true;
                 DisplayBubble = false;
                 DisplayStoryBox = false;
                 break;
-            case "Box":
+            case "box":
                 DisplayStoryBox = true;
                 DisplayBubble = false;
                 CGMode = false;

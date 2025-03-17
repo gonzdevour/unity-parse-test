@@ -54,7 +54,7 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
 
     public void PortraitGoTo(string key)
     {
-        portrait.GoTo(key);
+        if (portrait != null) portrait.GoTo(key);
     }
 
     public void Display(
@@ -113,6 +113,7 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
 
                             // 設定bubble的內容
                             string effectName = AVG.Inst.isDifferentSayer ? "" : "";
+                            storyDisplayBubble.SetTone(charTone);
                             storyDisplayBubble.AimX(charRect.anchoredPosition.x - bbRect.anchoredPosition.x);
                             storyDisplayBubble.Name(DisplayName, effectName);
                             storyDisplayBubble.Serif(Content, effectName, AVG.Inst.OnTypingComplete);
@@ -151,6 +152,7 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
             {                
                 if (AVG.Inst.DisplayBubble && !AVG.Inst.ChoiceMode) // bubble與box共存時，box不隱藏但是內容清空
                 {
+                    if (!storyBox.activeSelf) storyBox.SetActive(true);//顯示box
                     if (portrait.gameObject.activeSelf) portrait.gameObject.SetActive(false);//隱藏頭圖
                     storyDisplayBox.Clear();
                 } 

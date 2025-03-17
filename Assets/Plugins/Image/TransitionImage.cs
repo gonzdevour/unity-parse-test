@@ -3,8 +3,6 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using System.Collections;
-using static System.TimeZoneInfo;
 
 public class TransitionImage : MonoBehaviour
 {
