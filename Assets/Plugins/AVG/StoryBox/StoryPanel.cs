@@ -1,13 +1,19 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoryPanel : MonoBehaviour,IStoryPlayer
 {
+    [Header("故事播放介面")]
     public AVGPortrait portrait;
     public StoryDisplayCG storyDisplayCG;
     public StoryDisplayBubble storyDisplayBubble;
     public StoryDisplayBox storyDisplayBox;
+
+    [Header("定場訊息介面")]
+    public CanvasGroup CaptionCanvasGroup;
+    public Typing CaptionTyper;
 
     private GameObject storyBox;
     private GameObject storyCG;
@@ -57,6 +63,23 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
         if (portrait != null) portrait.GoTo(key);
     }
 
+    public void Toast(string msg)
+    {
+        if (!CaptionCanvasGroup.gameObject.activeSelf) CaptionCanvasGroup.gameObject.SetActive(true);//顯示Toast面板
+        // 設定初始透明度為 0
+        CaptionCanvasGroup.alpha = 0;
+        // 播放訊息
+        CaptionTyper.StartTyping(msg);
+        RectTransform CaptionTyperTransform = CaptionTyper.GetComponent<RectTransform>();
+        CaptionTyperTransform.anchoredPosition = new Vector2(-1000, CaptionTyperTransform.anchoredPosition.y);
+        // 建立 Tween 動畫序列
+        Sequence seq = DOTween.Sequence();
+        seq.Append(CaptionCanvasGroup.DOFade(1, 1f));
+        seq.Join(CaptionTyperTransform.DOAnchorPosX(0, 3f).SetEase(Ease.OutExpo));
+        //seq.AppendInterval(3f);
+        //seq.Append(CaptionCanvasGroup.DOFade(0, 2f));
+    }
+
     public void Display(
         Dictionary<string, string> charData,
         string charUID,
@@ -69,6 +92,7 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
         string Content
         )
     {
+        if (CaptionCanvasGroup.gameObject.activeSelf) CaptionCanvasGroup.gameObject.SetActive(false);//隱藏Toast面板
         var gbjLayerChar = AVG.Inst.LayerChar.gameObject; // 取得角色圖層
         if (AVG.Inst.CGMode)
         {
@@ -150,7 +174,7 @@ public class StoryPanel : MonoBehaviour,IStoryPlayer
             }
             if (AVG.Inst.DisplayStoryBox)
             {                
-                if (AVG.Inst.DisplayBubble && !AVG.Inst.ChoiceMode) // bubble與box共存時，box不隱藏但是內容清空
+                if (AVG.Inst.DisplayBubble && charData != null && !AVG.Inst.ChoiceMode) // bubble與box共存時，box不隱藏但是內容清空
                 {
                     if (!storyBox.activeSelf) storyBox.SetActive(true);//顯示box
                     if (portrait.gameObject.activeSelf) portrait.gameObject.SetActive(false);//隱藏頭圖

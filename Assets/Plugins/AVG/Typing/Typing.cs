@@ -9,7 +9,7 @@ public partial class Typing : MonoBehaviour
 {
     public Text uiText; // UI Text (Legacy) 元件
     public float DefaultTypingInterval = 0.05f; // 每個字的顯示間隔
-    public GameObject MarkNext;
+    public GameObject MarkNext = null;
     public AudioSource typingSound; // 短音效
                                     
     private Dictionary<string, Action<object[]>> typingActions; // 定義action字典
@@ -59,7 +59,7 @@ public partial class Typing : MonoBehaviour
         }
 
         // 開始新的協程
-        MarkNext.SetActive(false); // 隱藏繼續箭頭
+        if (MarkNext != null) MarkNext.SetActive(false); // 隱藏繼續箭頭
         typingCoroutine = StartCoroutine(TypeText(message, typingSpeed));
     }
 
@@ -71,7 +71,7 @@ public partial class Typing : MonoBehaviour
             StopCoroutine(typingCoroutine);
         }
 
-        MarkNext.SetActive(true); // 顯示繼續箭頭
+        if (MarkNext != null) MarkNext.SetActive(true); // 顯示繼續箭頭
         uiText.text = fullMessage; // 直接顯示完整文本
         Debug.Log($"[SkipTyping]{fullMessage}");
         isTyping = false;
@@ -116,7 +116,7 @@ public partial class Typing : MonoBehaviour
             yield return new WaitForSeconds(currentSpeed);
         }
         // 顯示繼續箭頭
-        MarkNext.SetActive(true);
+        if (MarkNext != null) MarkNext.SetActive(true); // 顯示繼續箭頭
         // 確保最終顯示完整文本
         uiText.text = message;
         // 打字機完成

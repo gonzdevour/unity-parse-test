@@ -17,4 +17,5 @@ public interface IStoryPlayer
     bool IsTyping();
     void ClearPortrait();
     void PortraitGoTo(string key);
+    void Toast(string msg);
 }

@@ -117,4 +117,26 @@ public partial class Director
 
         Debug.Log($"Move {charUID}'s Y from {fromTo[0].y} to {fromTo[1].y}");
     }
+
+    private void ChangeExpression(object[] args)
+    {
+        string charUID = args[0]?.ToString();
+        string charEmo = args[1]?.ToString();
+        Debug.Log($"[Director]嘗試將{charUID}的表情轉變為{charEmo}");
+        // 在 LayerChar 中尋找子物件
+        IChar Char = GetCharByUID(charUID);
+        if (Char != null)
+        {
+            Debug.Log($"畫面上存在{charUID}");
+            if (!string.IsNullOrEmpty(charEmo) && charEmo != Char.Expression)
+            {
+                Char.SetExpression(charEmo, "fade", DefaultCharTransDur); // 設定表情
+                Debug.Log($"{charUID}的表情轉變為：{charEmo}");
+            }
+        }
+        else
+        {
+            Debug.Log($"畫面上不存在{charUID}");
+        }
+    }
 }

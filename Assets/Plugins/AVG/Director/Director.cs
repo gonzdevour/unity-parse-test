@@ -1,3 +1,4 @@
+using story;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,6 +52,7 @@ public partial class Director : MonoBehaviour
             { "結束", args => Cut(args) },
             { "背景", args => SetBackground(args) },
             { "彈出", args => PopUp(args) },
+            { "訊息", args => Toast(args) },
         };
 
         // 測試
@@ -85,25 +87,9 @@ public partial class Director : MonoBehaviour
         SEVolume = PlayerPrefs.GetFloat("SEVolume", 1f);
     }
 
-    private void ChangeExpression(object[] args)
+    private void Toast(object[] args)
     {
-        string charUID = args[0]?.ToString();
-        string charEmo = args[1]?.ToString();
-        Debug.Log($"[Director]嘗試將{charUID}的表情轉變為{charEmo}");
-        // 在 LayerChar 中尋找子物件
-        IChar Char = GetCharByUID(charUID);
-        if (Char != null)
-        {
-            Debug.Log($"畫面上存在{charUID}");
-            if (!string.IsNullOrEmpty(charEmo) && charEmo != Char.Expression)
-            {
-                Char.SetExpression(charEmo, "fade", DefaultCharTransDur); // 設定表情
-                Debug.Log($"{charUID}的表情轉變為：{charEmo}");
-            }
-        }
-        else
-        {
-            Debug.Log($"畫面上不存在{charUID}");
-        }
+        string msg = args[0]?.ToString();
+        AVG.Inst.StoryPlayer.Toast(msg);
     }
 }

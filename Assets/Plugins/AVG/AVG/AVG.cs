@@ -376,8 +376,17 @@ public partial class AVG : MonoBehaviour
             }
             else
             {
-                nextCutIndex = int.Parse(ParseEx(targets[0]));
                 //Debug.Log($"有前往但是沒有選項，指定前往第一個index{nextCutIndex}");
+                string parsedValue = ParseEx(targets[0]);
+                if (!int.TryParse(parsedValue, out nextCutIndex))
+                {
+                    nextCutIndex = cutIndex + 1;
+                    Debug.LogError($"無法轉換 '{parsedValue}' 為數字，判斷為無值，前往 {nextCutIndex}");
+                }
+                else
+                {
+                    Debug.Log($"前往 {nextCutIndex}");
+                }
             }
         }
         else
