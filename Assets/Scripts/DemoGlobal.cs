@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class DemoGlobal : MonoBehaviour
 {
-    public CSVToLocalization csv2Loc = new();
-
     public PanelLoadingProgress panelLoadingProgress;
     public GameObject panelSpinner;
     public SQLiteManager dbManager;
@@ -49,6 +47,8 @@ public class DemoGlobal : MonoBehaviour
         spinner.On( message: "讀取StreamingAssets圖檔");
         yield return null;
         yield return StartCoroutine(CacheSprites());
+        spinner.SetMessage("讀取音樂與音效");
+        yield return StartCoroutine(CacheAudioClips());
         spinner.SetMessage("讀取全域設定值");
         yield return StartCoroutine(CacheSettings());
         spinner.Off();
@@ -91,6 +91,17 @@ public class DemoGlobal : MonoBehaviour
         yield return new WaitUntil(() => isDone); // 等待完成
     }
 
+    public IEnumerator CacheAudioClips()
+    {
+        bool isDone = false;
+        SoundCacher.Inst.GetAllAudioClipsInSA(() =>
+        {
+            Debug.Log("GetAllAudioClipsInSA Done");
+            isDone = true;
+        });
+        yield return new WaitUntil(() => isDone); // 等待完成
+    }
+
     public IEnumerator CacheSettings()
     {
         yield return StreamingAssets.Inst.LoadTxt("Mods/ModsList.txt", resultDict => {
@@ -101,8 +112,9 @@ public class DemoGlobal : MonoBehaviour
             Debug.Log($"LoadCSV from StreamingAsset result:");
             Debug.Log($"{csvString}");
             //讀取本地csv更新本地化檔案
-            StartCoroutine(csv2Loc.Update("StringLoc", csvString));
+            StartCoroutine(Loc.Inst.UpdateCSV("StringLoc", csvString));
         });
+        //Sound.Inst.LoadFromStreamingAssets("Mods/Official/Sounds/basanova");
     }
 
     /// <summary>
@@ -199,7 +211,7 @@ public class DemoGlobal : MonoBehaviour
 
         yield return CSVDownloader.Inst.DownloadCSV(url, resultDict => {
             //Debug.Log($"DownloadCSV result:\nPage Name: {resultDict["PageName"]}\nCSV Data:\n{resultDict["CSVData"]}");
-            StartCoroutine(csv2Loc.Update("StringLoc", resultDict["CSVData"]));
+            StartCoroutine(Loc.Inst.UpdateCSV("StringLoc", resultDict["CSVData"]));
         });
     }
 

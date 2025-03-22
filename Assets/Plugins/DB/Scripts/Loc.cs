@@ -1,11 +1,75 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 
-public class CSVToLocalization
+public class Loc:MonoBehaviour
 {
+    public static Loc Inst { get; private set; }
+    private void Awake()
+    {
+        if (Inst == null) Inst = this; else Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private bool Updated = false;
+
+    public void Setup(GameObject root)
+    {
+        StartCoroutine(SetupCoroutine(root));
+    }
+
+    public IEnumerator SetupCoroutine(GameObject root)
+    {
+        yield return new WaitUntil(() => Updated == true);
+        Text[] allUITexts = root.GetComponentsInChildren<Text>();
+        foreach (var uiText in allUITexts)
+        {
+            SetupLocalization(uiText, "StringLoc");
+        }
+    }
+
+    public void SetupLocalization(Text uiText, string tableName)
+    {
+        string entryName = uiText.text;
+        Debug.Log($"本地化[{uiText.name}]{entryName}");
+
+        // 確保 UI 物件有 LocalizeStringEvent
+        LocalizeStringEvent localizeEvent = uiText.gameObject.GetComponent<LocalizeStringEvent>();
+        if (localizeEvent == null)
+        {
+            localizeEvent = uiText.gameObject.AddComponent<LocalizeStringEvent>();
+        }
+
+        // 設定 LocalizedString
+        LocalizedString localizedString = new LocalizedString();
+        localizedString.SetReference(tableName, entryName);
+
+        // 訂閱事件 (確保 UI 會更新)
+        localizeEvent.OnUpdateString.RemoveAllListeners();
+        localizeEvent.OnUpdateString.AddListener(value =>
+        {
+            if (value.StartsWith("No translation found"))
+            {
+                Debug.Log($"'{entryName}' 沒有翻譯內容");
+            }
+            else
+            {
+                uiText.text = value;
+            }
+        });
+
+        // 指定 LocalizedString
+        localizeEvent.StringReference = localizedString;
+
+        // 手動觸發更新
+        //localizeEvent.RefreshString();
+    }
+
     public Dictionary<string, Dictionary<string, string>> Load(string csvData)
     {
         if (string.IsNullOrEmpty(csvData))
@@ -50,7 +114,7 @@ public class CSVToLocalization
         return localization;
     }
 
-    public IEnumerator Update(string tableName, string csvData)
+    public IEnumerator UpdateCSV(string tableName, string csvData)
     {
         // 確認開始執行函數
         //Debug.Log("Update function started.");
@@ -125,7 +189,8 @@ public class CSVToLocalization
                 }
             }
         }
-
+        // 標記為已更新
+        Updated = true;
         Debug.Log($"'{tableName}' 本地化表格更新成功");
     }
 

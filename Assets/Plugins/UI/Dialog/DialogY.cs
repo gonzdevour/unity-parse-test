@@ -36,6 +36,9 @@ public class DialogY : MonoBehaviour
         TxContent.text = Content;
 
         cbkY = CallbackY;
+
+        // 執行本地化
+        Loc.Inst.Setup(gameObject);
     }
 
     public void Close()

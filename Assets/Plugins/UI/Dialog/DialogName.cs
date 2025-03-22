@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 public class DialogName : MonoBehaviour
@@ -28,24 +27,6 @@ public class DialogName : MonoBehaviour
         BtnY.onClick.RemoveListener(OnYesClicked);
     }
 
-    public void Loc()
-    {
-        Text[] allUITexts = GetComponentsInChildren<Text>();
-        foreach (var uiText in allUITexts)
-        {
-            Debug.Log($"本地化{uiText.name}");
-            LocalizeStringEvent localizeEvent = uiText.gameObject.GetComponent<LocalizeStringEvent>();
-            if (localizeEvent == null)
-            {
-                localizeEvent = uiText.gameObject.AddComponent<LocalizeStringEvent>();
-            }
-            // 設定本地化字串
-            localizeEvent.StringReference.SetReference("StringLoc", uiText.text);
-            // 更新顯示
-            localizeEvent.RefreshString();
-        }
-    }
-
     public void Open(string Name0, string Name1, string Title = "", string Content = "", Action<string> CallbackY = null)
     {
         //BtnY.interactable = false; // 正確填入姓名才enable
@@ -61,6 +42,8 @@ public class DialogName : MonoBehaviour
         TxContent.text = Content;
 
         cbkY = CallbackY;
+        // 執行本地化
+        Loc.Inst.Setup(gameObject);
     }
 
     public void Close()

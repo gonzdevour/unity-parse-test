@@ -100,6 +100,27 @@ public class StreamingAssets : MonoBehaviour
         }
     }
 
+    public IEnumerator LoadAudioClip(string fileName, AudioType audioType, Action<AudioClip> onFileLoaded)
+    {
+        string filePath = GetFilePath(fileName);
+        Debug.Log($"filePath:{filePath}");
+        using (UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(filePath, audioType))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(request);
+                onFileLoaded?.Invoke(clip);
+            }
+            else
+            {
+                Debug.LogError($"AudioClip 載入失敗：{fileName} | 錯誤：{request.error}");
+                onFileLoaded?.Invoke(null);
+            }
+        }
+    }
+
     public IEnumerator LoadImg(string fileName, Action<Texture2D> callback = null)
     {
         byte[] fileData = null;

@@ -20,24 +20,6 @@ public class DialogChoices : MonoBehaviour
     private List<GameObject> buttons = new();
     private Action<string, GameObject> cbkY;
 
-    public void Loc()
-    {
-        Text[] allUITexts = GetComponentsInChildren<Text>();
-        foreach (var uiText in allUITexts)
-        {
-            Debug.Log($"本地化{uiText.name}");
-            LocalizeStringEvent localizeEvent = uiText.gameObject.GetComponent<LocalizeStringEvent>();
-            if (localizeEvent == null)
-            {
-                localizeEvent = uiText.gameObject.AddComponent<LocalizeStringEvent>();
-            }
-            // 設定本地化字串
-            localizeEvent.StringReference.SetReference("StringLoc", uiText.text);
-            // 更新顯示
-            localizeEvent.RefreshString();
-        }
-    }
-
     public void Open(string[] options, string[] results,string Title = "", string Content = "", Action<string, GameObject> CallbackY = null)
     {
         TxTitle.gameObject.SetActive(!string.IsNullOrEmpty(Title));
@@ -62,6 +44,8 @@ public class DialogChoices : MonoBehaviour
             buttons.Add(button);
         }
         StartCoroutine(WaitForAnim());
+        // 執行本地化
+        Loc.Inst.Setup(gameObject);
     }
 
     private IEnumerator WaitForAnim()
