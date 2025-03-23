@@ -89,7 +89,6 @@ GameObject:
   m_Component:
   - component: {fileID: 654443459613135550}
   - component: {fileID: 6782673129665053570}
-  - component: {fileID: 6347660557208798843}
   m_Layer: 5
   m_Name: ButtonsPanel
   m_TagString: Untagged
@@ -147,22 +146,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &6347660557208798843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4184242252861216623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 935ea5f20657c0742b8e6645c3a36d98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ListTitle: {fileID: 228756448640335210}
-  ListLabel: {fileID: 4459961877647908314}
-  SaveColor: {r: 0.41960785, g: 0.11764706, b: 0.11764706, a: 1}
-  LoadColor: {r: 0.11764706, g: 0.41960785, b: 0.11764706, a: 1}
 --- !u!1 &5261348749943954945
 GameObject:
   m_ObjectHideFlags: 0
