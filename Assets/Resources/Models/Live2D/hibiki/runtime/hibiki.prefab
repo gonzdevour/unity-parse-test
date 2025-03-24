@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5338863749883702820}
   - component: {fileID: 8282783667863395858}
   - component: {fileID: 5990653065641353591}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_CORE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 7287141075733934653}
   - component: {fileID: 3453036182129108860}
   - component: {fileID: 3759631557796478681}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BODY_ANGLE_X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 7516445290161031095}
   - component: {fileID: 7443665287473376386}
   - component: {fileID: 1198324631789615419}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_BROW_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3049373169630356826}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Parameters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   - component: {fileID: 6582720584754878651}
   - component: {fileID: 7944390983670564861}
   - component: {fileID: 2737632934105952290}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +310,7 @@ Transform:
   m_GameObject: {fileID: 492221317171209283}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00049999997}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -381,7 +381,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2737632934105952290
 MonoBehaviour:
@@ -402,7 +402,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 50
   _depthOffset: 0.00001
@@ -418,7 +418,7 @@ GameObject:
   - component: {fileID: 1783208337282888137}
   - component: {fileID: 5935333459107336719}
   - component: {fileID: 8367496034891606716}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_EYE_R_OPEN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 6272159452989437318}
   - component: {fileID: 2338919151676351008}
   - component: {fileID: 323689442924121049}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_NECK_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -497,7 +497,7 @@ Transform:
   m_GameObject: {fileID: 642020276086221826}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00010999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -568,7 +568,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 11
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &323689442924121049
 MonoBehaviour:
@@ -589,7 +589,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 11
   _depthOffset: 0.00001
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 3454019885440161231}
   - component: {fileID: 3447616166780285089}
   - component: {fileID: 8703928516106733477}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +623,7 @@ Transform:
   m_GameObject: {fileID: 706845394793081977}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00048}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -694,7 +694,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 48
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8703928516106733477
 MonoBehaviour:
@@ -715,7 +715,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 48
   _depthOffset: 0.00001
@@ -731,7 +731,7 @@ GameObject:
   - component: {fileID: 3637845418573310065}
   - component: {fileID: 2338778173570933301}
   - component: {fileID: 6289117153132830595}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_RIBBON
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -792,7 +792,7 @@ GameObject:
   - component: {fileID: 9196044816930496423}
   - component: {fileID: 3033658241989046591}
   - component: {fileID: 1402623766810439884}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_HAIR_BACK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -855,7 +855,7 @@ GameObject:
   - component: {fileID: 7088328310711121423}
   - component: {fileID: 799504963239714738}
   - component: {fileID: 2752326566850152233}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_BROW_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +871,7 @@ Transform:
   m_GameObject: {fileID: 936311641309879647}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00057}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -942,7 +942,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 57
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2752326566850152233
 MonoBehaviour:
@@ -963,7 +963,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 57
   _depthOffset: 0.00001
@@ -981,7 +981,7 @@ GameObject:
   - component: {fileID: 5423438863416066157}
   - component: {fileID: 5566717764766715476}
   - component: {fileID: 7040894926847301906}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_FACE_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -997,7 +997,7 @@ Transform:
   m_GameObject: {fileID: 959490258507147859}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00024}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1068,7 +1068,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 24
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7040894926847301906
 MonoBehaviour:
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 24
   _depthOffset: 0.00001
@@ -1107,7 +1107,7 @@ GameObject:
   - component: {fileID: 9139854159164690381}
   - component: {fileID: 7944032145532880409}
   - component: {fileID: 7066493161841990847}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HOHO_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1123,7 @@ Transform:
   m_GameObject: {fileID: 1005001675868608967}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00037999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1194,7 +1194,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 38
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7066493161841990847
 MonoBehaviour:
@@ -1215,7 +1215,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 38
   _depthOffset: 0.00001
@@ -1233,7 +1233,7 @@ GameObject:
   - component: {fileID: 6786726193677902507}
   - component: {fileID: 9138714719792048755}
   - component: {fileID: 4936374798578705272}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_NOSE_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1249,7 +1249,7 @@ Transform:
   m_GameObject: {fileID: 1023688905351388583}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00045}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1320,7 +1320,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 45
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4936374798578705272
 MonoBehaviour:
@@ -1341,7 +1341,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 45
   _depthOffset: 0.00001
@@ -1359,7 +1359,7 @@ GameObject:
   - component: {fileID: 1602456702808533252}
   - component: {fileID: 7412885654457273875}
   - component: {fileID: 4381841616459031471}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_BALL_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1375,7 +1375,7 @@ Transform:
   m_GameObject: {fileID: 1246990894441406588}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00029}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1446,7 +1446,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 29
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4381841616459031471
 MonoBehaviour:
@@ -1467,7 +1467,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 29
   _depthOffset: 0.00001
@@ -1483,7 +1483,7 @@ GameObject:
   - component: {fileID: 287607742364939077}
   - component: {fileID: 481190488845919058}
   - component: {fileID: 5884204746757598753}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_L_Y
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1544,7 +1544,7 @@ GameObject:
   - component: {fileID: 6089085774373782700}
   - component: {fileID: 1797992513214903117}
   - component: {fileID: 8076091667187903071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_EYE_BALL_Y
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1605,7 +1605,7 @@ GameObject:
   - component: {fileID: 3703182337803579844}
   - component: {fileID: 4110473647681137621}
   - component: {fileID: 978170720839380785}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BREATH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1667,7 +1667,7 @@ GameObject:
   - component: {fileID: 5303944156163452135}
   - component: {fileID: 4359155595624262685}
   - component: {fileID: 1150143044276019852}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_FACE_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1750,7 +1750,7 @@ GameObject:
   - component: {fileID: 8217508472117158489}
   - component: {fileID: 5818752052341634027}
   - component: {fileID: 4210142005479181415}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1766,7 +1766,7 @@ Transform:
   m_GameObject: {fileID: 1857390772861081055}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00032999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1837,7 +1837,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 33
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4210142005479181415
 MonoBehaviour:
@@ -1858,7 +1858,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 33
   _depthOffset: 0.00001
@@ -1876,7 +1876,7 @@ GameObject:
   - component: {fileID: 5206537179024107048}
   - component: {fileID: 2427706890757029952}
   - component: {fileID: 4105933166220307620}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_BODY_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1892,7 +1892,7 @@ Transform:
   m_GameObject: {fileID: 2035002049506664501}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00008}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1963,7 +1963,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4105933166220307620
 MonoBehaviour:
@@ -1984,7 +1984,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 8
   _depthOffset: 0.00001
@@ -2002,7 +2002,7 @@ GameObject:
   - component: {fileID: 319539624765030166}
   - component: {fileID: 5191582230857261115}
   - component: {fileID: 1852216224142137272}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EAR_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2018,7 +2018,7 @@ Transform:
   m_GameObject: {fileID: 2041557627676172666}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00021999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2089,7 +2089,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 22
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1852216224142137272
 MonoBehaviour:
@@ -2110,7 +2110,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 22
   _depthOffset: 0.00001
@@ -2127,7 +2127,7 @@ GameObject:
   - component: {fileID: 7535975099668641325}
   - component: {fileID: 356752458424607674}
   - component: {fileID: 4916501646059109318}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_ARM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2216,7 +2216,7 @@ GameObject:
   - component: {fileID: 8254903648322065789}
   - component: {fileID: 4629309617510511047}
   - component: {fileID: 7169130004431492910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2232,7 +2232,7 @@ Transform:
   m_GameObject: {fileID: 2110703528453216751}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00018999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2303,7 +2303,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 19
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7169130004431492910
 MonoBehaviour:
@@ -2324,7 +2324,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 19
   _depthOffset: 0.00001
@@ -2340,7 +2340,7 @@ GameObject:
   - component: {fileID: 8641447875534822332}
   - component: {fileID: 4358198300747265521}
   - component: {fileID: 1983790556309236919}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_ANGLE_Z
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2402,7 +2402,7 @@ GameObject:
   - component: {fileID: 676460534482950419}
   - component: {fileID: 3662237351033794152}
   - component: {fileID: 3806490226385890553}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_NOSE_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2484,7 +2484,7 @@ GameObject:
   - component: {fileID: 5431580459177216220}
   - component: {fileID: 4538657018222354088}
   - component: {fileID: 3249988046627855231}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2500,7 +2500,7 @@ Transform:
   m_GameObject: {fileID: 2339215199901676904}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00026}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2571,7 +2571,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 26
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3249988046627855231
 MonoBehaviour:
@@ -2592,7 +2592,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 26
   _depthOffset: 0.00001
@@ -2608,7 +2608,7 @@ GameObject:
   - component: {fileID: 6766374392315184365}
   - component: {fileID: 5377261178675088688}
   - component: {fileID: 4146954651504972536}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_ARM_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2671,7 +2671,7 @@ GameObject:
   - component: {fileID: 6341505449510788171}
   - component: {fileID: 1564611086855814055}
   - component: {fileID: 4545414176686486705}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2687,7 +2687,7 @@ Transform:
   m_GameObject: {fileID: 2450216683397407364}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00054}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2758,7 +2758,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 54
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4545414176686486705
 MonoBehaviour:
@@ -2779,7 +2779,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 54
   _depthOffset: 0.00001
@@ -2797,7 +2797,7 @@ GameObject:
   - component: {fileID: 1537883475699057427}
   - component: {fileID: 2042747359324671186}
   - component: {fileID: 6220388697491601298}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_CLOTHES_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2813,7 +2813,7 @@ Transform:
   m_GameObject: {fileID: 2563659982995872779}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00013999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2884,7 +2884,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 14
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6220388697491601298
 MonoBehaviour:
@@ -2905,7 +2905,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 14
   _depthOffset: 0.00001
@@ -2923,7 +2923,7 @@ GameObject:
   - component: {fileID: 2389982601113807985}
   - component: {fileID: 7636121688966398013}
   - component: {fileID: 3082469601984357320}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HOHO_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2939,7 +2939,7 @@ Transform:
   m_GameObject: {fileID: 2703573752828973039}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0004}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3010,7 +3010,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 40
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3082469601984357320
 MonoBehaviour:
@@ -3031,7 +3031,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 40
   _depthOffset: 0.00001
@@ -3049,7 +3049,7 @@ GameObject:
   - component: {fileID: 2233315640509436321}
   - component: {fileID: 5356904853440288297}
   - component: {fileID: 7523308983266165661}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_FACE_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3065,7 +3065,7 @@ Transform:
   m_GameObject: {fileID: 2814375414224454705}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00043999997}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3136,7 +3136,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 44
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7523308983266165661
 MonoBehaviour:
@@ -3157,7 +3157,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 44
   _depthOffset: 0.00001
@@ -3182,7 +3182,7 @@ GameObject:
   - component: {fileID: 8402512143709111476}
   - component: {fileID: 1499632142519182645}
   - component: {fileID: 6155835099469500629}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: hibiki
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3263,7 +3263,7 @@ MonoBehaviour:
   _modelMultiplyColor: {r: 0, g: 0, b: 0, a: 0}
   _modelScreenColor: {r: 0, g: 0, b: 0, a: 0}
   _sortingLayerId: 0
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   CameraToFace: {fileID: 0}
   _drawOrderHandler: {fileID: 0}
@@ -3537,7 +3537,7 @@ GameObject:
   - component: {fileID: 2983651083997998476}
   - component: {fileID: 6794543971030402099}
   - component: {fileID: 8502171259833765896}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_HAIR_BACK_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3620,7 +3620,7 @@ GameObject:
   - component: {fileID: 1138400701857674249}
   - component: {fileID: 7583019112877004241}
   - component: {fileID: 640539267489866360}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_EYE_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3713,7 +3713,7 @@ GameObject:
   - component: {fileID: 342135074938698216}
   - component: {fileID: 8287321394060250714}
   - component: {fileID: 2351900004967775762}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_EYE_BALL_X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3774,7 +3774,7 @@ GameObject:
   - component: {fileID: 2595196163039781947}
   - component: {fileID: 3942124058376220654}
   - component: {fileID: 6582130100279413663}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_L_ANGLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3835,7 +3835,7 @@ GameObject:
   - component: {fileID: 7605199880842852065}
   - component: {fileID: 6125352494120004399}
   - component: {fileID: 7056820876840543184}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_ANGLE_X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3896,7 +3896,7 @@ GameObject:
   - component: {fileID: 5277384540007140184}
   - component: {fileID: 8383758616652771210}
   - component: {fileID: 6152822515378192325}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_R_X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3959,7 +3959,7 @@ GameObject:
   - component: {fileID: 8295529464016068852}
   - component: {fileID: 2261024097718425352}
   - component: {fileID: 8334918088262921238}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HAIR_BACK_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3975,7 +3975,7 @@ Transform:
   m_GameObject: {fileID: 4215528246733048636}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00001}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4046,7 +4046,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8334918088262921238
 MonoBehaviour:
@@ -4067,7 +4067,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 1
   _depthOffset: 0.00001
@@ -4083,7 +4083,7 @@ GameObject:
   - component: {fileID: 7102280119547087618}
   - component: {fileID: 1187185430397420866}
   - component: {fileID: 421859026899849582}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_ANGLE_Y
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4146,7 +4146,7 @@ GameObject:
   - component: {fileID: 1661527140577880374}
   - component: {fileID: 7676379186741982221}
   - component: {fileID: 1939558940566102502}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4162,7 +4162,7 @@ Transform:
   m_GameObject: {fileID: 4597874089693599829}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0002}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4233,7 +4233,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1939558940566102502
 MonoBehaviour:
@@ -4254,7 +4254,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 20
   _depthOffset: 0.00001
@@ -4271,7 +4271,7 @@ GameObject:
   - component: {fileID: 8769598646420677145}
   - component: {fileID: 8774085546562188128}
   - component: {fileID: 2347188775953578912}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_BODY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4355,7 +4355,7 @@ GameObject:
   - component: {fileID: 9166673062972437794}
   - component: {fileID: 1650887309256845831}
   - component: {fileID: 1949489798565259458}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_BODY_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4371,7 +4371,7 @@ Transform:
   m_GameObject: {fileID: 4795434417430057827}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000069999995}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4442,7 +4442,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 7
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1949489798565259458
 MonoBehaviour:
@@ -4463,7 +4463,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 7
   _depthOffset: 0.00001
@@ -4479,7 +4479,7 @@ GameObject:
   - component: {fileID: 8232163708102323181}
   - component: {fileID: 211088371958421961}
   - component: {fileID: 314874170338441542}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_R_ANGLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4542,7 +4542,7 @@ GameObject:
   - component: {fileID: 5065449701845230184}
   - component: {fileID: 6630316997255399408}
   - component: {fileID: 4572053202592240397}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HAIR_BACK_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4558,7 +4558,7 @@ Transform:
   m_GameObject: {fileID: 5045295811306874418}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00047}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4629,7 +4629,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 47
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4572053202592240397
 MonoBehaviour:
@@ -4650,7 +4650,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 47
   _depthOffset: 0.00001
@@ -4668,7 +4668,7 @@ GameObject:
   - component: {fileID: 7920763629406897710}
   - component: {fileID: 8454381859705094091}
   - component: {fileID: 1981146118845649937}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_BODY_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4684,7 +4684,7 @@ Transform:
   m_GameObject: {fileID: 5153852617399555843}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00006}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4755,7 +4755,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1981146118845649937
 MonoBehaviour:
@@ -4776,7 +4776,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 6
   _depthOffset: 0.00001
@@ -4792,7 +4792,7 @@ GameObject:
   - component: {fileID: 9032303127525778081}
   - component: {fileID: 2134536533137069445}
   - component: {fileID: 6748979373621249541}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_MOUTH_FORM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4853,7 +4853,7 @@ GameObject:
   - component: {fileID: 9077837907786643521}
   - component: {fileID: 8538671612631185326}
   - component: {fileID: 3345219505835466326}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_L_X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4916,7 +4916,7 @@ GameObject:
   - component: {fileID: 2038238059468254810}
   - component: {fileID: 2390327581601378349}
   - component: {fileID: 576946328643255621}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4932,7 +4932,7 @@ Transform:
   m_GameObject: {fileID: 5361072229738146434}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00009}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5003,7 +5003,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 9
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &576946328643255621
 MonoBehaviour:
@@ -5024,7 +5024,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 9
   _depthOffset: 0.00001
@@ -5041,7 +5041,7 @@ GameObject:
   - component: {fileID: 8482934310658509667}
   - component: {fileID: 8151447053625795095}
   - component: {fileID: 773761891130305392}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_CLOTHES
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5129,7 +5129,7 @@ GameObject:
   - component: {fileID: 2223054822038988925}
   - component: {fileID: 109005606094979964}
   - component: {fileID: 4385902523161040253}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_MOUTH_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5145,7 +5145,7 @@ Transform:
   m_GameObject: {fileID: 5488072948847289217}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00037}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5216,7 +5216,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 37
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4385902523161040253
 MonoBehaviour:
@@ -5237,7 +5237,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 37
   _depthOffset: 0.00001
@@ -5255,7 +5255,7 @@ GameObject:
   - component: {fileID: 405821005938324398}
   - component: {fileID: 842080063610689915}
   - component: {fileID: 4394996738494954253}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_MOUTH_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5271,7 +5271,7 @@ Transform:
   m_GameObject: {fileID: 5526366467184145765}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00031}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5342,7 +5342,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 31
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4394996738494954253
 MonoBehaviour:
@@ -5363,7 +5363,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 31
   _depthOffset: 0.00001
@@ -5379,7 +5379,7 @@ GameObject:
   - component: {fileID: 9066184929932162787}
   - component: {fileID: 5635585200965815474}
   - component: {fileID: 4962260858430318499}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_R_FORM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5442,7 +5442,7 @@ GameObject:
   - component: {fileID: 7308681067101002567}
   - component: {fileID: 736716877117539295}
   - component: {fileID: 4066754244327657626}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5458,7 +5458,7 @@ Transform:
   m_GameObject: {fileID: 5568962403562792055}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00049}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5529,7 +5529,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 49
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4066754244327657626
 MonoBehaviour:
@@ -5550,7 +5550,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 49
   _depthOffset: 0.00001
@@ -5568,7 +5568,7 @@ GameObject:
   - component: {fileID: 3549345918097103693}
   - component: {fileID: 8286516480690476571}
   - component: {fileID: 7457197876866696484}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5584,7 +5584,7 @@ Transform:
   m_GameObject: {fileID: 5611815718435473248}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00004}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5655,7 +5655,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7457197876866696484
 MonoBehaviour:
@@ -5676,7 +5676,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 4
   _depthOffset: 0.00001
@@ -5693,7 +5693,7 @@ GameObject:
   - component: {fileID: 2288337013038871381}
   - component: {fileID: 6894998276640439661}
   - component: {fileID: 3401922077400024434}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ROUGH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5770,7 +5770,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2938068687259955003}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Parts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5823,7 +5823,7 @@ GameObject:
   - component: {fileID: 8200412743573884086}
   - component: {fileID: 1963203770469670025}
   - component: {fileID: 2081508924790293760}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5839,7 +5839,7 @@ Transform:
   m_GameObject: {fileID: 5733092701376013241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00052999996}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5910,7 +5910,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 53
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2081508924790293760
 MonoBehaviour:
@@ -5931,7 +5931,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 53
   _depthOffset: 0.00001
@@ -5949,7 +5949,7 @@ GameObject:
   - component: {fileID: 4230212311729565744}
   - component: {fileID: 421272471097634395}
   - component: {fileID: 439759683544066457}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5965,7 +5965,7 @@ Transform:
   m_GameObject: {fileID: 5799150928778261060}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00032}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6036,7 +6036,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 32
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &439759683544066457
 MonoBehaviour:
@@ -6057,7 +6057,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 32
   _depthOffset: 0.00001
@@ -6071,7 +6071,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6548905446330330037}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Drawables
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6164,7 +6164,7 @@ GameObject:
   - component: {fileID: 6341251537646836828}
   - component: {fileID: 2563398599419943024}
   - component: {fileID: 414392835665965262}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EAR_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6180,7 +6180,7 @@ Transform:
   m_GameObject: {fileID: 5902285850277677338}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00022999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6251,7 +6251,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 23
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &414392835665965262
 MonoBehaviour:
@@ -6272,7 +6272,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 23
   _depthOffset: 0.00001
@@ -6290,7 +6290,7 @@ GameObject:
   - component: {fileID: 8755318764081323405}
   - component: {fileID: 10336974874053930}
   - component: {fileID: 8302984443719833283}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_BROW_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6306,7 +6306,7 @@ Transform:
   m_GameObject: {fileID: 5937223840890272081}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00055999996}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6377,7 +6377,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 56
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8302984443719833283
 MonoBehaviour:
@@ -6398,7 +6398,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 56
   _depthOffset: 0.00001
@@ -6414,7 +6414,7 @@ GameObject:
   - component: {fileID: 4721312315276297270}
   - component: {fileID: 6916328316407822374}
   - component: {fileID: 5430740479270545880}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_L_FORM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6477,7 +6477,7 @@ GameObject:
   - component: {fileID: 2767635346264585294}
   - component: {fileID: 6779071222749704328}
   - component: {fileID: 5329682092412145876}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HAIR_SIDE_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6493,7 +6493,7 @@ Transform:
   m_GameObject: {fileID: 5994664495479815265}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00021}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6564,7 +6564,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 21
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &5329682092412145876
 MonoBehaviour:
@@ -6585,7 +6585,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 21
   _depthOffset: 0.00001
@@ -6603,7 +6603,7 @@ GameObject:
   - component: {fileID: 6989844389503520229}
   - component: {fileID: 7313168927772847740}
   - component: {fileID: 8963856696044784672}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6619,7 +6619,7 @@ Transform:
   m_GameObject: {fileID: 6063301862204263410}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00052}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6690,7 +6690,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 52
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8963856696044784672
 MonoBehaviour:
@@ -6711,7 +6711,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 52
   _depthOffset: 0.00001
@@ -6729,7 +6729,7 @@ GameObject:
   - component: {fileID: 3672008043520068596}
   - component: {fileID: 2909805125321604445}
   - component: {fileID: 2464179805817344611}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6745,7 +6745,7 @@ Transform:
   m_GameObject: {fileID: 6088533987966952305}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00024999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6816,7 +6816,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 25
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2464179805817344611
 MonoBehaviour:
@@ -6837,7 +6837,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 25
   _depthOffset: 0.00001
@@ -6855,7 +6855,7 @@ GameObject:
   - component: {fileID: 4006419617775908512}
   - component: {fileID: 1560822519945883140}
   - component: {fileID: 641160203290126596}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HOHO_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6871,7 +6871,7 @@ Transform:
   m_GameObject: {fileID: 6323257930583815480}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00039}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6942,7 +6942,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 39
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &641160203290126596
 MonoBehaviour:
@@ -6963,7 +6963,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 39
   _depthOffset: 0.00001
@@ -6980,7 +6980,7 @@ GameObject:
   - component: {fileID: 398238810035136559}
   - component: {fileID: 6291816940625184380}
   - component: {fileID: 4191308885575755779}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_NECK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7060,7 +7060,7 @@ GameObject:
   - component: {fileID: 4808128394201786962}
   - component: {fileID: 6212678439470145978}
   - component: {fileID: 7914717332150964712}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_TERE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7122,7 +7122,7 @@ GameObject:
   - component: {fileID: 3679776790334012638}
   - component: {fileID: 4342006785560126359}
   - component: {fileID: 1983250816680693950}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_EAR_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7205,7 +7205,7 @@ GameObject:
   - component: {fileID: 5049028820888667809}
   - component: {fileID: 7237526860285087265}
   - component: {fileID: 2268233473447939411}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_BODY_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7221,7 +7221,7 @@ Transform:
   m_GameObject: {fileID: 6585453090878440479}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0001}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7292,7 +7292,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2268233473447939411
 MonoBehaviour:
@@ -7313,7 +7313,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 10
   _depthOffset: 0.00001
@@ -7331,7 +7331,7 @@ GameObject:
   - component: {fileID: 5255266396184716785}
   - component: {fileID: 1504746749564476678}
   - component: {fileID: 559694976062672441}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7347,7 +7347,7 @@ Transform:
   m_GameObject: {fileID: 6693207292674117215}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00016}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7418,7 +7418,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 16
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &559694976062672441
 MonoBehaviour:
@@ -7439,7 +7439,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 16
   _depthOffset: 0.00001
@@ -7456,7 +7456,7 @@ GameObject:
   - component: {fileID: 6781380022174219218}
   - component: {fileID: 3985685259595565508}
   - component: {fileID: 6376505209953178626}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_MOUTH_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7539,7 +7539,7 @@ GameObject:
   - component: {fileID: 6163760133551579764}
   - component: {fileID: 7668295333895235620}
   - component: {fileID: 6055681595394613092}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_EYE_BALL_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7623,7 +7623,7 @@ GameObject:
   - component: {fileID: 4034160950904505331}
   - component: {fileID: 2875137218197401337}
   - component: {fileID: 5603385816604315174}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_BACKGROUND
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7704,7 +7704,7 @@ GameObject:
   - component: {fileID: 7579755247863441963}
   - component: {fileID: 3971371945079527724}
   - component: {fileID: 4985254335413213211}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_CLOTHES_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7720,7 +7720,7 @@ Transform:
   m_GameObject: {fileID: 6789415164147558931}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00002}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7791,7 +7791,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4985254335413213211
 MonoBehaviour:
@@ -7812,7 +7812,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 2
   _depthOffset: 0.00001
@@ -7830,7 +7830,7 @@ GameObject:
   - component: {fileID: 2355047950766048826}
   - component: {fileID: 6715039992547940235}
   - component: {fileID: 8564034485909330634}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7846,7 +7846,7 @@ Transform:
   m_GameObject: {fileID: 6822775348298010178}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00035}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7917,7 +7917,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 35
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8564034485909330634
 MonoBehaviour:
@@ -7938,7 +7938,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 35
   _depthOffset: 0.00001
@@ -7956,7 +7956,7 @@ GameObject:
   - component: {fileID: 7791486774977919582}
   - component: {fileID: 73520955636930862}
   - component: {fileID: 530650959192043011}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7972,7 +7972,7 @@ Transform:
   m_GameObject: {fileID: 6839873887201658149}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00017}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8043,7 +8043,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 17
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &530650959192043011
 MonoBehaviour:
@@ -8064,7 +8064,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 17
   _depthOffset: 0.00001
@@ -8082,7 +8082,7 @@ GameObject:
   - component: {fileID: 5120201107725623923}
   - component: {fileID: 6125189320286399588}
   - component: {fileID: 4813364169333976229}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_CLOTHES_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8098,7 +8098,7 @@ Transform:
   m_GameObject: {fileID: 6955542259784061067}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00012}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8169,7 +8169,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4813364169333976229
 MonoBehaviour:
@@ -8190,7 +8190,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 12
   _depthOffset: 0.00001
@@ -8207,7 +8207,7 @@ GameObject:
   - component: {fileID: 7208617445498408507}
   - component: {fileID: 4622459592783731621}
   - component: {fileID: 8502088194249955512}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_HAIR_FRONT_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8289,7 +8289,7 @@ GameObject:
   - component: {fileID: 5394139444035339139}
   - component: {fileID: 4350450095695283274}
   - component: {fileID: 7105850692319047685}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HOHO_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8305,7 +8305,7 @@ Transform:
   m_GameObject: {fileID: 7028339743834601979}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00040999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8376,7 +8376,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 41
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7105850692319047685
 MonoBehaviour:
@@ -8397,7 +8397,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 41
   _depthOffset: 0.00001
@@ -8415,7 +8415,7 @@ GameObject:
   - component: {fileID: 2221416750254548127}
   - component: {fileID: 3546309720679321681}
   - component: {fileID: 7099853445634395460}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_BALL_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8431,7 +8431,7 @@ Transform:
   m_GameObject: {fileID: 7118476349283773224}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00029999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8502,7 +8502,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 30
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7099853445634395460
 MonoBehaviour:
@@ -8523,7 +8523,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 30
   _depthOffset: 0.00001
@@ -8541,7 +8541,7 @@ GameObject:
   - component: {fileID: 7002387850943311543}
   - component: {fileID: 6603793036002347797}
   - component: {fileID: 3129154954874484502}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_MOUTH_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8557,7 +8557,7 @@ Transform:
   m_GameObject: {fileID: 7185516312470577324}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00036}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8628,7 +8628,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 36
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3129154954874484502
 MonoBehaviour:
@@ -8649,7 +8649,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 36
   _depthOffset: 0.00001
@@ -8666,7 +8666,7 @@ GameObject:
   - component: {fileID: 739205324219783231}
   - component: {fileID: 7534381917663682372}
   - component: {fileID: 8636739904578146443}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_HOHO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8751,7 +8751,7 @@ GameObject:
   - component: {fileID: 6723302766564546084}
   - component: {fileID: 1408247172582369443}
   - component: {fileID: 3388676295054989008}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8767,7 +8767,7 @@ Transform:
   m_GameObject: {fileID: 7292023171342684914}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00055}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8838,7 +8838,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 55
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3388676295054989008
 MonoBehaviour:
@@ -8859,7 +8859,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 55
   _depthOffset: 0.00001
@@ -8876,7 +8876,7 @@ GameObject:
   - component: {fileID: 4002930124075556524}
   - component: {fileID: 8180067726727666922}
   - component: {fileID: 3418365964380146759}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARTS_01_HAIR_SIDE_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8958,7 +8958,7 @@ GameObject:
   - component: {fileID: 836497288077373473}
   - component: {fileID: 6613986512361255452}
   - component: {fileID: 2262007166642181309}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_REF_HEAD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8974,7 +8974,7 @@ Transform:
   m_GameObject: {fileID: 7594420292038281911}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00042}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9045,7 +9045,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 42
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2262007166642181309
 MonoBehaviour:
@@ -9066,7 +9066,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 42
   _depthOffset: 0.00001
@@ -9082,7 +9082,7 @@ GameObject:
   - component: {fileID: 8771929205447341827}
   - component: {fileID: 6729222878839363649}
   - component: {fileID: 3691666504122592875}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_HAIR_FRONT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9145,7 +9145,7 @@ GameObject:
   - component: {fileID: 3061318993172597047}
   - component: {fileID: 5596754087408288477}
   - component: {fileID: 9100233444591846613}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9161,7 +9161,7 @@ Transform:
   m_GameObject: {fileID: 7698079462292245416}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00018}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9232,7 +9232,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 18
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &9100233444591846613
 MonoBehaviour:
@@ -9253,7 +9253,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 18
   _depthOffset: 0.00001
@@ -9271,7 +9271,7 @@ GameObject:
   - component: {fileID: 773421547954692587}
   - component: {fileID: 8000580076421346107}
   - component: {fileID: 1960184782370383000}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_BALL_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9287,7 +9287,7 @@ Transform:
   m_GameObject: {fileID: 7711011791643638738}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00027}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9358,7 +9358,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 27
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1960184782370383000
 MonoBehaviour:
@@ -9379,7 +9379,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 27
   _depthOffset: 0.00001
@@ -9397,7 +9397,7 @@ GameObject:
   - component: {fileID: 3896806086114464047}
   - component: {fileID: 7866769096617995529}
   - component: {fileID: 3030791833596183258}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_BALL_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9413,7 +9413,7 @@ Transform:
   m_GameObject: {fileID: 7761478948199458760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00027999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9484,7 +9484,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 28
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3030791833596183258
 MonoBehaviour:
@@ -9505,7 +9505,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 28
   _depthOffset: 0.00001
@@ -9523,7 +9523,7 @@ GameObject:
   - component: {fileID: 7472957326723417114}
   - component: {fileID: 2700614139550116860}
   - component: {fileID: 1335364063719152789}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9539,7 +9539,7 @@ Transform:
   m_GameObject: {fileID: 7817744281885343971}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00051}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9610,7 +9610,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 51
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1335364063719152789
 MonoBehaviour:
@@ -9631,7 +9631,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 51
   _depthOffset: 0.00001
@@ -9649,7 +9649,7 @@ GameObject:
   - component: {fileID: 2791613878809739181}
   - component: {fileID: 5039708650869915365}
   - component: {fileID: 5374269015291858841}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_ARM_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9665,7 +9665,7 @@ Transform:
   m_GameObject: {fileID: 8013333938304318152}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00005}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9736,7 +9736,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &5374269015291858841
 MonoBehaviour:
@@ -9757,7 +9757,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 5
   _depthOffset: 0.00001
@@ -9775,7 +9775,7 @@ GameObject:
   - component: {fileID: 4275603678463972566}
   - component: {fileID: 3884575356804313824}
   - component: {fileID: 3546824860997860606}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_CLOTHES_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9791,7 +9791,7 @@ Transform:
   m_GameObject: {fileID: 8046009866507336760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00013}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9862,7 +9862,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 13
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3546824860997860606
 MonoBehaviour:
@@ -9883,7 +9883,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 13
   _depthOffset: 0.00001
@@ -9901,7 +9901,7 @@ GameObject:
   - component: {fileID: 3307633253659836067}
   - component: {fileID: 4203192973569277853}
   - component: {fileID: 7306680536362008021}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_CLOTHES_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9917,7 +9917,7 @@ Transform:
   m_GameObject: {fileID: 8193239143856897240}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00003}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9988,7 +9988,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7306680536362008021
 MonoBehaviour:
@@ -10009,7 +10009,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 3
   _depthOffset: 0.00001
@@ -10027,7 +10027,7 @@ GameObject:
   - component: {fileID: 1321882575152790118}
   - component: {fileID: 1673840968467240033}
   - component: {fileID: 6871914108507615614}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HAIR_BACK_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10043,7 +10043,7 @@ Transform:
   m_GameObject: {fileID: 8267257317510687813}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10135,7 +10135,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 0
   _depthOffset: 0.00001
@@ -10151,7 +10151,7 @@ GameObject:
   - component: {fileID: 8845003519476007470}
   - component: {fileID: 4918506633626809349}
   - component: {fileID: 6241897788870174712}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BODY_ANGLE_Z
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10214,7 +10214,7 @@ GameObject:
   - component: {fileID: 647799208755449235}
   - component: {fileID: 8747595833990824857}
   - component: {fileID: 1199187839459835950}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_HAIR_FRONT_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10230,7 +10230,7 @@ Transform:
   m_GameObject: {fileID: 8456834375088070109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00045999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10301,7 +10301,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 46
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1199187839459835950
 MonoBehaviour:
@@ -10322,7 +10322,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 46
   _depthOffset: 0.00001
@@ -10340,7 +10340,7 @@ GameObject:
   - component: {fileID: 4620101470801600959}
   - component: {fileID: 4021737059938578406}
   - component: {fileID: 7653033045015339937}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_CLOTHES_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10356,7 +10356,7 @@ Transform:
   m_GameObject: {fileID: 8571258158663722011}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00014999999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10427,7 +10427,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 15
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7653033045015339937
 MonoBehaviour:
@@ -10448,7 +10448,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 15
   _depthOffset: 0.00001
@@ -10464,7 +10464,7 @@ GameObject:
   - component: {fileID: 6838708545340628679}
   - component: {fileID: 2043611634530899553}
   - component: {fileID: 6836049487201696048}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_MOUTH_OPEN_Y
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10527,7 +10527,7 @@ GameObject:
   - component: {fileID: 1875287871901542458}
   - component: {fileID: 4246353433438640156}
   - component: {fileID: 4473046300262762473}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_EYE_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10543,7 +10543,7 @@ Transform:
   m_GameObject: {fileID: 8741787450314400048}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00034}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10614,7 +10614,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 34
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4473046300262762473
 MonoBehaviour:
@@ -10635,7 +10635,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 34
   _depthOffset: 0.00001
@@ -10653,7 +10653,7 @@ GameObject:
   - component: {fileID: 8475024509712117838}
   - component: {fileID: 7354330908461393720}
   - component: {fileID: 1200518703449655293}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: D_REF_BODY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10669,7 +10669,7 @@ Transform:
   m_GameObject: {fileID: 9024608668427623513}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00043}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10740,7 +10740,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 43
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1200518703449655293
 MonoBehaviour:
@@ -10761,7 +10761,7 @@ MonoBehaviour:
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
   _screenColor: {r: 0, g: 0, b: 0, a: 0}
   _mainTexture: {fileID: 2800000, guid: 5edd324cf58285541a38159d82ec117b, type: 3}
-  _sortingMode: 0
+  _sortingMode: 2
   _sortingOrder: 0
   _renderOrder: 43
   _depthOffset: 0.00001
@@ -10777,7 +10777,7 @@ GameObject:
   - component: {fileID: 9029149320002454681}
   - component: {fileID: 2369821364246827661}
   - component: {fileID: 546225402099538300}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_BROW_R_Y
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10838,7 +10838,7 @@ GameObject:
   - component: {fileID: 5802390144059004452}
   - component: {fileID: 4908048792067526250}
   - component: {fileID: 3911263100295808395}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PARAM_EYE_L_OPEN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
