@@ -4013,6 +4013,8 @@ MonoBehaviour:
   cover: {fileID: 1023590096243053841}
   panelLoadingProgress: {fileID: 7615224000106081201}
   panelSpinner: {fileID: 6909995189079956939}
+  RenderTextureSize: {x: 1024, y: 1024}
+  ModelParent: {fileID: 1213843927}
 --- !u!114 &763413948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5606,6 +5608,37 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1150700099003697265, guid: 4feac0213b1a8854ab77bd37a8e229ba, type: 3}
   m_PrefabInstance: {fileID: 1193921010}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1213843926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1213843927}
+  m_Layer: 0
+  m_Name: ModelsForRT
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1213843927
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213843926}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1263414773
 GameObject:
   m_ObjectHideFlags: 0
@@ -6398,7 +6431,8 @@ MonoBehaviour:
   ChoiceLayer: {fileID: 1023482014}
   ChoiceCover: {fileID: 639533766}
   LayerChar: {fileID: 1622148760}
-  CharPrefab: {fileID: 2713868546816420850, guid: 93e55fd644868b74f9839360ce82586d, type: 3}
+  CharPrefab_TImg: {fileID: 2713868546816420850, guid: 93e55fd644868b74f9839360ce82586d, type: 3}
+  CharPrefab_MImg: {fileID: 5490935563479654474, guid: 91202c2f0c7e29046820ec1353b3d4ea, type: 3}
   LayerStoryPlayer: {fileID: 642413391}
   StoryPlayerPrefb: {fileID: 313736453434645494, guid: 015f7b3892f07ae4fba7dbf2fe31a5c0, type: 3}
   StoryPlayerObj: {fileID: 0}
@@ -9593,8 +9627,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6320058612597008440}
   - component: {fileID: 3344866937020441415}
-  - component: {fileID: 6320058612597008442}
-  - component: {fileID: 6320058612597008441}
   m_Layer: 0
   m_Name: Demo
   m_TagString: Untagged
@@ -10312,33 +10344,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6320058612597008441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4792686642607908346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08c421aa40f7adc4181ec065a8f54650, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiParent: {fileID: 641051026}
-  renderTextureSize: {x: 1024, y: 1024}
-  rawImageSize: {x: 200, y: 200}
---- !u!114 &6320058612597008442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4792686642607908346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1e8bf465e4426f47ba2d2269764cfa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6360648916986199440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11125,6 +11130,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1266201279}
+  - {fileID: 1213843927}
   - {fileID: 763413946}
   - {fileID: 2006935865}
   - {fileID: 6320058612597008440}

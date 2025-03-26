@@ -36,7 +36,8 @@ public partial class AVG : MonoBehaviour
 
     [Header("角色")]
     public Transform LayerChar; //角色層
-    public GameObject CharPrefab; // 角色Prefab
+    public GameObject CharPrefab_TImg; // TransitionImage角色Prefab
+    public GameObject CharPrefab_MImg; // ModelImage角色Prefab
 
     [Header("對話框")]
     public Transform LayerStoryPlayer;

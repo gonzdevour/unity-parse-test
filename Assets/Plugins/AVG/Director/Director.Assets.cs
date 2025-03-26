@@ -96,7 +96,7 @@ public partial class Director
 
         var assetID = charData.GetValueOrDefault("AssetID", string.Empty);
         var assetRoot = PPM.Inst.Get("素材來源");
-        var assetPath = PPM.Inst.Get("角色素材路徑");
+        var assetPath = PPM.Inst.Get("立繪素材路徑");
         var resPath = assetRoot + "://" + assetPath;
         string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
         string[] emos = emoTypes.Split(",");
@@ -111,5 +111,11 @@ public partial class Director
             }
         }
         return imagePathsExpression;
+    }
+
+    public string GetModelUrl(string ModelType, string AssetID)
+    {
+        string url = $"Models/{ModelType}/{AssetID}";
+        return url;
     }
 }

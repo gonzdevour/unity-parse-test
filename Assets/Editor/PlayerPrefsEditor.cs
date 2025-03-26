@@ -10,7 +10,7 @@ public class PlayerPrefsEditor : EditorWindow
 
     private static readonly string[] predefinedKeys = new string[]
     {
-        "素材來源", "角色素材路徑", "頭圖素材路徑", "背景素材路徑", "表情類型列表", "符號類型列表",
+        "素材來源", "立繪素材路徑", "頭圖素材路徑", "背景素材路徑", "表情類型列表", "符號類型列表",
         "姓", "名", "稱呼", "體重", "日期", "hp", "mp", "目前時間",
         "王小美好感度", "李大花好感度", "金錢", "蛋糕價格", "麵包價格",
         "卡布奇諾價格", "栗子蒙布朗價格", "MaxHP", "獲勝陣營"

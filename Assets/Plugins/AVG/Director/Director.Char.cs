@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using story;
+using UnityEngine.UI;
 
 public partial class Director
 {
@@ -71,7 +72,17 @@ public partial class Director
         Vector2 SpawnPoint = PositionParser.ParsePoint(charPos, Avg.MainPanel);
 
         // 實例化 Prefab
-        GameObject newChar = Instantiate(Avg.CharPrefab, Avg.LayerChar);
+        GameObject newChar;
+        string resType = charData["素材類型"];
+        if (resType == "Pic") 
+        {
+            newChar = Instantiate(Avg.CharPrefab_TImg, Avg.LayerChar); 
+        }
+        else
+        {
+            newChar = CreateModelImage(resType, charData["AssetID"]);
+        }
+
         newChar.name = charUID;
         var newCharTransform = newChar.GetComponent<RectTransform>();
         newCharTransform.anchoredPosition = SpawnPoint;
@@ -79,6 +90,21 @@ public partial class Director
         IChar Char = newChar.GetComponent<IChar>();
         Char.Init(charData, charEmo, charSimbol);
         return Char;
+    }
+
+    public GameObject CreateModelImage(string resType, string assetID)
+    {
+        // 產生 ModelImage Prefab
+        GameObject MImg = Instantiate(Avg.CharPrefab_MImg, Avg.LayerChar);
+        // 取出 ModelImage 中的 RawImage
+        RawImage rawImg = MImg.GetComponentInChildren<RawImage>();
+        // 生成 Model 讓 RawImage 透過 renderTexture 映射
+        GameObject modelGO = CanvasUI.Inst.CreateModelToRawImage(GetModelUrl(resType, assetID), rawImg);
+        // 將生成的 Model 與 ModelImage 綁定
+        CharModel charModel = MImg.GetComponent<CharModel>();
+        charModel.Model = modelGO;
+
+        return MImg;
     }
 
     public void CharsUnfocusAll()

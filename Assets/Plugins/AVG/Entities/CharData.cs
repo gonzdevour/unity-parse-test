@@ -12,6 +12,7 @@ namespace Story
 
         public string 暱稱1 { get; set; } // 暱稱1
         public string 暱稱2 { get; set; } // 暱稱2
+        public string 素材類型 { get; set; } // Pic, Live2D, Spine, 3D...
         public string 立繪 { get; set; } // 使用立繪
         public string 頭圖 { get; set; } // 使用頭圖
         public float Scale { get; set; } // 縮放比例

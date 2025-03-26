@@ -1,10 +1,21 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.IO;
 
 public class CanvasUI : MonoBehaviour
 {
+    [Header("黑屏")]
     public GameObject cover;
+    [Header("讀取面板")]
     public PanelLoadingProgress panelLoadingProgress;
     public PanelSpinner panelSpinner;
+    [Header("ModelUI")]
+    public Vector2Int RenderTextureSize = new(1024, 1024);
+    public Transform ModelParent;       // 指定模型的父物件
+    public static string ModelLayerName = "Model"; // 手動設定好的 Layer 名稱
+    private static int modelCellCount = 0; // 格狀排列用的索引
+    private static int gridColumnCount = 4; // 一行放幾個 Live2D 模型
+
     // 單例模式
     public static CanvasUI Inst { get; private set; }
 
@@ -64,4 +75,57 @@ public class CanvasUI : MonoBehaviour
         }
     }
 
+    public GameObject CreateModelToRawImage(string address, RawImage rawImage)
+    {
+        Debug.Log($"modePrefab address: {address}");
+        GameObject modelPrefab = Resources.Load<GameObject>(address);
+        if (modelPrefab == null)
+        {
+            Debug.Log("Prefab not found");
+        }
+        GameObject modelGO = Instantiate(modelPrefab, ModelParent);
+
+        // 取得 Layer 編號
+        int modelLayer = LayerMask.NameToLayer(ModelLayerName);
+        if (modelLayer == -1)
+        {
+            Debug.LogError($"Layer \"{ModelLayerName}\" 尚未在 Tags & Layers 中設定！");
+            return null;
+        }
+
+        // 計算格狀位置
+        int col = modelCellCount % gridColumnCount;
+        int row = modelCellCount / gridColumnCount;
+        float unitSize = 10f;
+        Vector3 modelPos = new(col * unitSize, -row * unitSize, 0);
+        modelGO.transform.position = modelPos;
+
+        // 將model與所有子物件都移到modelLayer
+        modelGO.layer = modelLayer;
+        foreach (Transform child in modelGO.transform) child.gameObject.layer = modelLayer;
+
+        // 建立 RenderTexture
+        RenderTexture rt = new(RenderTextureSize.x, RenderTextureSize.y, 24, RenderTextureFormat.ARGB32);
+        rt.name = $"{modelGO.name}_RT";
+
+        // 建立 Camera 並設為 modelGO 子物件
+        GameObject camGO = new($"Camera_{modelGO.name}");
+        camGO.transform.SetParent(modelGO.transform, false); // 設為子物件
+        camGO.transform.localPosition = new Vector3(0, 0, -10); // 相對位置固定在前方
+
+        Camera cam = camGO.AddComponent<Camera>();
+        cam.clearFlags = CameraClearFlags.SolidColor;
+        cam.backgroundColor = new Color(0, 0, 0, 0);
+        cam.orthographic = true;
+        cam.orthographicSize = unitSize / 2f;
+        cam.cullingMask = 1 << modelLayer;
+        cam.targetTexture = rt;
+
+        modelCellCount++;
+
+        rawImage.gameObject.name = Path.GetFileNameWithoutExtension(address);
+        rawImage.texture = rt;
+
+        return modelGO;
+    }
 }
