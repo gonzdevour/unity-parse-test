@@ -3,6 +3,9 @@ using UnityEngine;
 
 using story;
 using UnityEngine.UI;
+using UnityEditor.VersionControl;
+using System.Net;
+using Spine.Unity;
 
 public partial class Director
 {
@@ -74,13 +77,17 @@ public partial class Director
         // 實例化 Prefab
         GameObject newChar;
         string resType = charData["素材類型"];
-        if (resType == "Pic") 
+        switch (resType)
         {
-            newChar = Instantiate(Avg.CharPrefab_TImg, Avg.LayerChar); 
-        }
-        else
-        {
-            newChar = CreateModelImage(resType, charData["AssetID"]);
+            case "Live2D":
+                newChar = CreateModelImage(resType, charData["AssetID"]);
+                break;
+            case "Spine":
+                newChar = CreateSpineImage(resType, charData["AssetID"]);
+                break;
+            default: // pic
+                newChar = Instantiate(Avg.CharPrefab_TImg, Avg.LayerChar);
+                break;
         }
 
         newChar.name = charUID;
@@ -90,6 +97,19 @@ public partial class Director
         IChar Char = newChar.GetComponent<IChar>();
         Char.Init(charData, charEmo, charSimbol);
         return Char;
+    }
+
+    public GameObject CreateSpineImage(string resType, string assetID)
+    {
+        GameObject charSpineGO = Instantiate(Avg.CharPrefab_Spine, Avg.LayerChar);
+        // 產生spine模型的prefab為charSpine的子物件
+        GameObject modelPrefab = Resources.Load<GameObject>(GetModelUrl(resType, assetID));
+        GameObject modelInstance = Instantiate(modelPrefab, charSpineGO.transform);
+        // 將生成的 Model 與 CharSpine 綁定
+        CharSpine charSpine = charSpineGO.GetComponent<CharSpine>();
+        charSpine.skeletonGraphic = modelInstance.GetComponent<SkeletonGraphic>();
+
+        return charSpineGO;
     }
 
     public GameObject CreateModelImage(string resType, string assetID)

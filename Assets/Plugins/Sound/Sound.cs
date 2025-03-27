@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
 using UnityEngine.Audio;
-using System.Net;
 
 public class Sound : MonoBehaviour
 {

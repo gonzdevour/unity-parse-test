@@ -2,16 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Spine.Unity;
 
-public class CharModel : MonoBehaviour, IChar
+public class CharSpine : MonoBehaviour, IChar
 {
-
-    public GameObject Model;
+    public SkeletonGraphic skeletonGraphic;
     public Transform SimbolMarker;
     public GameObject SimbolPrefab;
 
-    private RawImage rawImage;
-    private Animator animator;
     private Vector2 SimbolMarkerOriginPos;
     private Dictionary<string, string> animNamesExpression = new(); // 這個角色的表情動作表
     private Dictionary<string, string> imagePathsSimbols;
@@ -36,8 +34,6 @@ public class CharModel : MonoBehaviour, IChar
     {
         // 停止與該物件相關的所有 Tween，避免存取已刪除物件
         DOTween.Kill(gameObject);
-        // 移除對應的ModelGO，連同子物件的camera一起刪除
-        Destroy(Model);
     }
 
     public GameObject GetGameObject()
@@ -47,9 +43,6 @@ public class CharModel : MonoBehaviour, IChar
 
     public void Init(Dictionary<string, string> CharData, string CharEmo = "無", string CharSimbol = "")
     {
-        // 取出rawImage
-        rawImage = gameObject.GetComponentInChildren<RawImage>();
-        animator = Model.GetComponent<Animator>();
         // 設定符號表
         imagePathsSimbols = Director.Inst.imagePathsSimbols;
 
@@ -69,8 +62,7 @@ public class CharModel : MonoBehaviour, IChar
         if (CharData.TryGetValue("Scale", out string scale) && float.TryParse(scale, out float parsedScale))
         {
             Scale = parsedScale;
-            //transform.localScale = Vector3.one * parsedScale;
-            Model.transform.localScale = Vector3.one * parsedScale;
+            skeletonGraphic.transform.localScale = Vector3.one * parsedScale;
         }
 
         if (CharData.TryGetValue("YAdd", out string yAdd) && float.TryParse(yAdd, out float parsedYAdd))
@@ -110,18 +102,22 @@ public class CharModel : MonoBehaviour, IChar
     {
         // 將物件移到所有同層物件的最前方
         transform.SetAsLastSibling();
-        rawImage.DOColor(new Color(1f, 1f, 1f), dur);
+        skeletonGraphic.DOColor(new Color(1f, 1f, 1f), dur);
     }
 
     public void Unfocus(float dur = 0f)
     {
-        rawImage.DOColor(new Color(0.3f, 0.3f, 0.3f), dur);
+        skeletonGraphic.DOColor(new Color(0.3f, 0.3f, 0.3f), dur);
     }
 
     public void SetExpression(string expression = "無", string transitionType = "slideup", float dur = 1f ) 
     {
-        string animationName = animNamesExpression[expression];
-        animator.Play(animationName);
+        string animationNameIdle = animNamesExpression["無"];
+        string animationNamePlayOnce = animNamesExpression[expression];
+        Debug.Log($"animationNamePlayOnce:{animationNamePlayOnce}");
+        // 播放一次動畫後自動回到 animationNameIdle
+        skeletonGraphic.AnimationState.SetAnimation(0, animationNamePlayOnce, false);
+        skeletonGraphic.AnimationState.AddAnimation(0, animationNameIdle, true, 0);
     }
 
     public void SetSimbol(string simbolName)

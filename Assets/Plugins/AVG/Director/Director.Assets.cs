@@ -113,6 +113,25 @@ public partial class Director
         return imagePathsExpression;
     }
 
+    public Dictionary<string, string> GetAnimationNames_CharExpressions(Dictionary<string, string> charData)
+    {
+        Dictionary<string, string> AnimNamesExpression = new(); // 表情動作名稱表
+
+        string emoTypes = PPM.Inst.Get("表情類型列表"); // "無,喜,怒,樂,驚,疑,暈"
+        string[] emos = emoTypes.Split(",");
+        // 組合每個表情的鍵值對
+        foreach (string emo in emos)
+        {
+            string animName = charData.GetValueOrDefault(emo, string.Empty);
+            if (!string.IsNullOrEmpty(animName))
+            {
+                // ex: imagePathsExpression["怒"] = StreamingAssets://Image/AVG/Char/A-anger.png
+                AnimNamesExpression[emo] = animName;
+            }
+        }
+        return AnimNamesExpression;
+    }
+
     public string GetModelUrl(string ModelType, string AssetID)
     {
         string url = $"Models/{ModelType}/{AssetID}";
