@@ -224,6 +224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf60921fb19982344a0c632271f970d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  platformPrefab: {fileID: 874016759}
+  scrollSpeed: 2
+  spawnIntervalDistance: 2.5
 --- !u!1 &83550789
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,6 +891,11 @@ MonoBehaviour:
   button: {fileID: 585424056}
   fileUrl: https://playoneapps.com.tw/Test/unity-parse-test/v14/StreamingAssets/test.xlsx
   fileName: test.xlsx
+--- !u!1 &874016759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5971679572837075802, guid: e76c5dab6e35fb144ace6eaae50d4f3f, type: 3}
+  m_PrefabInstance: {fileID: 6439093404313789980}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &874016760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1730684676722256465, guid: e76c5dab6e35fb144ace6eaae50d4f3f, type: 3}
@@ -2992,7 +3000,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1730684676722256465, guid: e76c5dab6e35fb144ace6eaae50d4f3f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.3919
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1730684676722256465, guid: e76c5dab6e35fb144ace6eaae50d4f3f, type: 3}
       propertyPath: m_LocalPosition.z
