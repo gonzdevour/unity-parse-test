@@ -3,8 +3,6 @@ using UnityEngine;
 
 using story;
 using UnityEngine.UI;
-using UnityEditor.VersionControl;
-using System.Net;
 using Spine.Unity;
 
 public partial class Director
